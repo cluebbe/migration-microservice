@@ -10,9 +10,9 @@
 
 ## 1. About me / Sobre mí
 
-🇬🇧 I'm **Carlos Georg Lübbe**, a Software Architect & Multistack Engineer with over **17 years of experience** in software development and architecture, and a PhD in Computer Science (*Dr. rer. nat.*, University of Stuttgart, distributed database systems). I'm based in **Madrid** and work in German, English and Spanish.
+🇬🇧 I'm **Carlos Georg Lübbe**, a Software Architect & Multistack Engineer with over **17 years of experience** in software development and architecture, and a PhD in Computer Science (*Dr. rer. nat.*, University of Stuttgart, distributed database systems). I'm based in **Madrid**.
 
-> 🇪🇸 Soy **Carlos Georg Lübbe**, Software Architect & Multistack Engineer con más de **17 años de experiencia** en desarrollo y arquitectura de software, y doctor en informática (*Dr. rer. nat.*, Universidad de Stuttgart, sistemas de bases de datos distribuidas). Resido en **Madrid** y trabajo en alemán, inglés y español.
+> 🇪🇸 Soy **Carlos Georg Lübbe**, Software Architect & Multistack Engineer con más de **17 años de experiencia** en desarrollo y arquitectura de software, y doctor en informática (*Dr. rer. nat.*, Universidad de Stuttgart, sistemas de bases de datos distribuidas). Resido en **Madrid**.
 
 🇬🇧 Much of my career has been in the **automotive and commercial-vehicle sector**, leading international teams and designing architectures on long-running projects. I bring **direct, hands-on experience migrating monolithic applications toward microservice architectures**, from both a **development** and (complementarily) an **infrastructure** perspective:
 
