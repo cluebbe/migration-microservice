@@ -8,10 +8,12 @@
 
 ### 1.1 ¿Qué es un monolito?
 
-Un **monolito** es una aplicación cuya unidad de despliegue es única: todo el código se compila, empaqueta y despliega junto. Es importante separar dos ideas que a menudo se confunden:
+El término **monolito** se usa para dos ideas distintas que a menudo se confunden:
 
-- **Monolito como unidad de despliegue:** un solo artefacto (un WAR, un binario, una imagen).
+- **Monolito como unidad de despliegue:** toda la aplicación se compila, empaqueta y despliega como un solo artefacto (un WAR, un binario, una imagen).
 - **Monolito como unidad de organización del código:** todo el código vive en un mismo proyecto, con (o sin) estructura interna.
+
+Ambas cosas suelen ir juntas, pero no son lo mismo: puede haber un código bien modularizado que se despliega como un único artefacto (lo veremos como *monolito modular*), y un repositorio único del que salen varios artefactos. En esta formación, cuando decimos "monolito" sin más, nos referimos a la **unidad de despliegue única** — porque es el despliegue, no la organización del código, lo que los microservicios cambian.
 
 Un monolito **no es intrínsecamente malo**. Tiene ventajas reales:
 
@@ -25,7 +27,7 @@ Un monolito **no es intrínsecamente malo**. Tiene ventajas reales:
 
 Sus problemas aparecen con la **escala** (del sistema y de la organización):
 
-- **Acoplamiento creciente:** sin disciplina, todo acaba dependiendo de todo ("big ball of mud").
+- **Acoplamiento creciente:** sin disciplina, todo acaba dependiendo de todo, hasta degenerar en una *big ball of mud* — la "gran bola de barro" (Foote & Yoder, 1997): un sistema sin arquitectura discernible, código espagueti a escala de sistema.
 - **Despliegues acoplados:** un cambio pequeño exige redesplegar todo; el riesgo de cada despliegue crece y la frecuencia baja.
 - **Escalado grueso:** si solo un módulo necesita más recursos, hay que escalar la aplicación entera.
 - **Cuellos de botella organizativos:** muchos equipos tocando el mismo código → conflictos, colas de integración, "trenes de release".
@@ -56,7 +58,7 @@ Los microservicios **intercambian complejidad local por complejidad distribuida*
 | Aislamiento de fallos (potencial) | Consistencia de datos sin transacciones globales |
 | Libertad tecnológica por servicio | Coste de plataforma (CI/CD, descubrimiento, gateway…) |
 
-Las famosas **falacias de la computación distribuida** (Deutsch) resumen lo que deja de ser cierto al pasar por la red: la red *no* es fiable, la latencia *no* es cero, el ancho de banda *no* es infinito, la red *no* es segura, la topología *cambia*…
+Las famosas **falacias de la computación distribuida** (Peter Deutsch, Sun Microsystems) resumen lo que deja de ser cierto al pasar por la red: la red *no* es fiable, la latencia *no* es cero, el ancho de banda *no* es infinito, la red *no* es segura, la topología *cambia*…
 
 ---
 
@@ -65,10 +67,22 @@ Las famosas **falacias de la computación distribuida** (Deutsch) resumen lo que
 No hay que elegir entre "monolito caótico" y "200 microservicios". Existe un **espectro**:
 
 ```
-Big ball of mud → Monolito estructurado → Monolito modular → SOA / servicios gruesos → Microservicios
+Big ball of mud → Monolito por capas → Monolito modular → SOA / servicios gruesos → Microservicios
 ```
 
-### 2.1 El monolito modular
+### 2.1 Los peldaños del espectro
+
+**Big ball of mud** — Un monolito *sin* arquitectura discernible: todo depende de todo, sin límites internos (§1.1). Importa la distinción de escala frente al código espagueti: el espagueti es desorden *dentro* de un módulo (feo, pero localizado y arreglable); la bola de barro es la ausencia de estructura *entre* módulos. Y es esta última la que estorba a una migración: sin límites internos, no hay costuras por donde cortar.
+
+**Monolito por capas** — Un monolito con orden y disciplina, pero cuya estructura es *técnica*: capas horizontales (presentación, lógica de negocio, acceso a datos). Es el clásico monolito empresarial "bien hecho". Su límite: un cambio de negocio típico atraviesa todas las capas, y las capas no ofrecen fronteras por donde extraer servicios — el orden existe, pero no sigue al negocio.
+
+**Monolito modular** — El corte cambia de dirección: *vertical*, por dominios de negocio (pedidos, facturación…); cada módulo contiene sus capas dentro y expone una interfaz pequeña. Esos cortes verticales sí son costuras extraíbles — por eso es el peldaño previo natural a los microservicios. Lo desarrollamos en §2.2.
+
+**SOA / servicios gruesos** — La arquitectura orientada a servicios clásica de los 2000: el sistema ya está repartido en varios servicios desplegables que se comunican por red, pero en servicios **gruesos** (*coarse-grained*): pocos y grandes, a menudo del tamaño de una aplicación entera ("el servicio de clientes" de toda la empresa). Sus señas: integración centralizada en un **ESB** (un bus intermediario inteligente donde acababa viviendo mucha lógica), estándares pesados (SOAP, WS-\*), un "modelo de datos canónico" corporativo, gobernanza y releases coordinadas centralmente, y datos a menudo todavía compartidos. Su lección histórica: distribuir *sin* descentralizar reproduce los cuellos de botella del monolito con la complejidad de la red añadida.
+
+**Microservicios** — El grano se afina y las decisiones de la SOA clásica se invierten: muchos servicios pequeños modelados por dominio de negocio, *smart endpoints, dumb pipes* (la lógica vive en los servicios; la red solo transporta), un modelo propio por contexto en lugar del canónico corporativo, base de datos por servicio, y autonomía y despliegue independiente por equipo (§1.2). En este sentido, los microservicios son "SOA de grano fino y descentralizada".
+
+### 2.2 El monolito modular
 
 Un **monolito modular** mantiene una sola unidad de despliegue, pero el código está organizado en **módulos con límites explícitos**:
 
@@ -83,14 +97,20 @@ El monolito modular es:
 
 > **Regla práctica:** si no eres capaz de construir un monolito modular bien estructurado, los microservicios no van a arreglarlo — van a distribuir el desorden y añadirle red.
 
-### 2.2 ¿Dónde situarse en el espectro?
+### 2.3 ¿Dónde situarse en el espectro?
 
-Depende de:
+No hay un punto "correcto" del espectro: hay un punto adecuado para cada organización en cada momento. Los factores que más pesan en la decisión:
 
-- **Tamaño y número de equipos** (el factor más determinante).
-- **Necesidades de escalado diferencial** entre partes del sistema.
-- **Madurez operativa** (CI/CD, observabilidad, automatización).
-- **Velocidad de cambio requerida** y en qué partes del sistema se concentra.
+- **Tamaño y número de equipos** — el factor más determinante. Los microservicios resuelven sobre todo un problema *organizativo*: muchos equipos pisándose en el mismo código y en la misma release. Con uno o dos equipos, ese problema no existe — y la autonomía de despliegue que pagarías tan cara apenas tendría beneficiarios.
+- **Necesidades de escalado diferencial** — si una parte del sistema necesita 10 veces más recursos que el resto (la búsqueda, la generación de informes), separarla permite escalarla sola. Si todo el sistema escala de forma homogénea, el monolito replicado escala perfectamente bien.
+- **Madurez operativa** — operar N servicios exige CI/CD, observabilidad y automatización de infraestructura. Cada paso a la derecha del espectro multiplica las piezas que hay que desplegar, monitorizar y depurar; sin esa base, el día a día se vuelve inviable. La madurez operativa marca el límite derecho *alcanzable*, no el deseable.
+- **Velocidad de cambio requerida, y dónde se concentra** — la independencia de despliegue rinde donde el código cambia a menudo. Si el cambio se concentra en dos o tres zonas, quizá solo esas zonas merezcan ser servicios y el resto pueda quedarse en el monolito.
+
+Tres consecuencias prácticas de mirar el espectro así:
+
+1. **La posición no es permanente.** Se puede (y se suele) avanzar hacia la derecha a medida que crecen el equipo y la madurez — eso es exactamente lo que llamamos migración. También es legítimo retroceder: fusionar servicios que resultaron demasiado finos es una corrección, no un fracaso.
+2. **La posición no tiene que ser uniforme.** Un mismo sistema puede tener su núcleo volátil como microservicios y sus zonas estables en un monolito modular. Los híbridos deliberados no son estados de transición vergonzantes: son a menudo el destino final óptimo.
+3. **El movimiento tiene un orden natural.** Saltar de la bola de barro directamente a microservicios significa cortar sin costuras; pasar antes por el monolito modular crea los límites que luego se extraen. De ahí la regla práctica de §2.2: quien no sabe construir un monolito modular no está listo para microservicios.
 
 ---
 
@@ -181,7 +201,28 @@ Criterios para decidir **qué extraer primero**:
 | Riesgo | Funcionalidad no crítica para los primeros pasos |
 | Datos | Módulos con datos poco compartidos con el resto |
 
-Herramienta útil: una matriz **valor de extraer × facilidad de extraer**. Empezar por el cuadrante alto-valor/alta-facilidad; cuestionar si el cuadrante bajo-valor/baja-facilidad debe extraerse jamás.
+Herramienta útil: una matriz **valor de extraer × facilidad de extraer**:
+
+```
+                            Facilidad de extraer
+                        baja                  alta
+                 ┌──────────────────────┬──────────────────────┐
+            alto │ (2) INVERTIR         │ (1) EMPEZAR AQUÍ     │
+                 │ merece el esfuerzo:  │ victorias rápidas    │
+   Valor de      │ planificar, abordar  │ que entregan valor   │
+   extraer       │ cuando haya oficio   │ y enseñan            │
+                 ├──────────────────────┼──────────────────────┤
+            bajo │ (4) ¿EXTRAER JAMÁS?  │ (3) RELLENO          │
+                 │ candidato a quedarse │ barato pero aporta   │
+                 │ en el monolito       │ poco: no confundir   │
+                 │ (deliberadamente)    │ con progreso         │
+                 └──────────────────────┴──────────────────────┘
+```
+
+- **(1) Alto valor / alta facilidad — empezar aquí:** cada extracción se justifica sola y, de paso, el equipo aprende y la plataforma madura.
+- **(2) Alto valor / baja facilidad — invertir, pero después:** son las piezas que justifican la migración a largo plazo (a menudo el corazón del negocio); se abordan cuando las extracciones del cuadrante (1) ya han dado oficio, herramientas y APIs estables alrededor.
+- **(3) Bajo valor / alta facilidad — relleno:** extraer por extraer engorda el número de servicios sin mover las métricas; útil como mucho para practicar, pero no confundir actividad con progreso.
+- **(4) Bajo valor / baja facilidad — cuestionar si jamás:** el candidato natural a quedarse en el monolito (modularizado) de forma deliberada y documentada. Que algo *pueda* extraerse no significa que *deba*.
 
 ### 4.4 Buenas prácticas generales
 
@@ -229,7 +270,8 @@ La empresa **LibroExpress** (e-commerce de libros, 8 desarrolladores en 1 equipo
 1. Los despliegues son manuales y ocurren una vez al mes, en sábado.
 2. No hay tests automatizados; cada release rompe algo.
 3. En campaña de Navidad, la web entera va lenta porque el módulo de búsqueda consume toda la CPU.
-4. El CTO propone: "Migremos a microservicios, así desplegaremos a diario y escalará mejor."
+
+Ante esta situación, el CTO propone: *"Migremos a microservicios, así desplegaremos a diario y escalará mejor."*
 
 **Pregunta:** ¿Cuáles de los problemas (1–3) resolverían realmente los microservicios? ¿Qué propondrías tú en su lugar? Justifica con los conceptos de la sesión.
 
