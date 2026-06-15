@@ -132,6 +132,10 @@ Motivaciones legítimas habituales y su métrica natural:
 | Aislar fallos | Radio de impacto de incidentes, MTTR |
 | Modernizar tecnología | % de tráfico servido por la nueva pila |
 
+> **Dos términos de la tabla:**
+> - **Lead time (de cambios):** el tiempo que transcurre desde que un cambio se confirma en el código (*commit*) hasta que está funcionando en producción. Mide cuánto tarda el trabajo terminado en llegar al usuario; un lead time alto delata cuellos de botella en integración, pruebas o despliegue. (Es una de las cuatro métricas DORA, junto con la frecuencia de despliegue, la tasa de fallos en cambios y el MTTR.)
+> - **MTTR (*Mean Time To Recovery*):** el tiempo medio que se tarda en restablecer el servicio tras un incidente en producción. No mide cuántos fallos hay, sino con qué rapidez se recupera el sistema de ellos.
+
 Si el objetivo es difuso ("modernizar", "es lo que hace todo el mundo"), la migración no tendrá criterio de parada ni forma de priorizar.
 
 ### 3.2 Cuándo *no* merece la pena migrar
@@ -352,7 +356,7 @@ No hay una única respuesta correcta; lo que se evalúa es la estructura. Un eje
 | Métrica | Hoy | Objetivo (18 meses) |
 |---|---|---|
 | Frecuencia de despliegue | 1/mes (release train) | ≥ 2/semana por equipo |
-| Lead time (commit → producción) | 3 semanas | < 2 días |
+| Lead time (commit → producción) | 3 semanas | < 2 semanas |
 | Despliegues que requieren coordinación entre equipos | 100 % | < 10 % |
 
 **(c) Criterio de parada:**
