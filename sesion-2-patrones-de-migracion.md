@@ -1,3 +1,5 @@
+<img src="logo.png" alt="NobleProg" width="280">
+
 # Sesión 2 — Patrones de migración
 
 **Duración:** 3 h · **Objetivo:** construir una caja de herramientas completa de patrones de migración, entendiendo las ventajas, los límites y el encaje típico de cada uno.

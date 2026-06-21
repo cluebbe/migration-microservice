@@ -7,6 +7,13 @@ footer: 'Sesión 1 — Fundamentos y la justificación de migrar'
 style: |
   section {
     font-size: 26px;
+    background-image: url('logo.png');
+    background-repeat: no-repeat;
+    background-position: right 25px top 20px;
+    background-size: 150px;
+  }
+  section.lead {
+    background-image: none;
   }
   h1 {
     color: #1a5276;
@@ -32,6 +39,8 @@ style: |
 <!-- _paginate: false -->
 <!-- _header: '' -->
 <!-- _footer: '' -->
+
+![w:360](logo.png)
 
 # Sesión 1
 ## Fundamentos y la justificación de migrar

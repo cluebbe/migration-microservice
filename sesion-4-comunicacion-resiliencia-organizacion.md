@@ -1,3 +1,5 @@
+<img src="logo.png" alt="NobleProg" width="280">
+
 # Sesión 4 — Comunicación, resiliencia y organización
 
 **Duración:** 3 h · **Objetivo:** hacer que el sistema resultante sea robusto de operar y esté alineado con los equipos que lo mantienen; cerrar la formación con una hoja de ruta de migración.

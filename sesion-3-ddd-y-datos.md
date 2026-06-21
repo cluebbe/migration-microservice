@@ -1,3 +1,5 @@
+<img src="logo.png" alt="NobleProg" width="280">
+
 # Sesión 3 — Domain-Driven Design y descomposición de datos
 
 **Duración:** 3 h · **Objetivo:** aprender a encontrar buenos límites de servicio (DDD) y abordar la parte más difícil de toda migración: los datos.

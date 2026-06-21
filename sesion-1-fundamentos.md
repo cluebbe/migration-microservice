@@ -1,3 +1,5 @@
+<img src="logo.png" alt="NobleProg" width="280">
+
 # Sesión 1 — Fundamentos y la justificación de migrar
 
 **Duración:** 3 h · **Objetivo:** establecer un vocabulario común y un encuadre claro y honesto de cuándo (y cuándo no) migrar de un monolito a microservicios.
