@@ -2,18 +2,21 @@
 marp: true
 theme: default
 paginate: true
-header: 'Migración de Monolitos a Microservicios'
+header: '![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL'
 footer: 'Sesión 1 — Fundamentos y la justificación de migrar'
 style: |
   section {
     font-size: 26px;
-    background-image: url('logo.png');
-    background-repeat: no-repeat;
-    background-position: right 25px top 20px;
-    background-size: 150px;
   }
-  section.lead {
-    background-image: none;
+  header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    left: 30px;
+    top: 18px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a5276;
   }
   h1 {
     color: #1a5276;
@@ -147,11 +150,37 @@ código espagueti a escala de sistema. Ojo: espagueti = desorden DENTRO de un
 módulo; bola de barro = ausencia de estructura ENTRE módulos.
 Subrayar el cuello de botella organizativo: es el motivo nº1 real para migrar.
 
+Tren de release: como el monolito es una única unidad de despliegue, nadie
+despliega su cambio por separado; todos los cambios listos "viajan" en el mismo
+tren que sale en fecha fija (p.ej. cada 2 semanas). El que termina antes espera
+al tren; un cambio roto puede retrasar o tumbar el tren entero (vuelve atrás
+TODO). Es un SÍNTOMA del despliegue acoplado, no una buena práctica elegida.
+Con microservicios cada equipo tiene su propio tren —o ninguno: despliega cuando
+quiere.
+
+Atadura tecnológica: un solo artefacto = una sola pila (lenguaje, runtime,
+framework, BD) para TODOS los problemas, aunque no encaje. No puedes reescribir
+un módulo intensivo en CPU en Go, ni usar una BD de grafos para una carga que lo
+pediría, sin migrar la app entera. Más adelante esto se convierte en "libertad
+tecnológica" en la slide del trade-off.
+
 EN: Problems appear with the scale of the SYSTEM and of the ORGANIZATION.
 Big ball of mud (Foote & Yoder, 1997): a system with no discernible architecture,
 spaghetti code at system scale. Note: spaghetti = disorder WITHIN a module;
 ball of mud = lack of structure BETWEEN modules.
 Stress the organizational bottleneck: it's the real #1 reason to migrate.
+
+Release train: because the monolith is a single deployment unit, nobody ships
+their change on its own; every ready change "rides" the same train that leaves on
+a fixed schedule (e.g. every 2 weeks). Whoever finishes early waits for the train;
+one broken change can delay or roll back the WHOLE train (everything goes back).
+It's a SYMPTOM of coupled deployment, not a best practice you chose. With
+microservices each team gets its own train —or none: deploy on demand.
+
+Technology lock-in: one artifact = one stack (language, runtime, framework, DB)
+for EVERY problem, even when it's a poor fit. You can't rewrite a CPU-heavy module
+in Go, or use a graph DB for a workload that wants one, without migrating the
+whole app. Later this flips into "technology freedom" on the trade-off slide.
 -->
 
 ---
@@ -202,7 +231,7 @@ see later). Size is secondary.
 | Se gana | Se paga |
 |---|---|
 | Despliegue independiente, releases frecuentes | Sistema distribuido: latencia, fallos parciales |
-| Escalado selectivo | Operación mucho más compleja |
+| Escalado selectivo (pagas solo lo que escala) | Operación mucho más compleja |
 | Autonomía de equipos | Contratos y versionado entre servicios |
 | Aislamiento de fallos (potencial) | Consistencia sin transacciones globales |
 | Libertad tecnológica | Coste de plataforma (CI/CD, gateway...) |
@@ -217,6 +246,18 @@ justifican los costes EN TU CONTEXTO.
 EN: This is the central trade-off. No free lunch. Each row on the left has its price
 on the right. The decision to migrate = deciding whether the gains justify the
 costs IN YOUR CONTEXT.
+
+Matiz sobre coste (ES): hay que separar DOS costes distintos. El "Coste de plataforma"
+(derecha) es una inversión FIJA y de entrada (CI/CD, gateway, observabilidad): la pagas
+para poder operar, no depende de la carga. El coste de ESCALAR bajo carga es otra cosa:
+ahí el microservicio gana, porque escalas solo la parte caliente en vez de replicar todo
+el monolito. Por eso "Escalado selectivo" lleva ahora "pagas solo lo que escala".
+
+Cost nuance (EN): keep TWO costs separate. "Platform cost" (right) is a FIXED, upfront
+investment (CI/CD, gateway, observability) — you pay it to operate at all, independent of
+load. Scaling cost under load is different: microservices win there because you scale only
+the hot part instead of replicating the whole monolith. Hence "Selective scaling (you pay
+only for what you scale)".
 -->
 
 ---
@@ -310,6 +351,24 @@ No profundizar: 30 segundos si vamos justos de tiempo.
 EN: SOA: worth mentioning because many in the room lived through it (SOAP, ESB, WS-*).
 It's history, not a destination. The lesson of SOA is the same as the distributed
 monolith. Don't go deep: 30 seconds if we're short on time.
+
+SOA vs microservicios (ES): ambos parten el sistema en servicios sobre la red; la
+diferencia es DÓNDE vive la inteligencia y cuánto descentralizas. SOA = pocos servicios
+gruesos, ESB central inteligente (smart pipes), modelo de datos canónico, releases
+coordinadas, gobierno centralizado. Microservicios = grano fino por dominio, smart
+endpoints / dumb pipes, BD por servicio, despliegue independiente, autonomía de equipo.
+"Microservicios = SOA de grano fino y descentralizada." SOA distribuye pero no
+descentraliza (el ESB es el nuevo punto central de acoplamiento). Frase de aula: "SOA
+partió el sistema pero dejó el cerebro en el centro; los microservicios reparten el
+cerebro entre los servicios."
+
+SOA vs microservices (EN): both split the system into services over the network; the
+difference is WHERE the smarts live and how decentralized you are. SOA = few coarse
+services, central smart ESB (smart pipes), canonical data model, coordinated releases,
+centralized governance. Microservices = fine-grained per domain, smart endpoints / dumb
+pipes, database per service, independent deployment, team autonomy. "Microservices =
+fine-grained, decentralized SOA." SOA distributes but doesn't decentralize (the ESB
+becomes the new central coupling point).
 -->
 
 ---
@@ -362,13 +421,43 @@ Y recordar:
 3. El movimiento tiene **orden natural** (pasar por el modular antes)
 
 <!--
-ES: Los microservicios resuelven sobre todo un problema ORGANIZATIVO. Con 1-2 equipos
-ese problema no existe. La madurez operativa define hasta dónde puedes llegar sin
-ahogarte. Insistir en el híbrido deliberado: no es vergonzoso, suele ser óptimo.
+ES: Slide interactiva. Convertir cada factor en una pregunta al público y dejar que
+SE SITÚEN ellos mismos. No dar la respuesta: que el grupo razone.
 
-EN: Microservices mostly solve an ORGANIZATIONAL problem. With 1-2 teams that problem
-doesn't exist. Operational maturity defines how far you can go without drowning.
-Insist on the deliberate hybrid: it's not shameful, it's often optimal.
+Preguntas por factor:
+- Tamaño y equipos: "¿Cuántos equipos tocan y despliegan hoy el mismo código? ¿Se
+  pisan al hacer release?" (Clave: con 1-2 equipos el problema organizativo NO existe.)
+- Escalado diferencial: "¿Hay alguna parte que se satura mientras el resto está ocioso?
+  ¿O escaláis todo el bloque a la vez?"
+- Madurez operativa: "¿Podéis desplegar un servicio sin coordinar a media empresa?
+  ¿Tenéis CI/CD real? ¿Si algo se rompe de noche entre varios componentes, sabéis DÓNDE
+  mirar?" (Clave: la madurez marca el límite ALCANZABLE — sin ella te ahogas.)
+- Velocidad de cambio: "¿Dónde se concentran los cambios? ¿El 80% toca siempre el mismo
+  módulo, o está repartido?"
+
+Cierre, otra ronda de preguntas:
+- "¿Dónde diríais que estáis HOY en el espectro?"
+- "¿Y dónde necesitáis estar de verdad?" (Recordar: la posición no es permanente, no
+  tiene que ser uniforme, y el híbrido deliberado no es vergonzoso: suele ser óptimo.)
+
+EN: Interactive slide. Turn each factor into a question for the audience and let them
+PLACE THEMSELVES. Don't hand them the answer — make the group reason it out.
+
+Questions per factor:
+- Size & teams: "How many teams touch and deploy the same code today? Do they collide on
+  release?" (Key: with 1-2 teams the organizational problem doesn't exist.)
+- Differential scaling: "Is there a part that saturates while the rest sits idle? Or do
+  you scale the whole block at once?"
+- Operational maturity: "Can you deploy one service without coordinating half the
+  company? Do you have real CI/CD? If something breaks at night across components, do you
+  know WHERE to look?" (Key: maturity sets the ACHIEVABLE limit — without it you drown.)
+- Rate of change: "Where does change concentrate? Does 80% always hit the same module, or
+  is it spread out?"
+
+Wrap-up, another round of questions:
+- "Where would you say you are TODAY on the spectrum?"
+- "And where do you actually need to be?" (Remind: position isn't permanent, needn't be
+  uniform, and the deliberate hybrid isn't shameful — it's often optimal.)
 -->
 
 ---
