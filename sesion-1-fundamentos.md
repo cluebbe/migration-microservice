@@ -301,6 +301,15 @@ Ante esta situación, el CTO propone: *"Migremos a microservicios, así desplega
 
 </details>
 
+**Reto extra (opcional):** De los problemas que los microservicios *sí* resolverían, ¿cuál abordarías primero y con qué métrica demostrarías la mejora?
+
+<details>
+<summary>💡 Solución del reto extra</summary>
+
+De los tres, **solo el #3 (la búsqueda que satura la CPU)** es un problema que la división aborda de verdad (escalado selectivo); #1 es de madurez operativa y #2 de calidad. Aun así, *primero* abordaría #1 y #2 (CI/CD y tests): son prerrequisitos, y migrar sin ellos es temerario. Para #3, la intervención mínima es re-platforming (autoescalado del monolito) o extraer **solo** el servicio de búsqueda. **Métrica:** latencia p95/p99 de la búsqueda bajo carga de pico —y coste de infraestructura en campaña—, con línea base medida *antes* de tocar nada.
+
+</details>
+
 ---
 
 ### Ejercicio 1.2 — Detectar el monolito distribuido
@@ -337,6 +346,15 @@ El equipo de **PagoSeguro** migró hace dos años a 12 microservicios. Observas 
 
 </details>
 
+**Reto extra (opcional):** Elige uno de los síntomas y describe el primer paso concreto para corregirlo (p. ej. fusionar las capas de "cliente" o separar la BD compartida). ¿Cuál de los síntomas es el más caro de revertir?
+
+<details>
+<summary>💡 Solución del reto extra</summary>
+
+**El más caro de revertir es B (la base de datos compartida):** separar código es relativamente barato; separar datos —esquemas, integridad referencial, migración sin downtime— es lo más difícil y lo que arrastra al resto de síntomas. **Primer paso para B sin downtime:** asignar un *dueño* único de cada tabla/agregado, prohibir el acceso directo del otro servicio y sustituirlo por una API o eventos del dueño, y separar primero a nivel *lógico* (esquemas distintos, sin joins cruzados) antes que físico. (Para A el primer paso es el opuesto: *fusionar* `customer-api`/`customer-validation`/`customer-persistence` en un único servicio `customer` modelado por dominio.)
+
+</details>
+
 ---
 
 ### Ejercicio 1.3 — Objetivos y criterios de éxito
@@ -368,6 +386,15 @@ No hay una única respuesta correcta; lo que se evalúa es la estructura. Un eje
 - El objetivo habla de un **resultado de negocio/entrega**, no de tecnología ("tener microservicios" no es un objetivo).
 - Las métricas tienen **línea base**: sin medir el hoy, no se puede demostrar mejora.
 - Existe un **criterio de parada**: una buena migración no implica extraerlo todo; "monolito modular + algunos servicios" es un final perfectamente válido.
+
+</details>
+
+**Reto extra (opcional):** Define el criterio de parada con números: ¿qué valores de las métricas te dirían "ya hemos terminado; el resto se queda en el monolito"?
+
+<details>
+<summary>💡 Solución del reto extra</summary>
+
+Ejemplo de criterio cuantificado — *paramos de extraer cuando*: (a) **< 10 %** de los despliegues requieren coordinación entre equipos, (b) cada uno de los 4 equipos posee ya los servicios que necesita para entregar de forma autónoma, y (c) los módulos que aún quedan en el monolito tienen un lead time por debajo del umbral objetivo (p. ej. **< 1 semana**). Regla práctica: si extraer el siguiente candidato no mueve ninguna de esas tres cifras, se queda en el monolito modular.
 
 </details>
 
@@ -415,6 +442,15 @@ Datos adicionales: *Documentos* provoca picos de CPU que degradan todo el sistem
 - **Contratación** también se deja para tarde, pero por la razón opuesta: es el corazón del negocio y el más acoplado (3 dependencias). Conviene extraerlo cuando el equipo ya haya aprendido con extracciones menores y cuando sus dependencias (Clientes, Documentos, Tarificación) ya sean servicios con APIs estables.
 
 **Lección general:** se empieza por módulos *hoja* (sin dependencias salientes), con dolor concreto (Documentos) o alta volatilidad (Catálogo); se aplaza lo crítico-y-estable (Pagos) y lo central-y-acoplado (Contratación).
+
+</details>
+
+**Reto extra (opcional):** Si solo pudieras extraer un módulo este trimestre, ¿cuál? Nombra también uno que dejarías en el monolito "para siempre" y justifícalo. ¿Qué orden de extracción minimiza el riesgo aunque no sea el de mayor valor?
+
+<details>
+<summary>💡 Solución del reto extra</summary>
+
+**Un solo módulo este trimestre: Documentos** — máximo valor medible (sus picos de CPU degradan todo el sistema), es *hoja* (sin dependencias salientes) y de bajo riesgo. **Dejar en el monolito "para siempre": Pagos** — volatilidad casi nula (la independencia de despliegue apenas aporta) y riesgo altísimo (crítico y regulado). **Orden que minimiza el riesgo:** empezar por hojas de bajo riesgo (Documentos → Catálogo → quizá Clientes), aplazar lo central-y-acoplado (Contratación) hasta tener oficio y APIs estables, y dejar lo crítico-y-estable (Pagos) para el final o nunca. Nótese que aunque Contratación tenga más *valor*, el **riesgo manda en la secuenciación**: el valor justifica el programa, el riesgo decide el orden.
 
 </details>
 
