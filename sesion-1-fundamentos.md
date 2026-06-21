@@ -346,7 +346,7 @@ El equipo de **PagoSeguro** migró hace dos años a 12 microservicios. Observas 
 
 </details>
 
-**Reto extra (opcional):** Elige uno de los síntomas y describe el primer paso concreto para corregirlo (p. ej. fusionar las capas de "cliente" o separar la BD compartida). ¿Cuál de los síntomas es el más caro de revertir?
+**Reto extra (opcional):** ¿Cuál de los síntomas es el más caro de revertir? Después, describe el primer paso concreto para corregirlo (p. ej. fusionar las capas de "cliente" o separar la BD compartida).
 
 <details>
 <summary>💡 Solución del reto extra</summary>
