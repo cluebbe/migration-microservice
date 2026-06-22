@@ -621,6 +621,8 @@ we'll cover as a pattern (and its rare exceptions) in Session 2.
 
 ## Gestión del riesgo
 
+*El "cómo" del enfoque incremental: prácticas para que cada paso sea seguro y reversible.*
+
 - **Empieza por algo que enseñe mucho y arriesgue poco** (no el corazón crítico)
 - **Separa despliegue de activación** (feature flags, enrutado gradual)
 - **Mide antes y después** (sin línea base no hay prueba de mejora)
@@ -639,6 +641,8 @@ anything improved (nor detect regressions).
 ---
 
 ## Secuenciar: la matriz valor × facilidad
+
+*Si migras de forma incremental, el siguiente paso es decidir el orden: qué pieza extraer primero, cuál después y cuál no tocar.*
 
 ```
                      Facilidad de extraer
@@ -678,11 +682,15 @@ That something CAN be extracted doesn't mean it SHOULD. Connects to exercise 1.4
 - Comunica el **estado de la convivencia** (qué está en servicios, qué en el monolito, qué a medias)
 
 <!--
-ES: La plataforma (CI/CD, observabilidad, plantillas) es lo que hace que la migración
-escale. Si cada servicio cuesta como el primero, nunca terminarás.
+ES: (1) Producto, no proyecto: backlog y métricas, no fecha de corte; encaja con lo incremental.
+(2) No congelar el monolito: sigue evolucionando; solo se congela la pieza en extracción activa.
+(3) Invertir PRONTO en plataforma (CI/CD, observabilidad, plantillas): si el 2º servicio cuesta como el 1º, no terminas.
+(4) Comunicar la convivencia: qué está en servicios, en el monolito o a medias; sin mapa, bugs y trabajo duplicado.
 
-EN: The platform (CI/CD, observability, templates) is what makes the migration scale.
-If every service costs as much as the first one, you'll never finish.
+EN: (1) Product, not project: backlog and metrics, not a cutover date; fits the incremental approach.
+(2) Don't freeze the monolith: it keeps evolving; only the piece under active extraction is frozen.
+(3) Invest EARLY in the platform (CI/CD, observability, templates): if the 2nd service costs like the 1st, you never finish.
+(4) Communicate the coexistence: what's in services, in the monolith, or half-done; no map → bugs and duplicated work.
 -->
 
 ---
@@ -727,9 +735,41 @@ Sync/async · API Gateway · Circuit breaker · Observabilidad · Conway
 <!--
 ES: Descomposición dice DÓNDE cortar; migración dice CÓMO ejecutar el corte con
 seguridad; operación hace vivible el resultado. Una migración real combina los tres.
+Glosario rápido:
+- Strangler: envolver el monolito y reemplazar funciones poco a poco hasta "estrangularlo".
+- ACL (anti-corruption layer): capa traductora que aísla el modelo nuevo del legacy.
+- Branch by Abstraction: meter una abstracción para cambiar la implementación sin big-bang.
+- Parallel Run: correr viejo y nuevo a la vez y comparar antes de confiar en el nuevo.
+- Bubble Context: crear un contexto nuevo y limpio junto al legacy, sin contaminarlo.
+- DDD: diseñar el software según el dominio de negocio.
+- Bounded context: límite donde un modelo es coherente; base para trazar servicios.
+- BD por servicio: cada servicio dueño de sus datos; nadie toca la BD de otro.
+- Saga: transacción distribuida por pasos con compensaciones (sin commit global).
+- Outbox: publicar eventos fiablemente escribiéndolos en la misma transacción que los datos.
+- Sync/async: llamada bloqueante (REST) vs. mensajería/eventos no bloqueante.
+- API Gateway: puerta de entrada única que enruta y centraliza (auth, rate limit).
+- Circuit breaker: corta llamadas a un servicio caído para evitar cascadas.
+- Observabilidad: logs, métricas y trazas para entender el sistema en producción.
+- Conway: la arquitectura acaba reflejando la estructura de comunicación de los equipos.
 
 EN: Decomposition says WHERE to cut; migration says HOW to execute the cut safely;
 operation makes the result livable. A real migration combines all three.
+Quick glossary:
+- Strangler: wrap the monolith and replace features bit by bit until it's "strangled".
+- ACL (anti-corruption layer): translation layer that isolates the new model from the legacy.
+- Branch by Abstraction: add an abstraction to swap the implementation without a big-bang.
+- Parallel Run: run old and new together and compare before trusting the new one.
+- Bubble Context: build a clean new context next to the legacy, without contaminating it.
+- DDD: design the software around the business domain.
+- Bounded context: boundary where one model is coherent; basis for drawing services.
+- DB per service: each service owns its data; nobody touches another's DB.
+- Saga: distributed transaction as steps with compensations (no global commit).
+- Outbox: publish events reliably by writing them in the same transaction as the data.
+- Sync/async: blocking call (REST) vs. non-blocking messaging/events.
+- API Gateway: single entry point that routes and centralizes (auth, rate limit).
+- Circuit breaker: cuts off calls to a downed service to prevent cascades.
+- Observability: logs, metrics and traces to understand the system in production.
+- Conway: the architecture ends up mirroring the teams' communication structure.
 -->
 
 ---
