@@ -2610,11 +2610,26 @@ a distributed monolith. ~20-25 min including group discussion.</p></div><div cla
 habrá criterio de parada ni de prioridad.
 Lead time = tiempo de commit a producción (métrica DORA).
 MTTR = tiempo medio de recuperación tras un incidente.
+Radio de impacto (blast radius) = cuánto del sistema se cae cuando falla una parte.
+En el monolito es máximo (un fallo tumba todo el proceso: es el síntoma #3 de
+LibroExpress, la búsqueda satura la CPU y cae la web entera); con servicios bien
+aislados el fallo queda contenido. Se mide como el % de funcionalidad/usuarios/
+transacciones afectados ante el fallo de un componente. Ojo: no baja solo —si la
+división crea una cadena síncrona obligatoria, el radio no se reduce, se reparte;
+reducirlo de verdad exige resiliencia (timeouts, circuit breakers), Sesión 4.
 
 EN: Migrating is a MEANS, never an end. If the goal is vague (&quot;modernize&quot;), there
 will be no stopping criterion and no way to prioritize.
 Lead time = time from commit to production (a DORA metric).
-MTTR = mean time to recovery after an incident.</p></div><div class="bespoke-marp-note" data-index="20" tabindex="0"><p>ES: Esta slide es quizá la más honesta del curso. La mayoría de &quot;fracasos de
+MTTR = mean time to recovery after an incident.
+Blast radius = how much of the system goes down when one part fails. In the
+monolith it&#39;s maximal (one fault takes down the whole process: that&#39;s LibroExpress
+symptom #3, search saturates the CPU and the entire site goes down); with
+well-isolated services the failure stays contained. Measured as the % of
+functionality/users/transactions affected when a component fails. Note: it doesn&#39;t
+drop by itself —if the split creates a mandatory synchronous chain, the radius
+isn&#39;t reduced, just spread; truly reducing it requires resilience (timeouts,
+circuit breakers), Session 4.</p></div><div class="bespoke-marp-note" data-index="20" tabindex="0"><p>ES: Esta slide es quizá la más honesta del curso. La mayoría de &quot;fracasos de
 microservicios&quot; son organizaciones que no debían haber migrado.
 Re-platforming = mover a mejor infra sin trocear. A menudo resuelve el escalado.
 

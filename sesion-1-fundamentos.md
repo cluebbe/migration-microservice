@@ -301,12 +301,12 @@ Ante esta situación, el CTO propone: *"Migremos a microservicios, así desplega
 
 </details>
 
-**Reto extra (opcional):** De los problemas que los microservicios *sí* resolverían, ¿cuál abordarías primero y con qué métrica demostrarías la mejora?
+**Reto extra (opcional):** Imagina que LibroExpress crece y el año que viene serán 40 desarrolladores repartidos en varios equipos de producto. ¿Cambia eso tu recomendación al CTO? ¿Qué tendría que ser cierto para que migrar a microservicios fuera la decisión correcta?
 
 <details>
 <summary>💡 Solución del reto extra</summary>
 
-De los tres, **solo el #3 (la búsqueda que satura la CPU)** es un problema que la división aborda de verdad (escalado selectivo); #1 es de madurez operativa y #2 de calidad. Aun así, *primero* abordaría #1 y #2 (CI/CD y tests): son prerrequisitos, y migrar sin ellos es temerario. Para #3, la intervención mínima es re-platforming (autoescalado del monolito) o extraer **solo** el servicio de búsqueda. **Métrica:** latencia p95/p99 de la búsqueda bajo carga de pico —y coste de infraestructura en campaña—, con línea base medida *antes* de tocar nada.
+Sí, cambia el análisis —pero no por los tres síntomas originales, que siguen siendo de madurez operativa (#1), calidad (#2) y escalado puntual (#3). Lo que aparece con 40 personas en varios equipos es el problema que los microservicios *sí* resuelven de raíz: la **fricción organizativa**. Con un solo equipo no hay nadie pisándose; con varios equipos de producto, el monolito obliga a coordinar releases y se convierte en un cuello de botella de *entrega*. El límite que justifica la migración es **organizativo (Conway)**, no técnico. Para que migrar fuera correcto tendría que ser cierto que: (a) los equipos se bloquean entre sí al desplegar, (b) existen límites de dominio claros por los que cortar, y (c) ya están resueltos los prerrequisitos #1 y #2 (CI/CD y tests) —migrar sin ellos sigue siendo temerario, ahora multiplicado por N servicios.
 
 </details>
 

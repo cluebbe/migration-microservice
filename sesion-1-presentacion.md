@@ -504,11 +504,26 @@ ES: Migrar es un MEDIO, nunca un fin. Si el objetivo es difuso ("modernizar"), n
 habrá criterio de parada ni de prioridad.
 Lead time = tiempo de commit a producción (métrica DORA).
 MTTR = tiempo medio de recuperación tras un incidente.
+Radio de impacto (blast radius) = cuánto del sistema se cae cuando falla una parte.
+En el monolito es máximo (un fallo tumba todo el proceso: es el síntoma #3 de
+LibroExpress, la búsqueda satura la CPU y cae la web entera); con servicios bien
+aislados el fallo queda contenido. Se mide como el % de funcionalidad/usuarios/
+transacciones afectados ante el fallo de un componente. Ojo: no baja solo —si la
+división crea una cadena síncrona obligatoria, el radio no se reduce, se reparte;
+reducirlo de verdad exige resiliencia (timeouts, circuit breakers), Sesión 4.
 
 EN: Migrating is a MEANS, never an end. If the goal is vague ("modernize"), there
 will be no stopping criterion and no way to prioritize.
 Lead time = time from commit to production (a DORA metric).
 MTTR = mean time to recovery after an incident.
+Blast radius = how much of the system goes down when one part fails. In the
+monolith it's maximal (one fault takes down the whole process: that's LibroExpress
+symptom #3, search saturates the CPU and the entire site goes down); with
+well-isolated services the failure stays contained. Measured as the % of
+functionality/users/transactions affected when a component fails. Note: it doesn't
+drop by itself —if the split creates a mandatory synchronous chain, the radius
+isn't reduced, just spread; truly reducing it requires resilience (timeouts,
+circuit breakers), Session 4.
 -->
 
 ---
