@@ -291,28 +291,38 @@ Los patrones operan a niveles distintos y una migración real los apila:
 
 ## Ejercicios
 
-### Ejercicio 2.1 — Elegir patrón para cada situación
+### Ejercicio 2.1 — El bucle del estrangulador, paso a paso
 
-Para cada escenario, indica el patrón (o combinación) más adecuado y por qué:
+**SaludPlus**, una clínica online, tiene un monolito Java accesible por HTTP. Quieres extraer la **gestión de citas**, que los pacientes usan bajo las rutas `/citas/*`. Las citas necesitan leer datos de pacientes (nombre, historia) que viven en el monolito. El monolito está en producción y no puede pararse.
 
-- **A.** Una aplicación web monolítica de RR. HH. Quieres extraer el módulo de "gestión de vacaciones", que tiene sus propias pantallas bajo `/vacaciones/*`.
-- **B.** El monolito usa una librería interna de cálculo de impuestos llamada desde 47 puntos del código. Quieres sustituirla por un nuevo `tax-service`.
-- **C.** Vas a reemplazar el motor de tarificación de seguros. Un error de cálculo en producción tendría consecuencias regulatorias.
-- **D.** El negocio lanza una línea de producto totalmente nueva ("seguros para mascotas") que apenas comparte reglas con el legacy, pero necesita los datos de clientes existentes.
-- **E.** Una utilidad interna de 3.000 líneas que genera un informe semanal, sin cambios funcionales en 4 años y con una suite de tests que cubre todos los casos. Hay que sacarla de una plataforma que se apaga en 6 meses.
+**Tarea:** Describe la secuencia completa del Strangler. Para cada paso indica: qué se despliega, si cambia el comportamiento observable y cómo se haría rollback. Responde además:
+1. ¿Qué haces en el "paso 0", antes de extraer nada?
+2. El servicio nuevo necesita los datos de pacientes del monolito mientras se construye. ¿Cómo lo resuelves sin acoplarte a su modelo?
+3. ¿Cómo verificas que el servicio nuevo se comporta bien **antes** de borrar el código viejo? ¿Y cuándo borras?
 
 <details>
 <summary>💡 Solución</summary>
 
-- **A — Strangler Fig.** Existe un borde perfecto: las rutas `/vacaciones/*` son interceptables por un proxy. Pasos: fachada delante del monolito → construir `vacation-service` → redirigir las rutas (gradualmente si se quiere) → borrar el módulo del monolito. Con una **ACL** si el servicio nuevo necesita leer datos del legacy (empleados, calendarios).
+**Paso 0 — Introducir la fachada.** Colocar un proxy/gateway delante del monolito que enruta el **100 % al monolito** (sin cambio de comportamiento).
+*Despliegue:* sí (infraestructura de enrutado). *Comportamiento:* idéntico. *Rollback:* quitar el proxy. Es el paso de menor riesgo y deja lista la redirección.
 
-- **B — Branch by Abstraction.** No hay borde externo: 47 llamantes *internos*. Crear la interfaz `TaxCalculator`, migrar los 47 puntos a la interfaz (refactorización segura), implementar detrás una versión que llama a `tax-service`, conmutar con feature flag, borrar la librería vieja. Strangler no aplica porque no hay nada que interceptar desde fuera.
+**Paso 1 — Construir `appointments-service`** con su propia BD, desplegado pero **sin tráfico** (la fachada sigue enviando todo al monolito). Durante la construcción lee los datos de pacientes del monolito a través de una **API interna**, no leyendo sus tablas directamente.
+*Comportamiento:* idéntico. *Rollback:* innecesario, no recibe tráfico.
 
-- **C — Parallel Run** (montado sobre Branch by Abstraction o Strangler). El riesgo es alto y la salida (una prima calculada) es perfectamente comparable. Ejecutar ambos motores en sombra con tráfico real, medir el porcentaje de coincidencia, investigar discrepancias (¡algunas serán bugs del *legacy*!), y conmutar solo con evidencia cuantitativa. Atención a los efectos secundarios y al no determinismo (redondeos) en la comparación.
+**Paso 2 — Redirección gradual (canary).** Apuntar `/citas/*` al servicio nuevo para una porción pequeña (p. ej. citas de empleados internos, o el 1 % de pacientes) → observar métricas y errores → subir a 10 % → 100 %.
+*Comportamiento:* cambia solo para la porción redirigida. *Rollback:* re-apuntar la ruta al monolito en la fachada (cambio de configuración, segundos).
 
-- **D — Bubble Context** (con su ACL). El motor es modelar un dominio **nuevo** con reglas propias: nace como contexto limpio con su propio modelo, y la ACL traduce/sincroniza los datos de clientes desde el legacy. Con el tiempo, si crece, se convierte en servicio independiente. Empezar esta línea *dentro* del modelo legacy lo contaminaría desde el día uno.
+**Paso 3 — Borrar** el código de citas del monolito una vez el servicio nuevo lleva estable un tiempo al 100 %. ✂️
 
-- **E — Big-Bang (reescritura directa), y es la elección correcta.** Es el caso acotado donde se justifica: pequeño (3.000 líneas), congelado (4 años sin cambios), especificado por una suite de tests completa, y con una fecha límite externa real. Montar un Strangler con convivencia para esto sería sobreingeniería. Lección: big-bang no está prohibido; está prohibido para sistemas grandes, vivos y mal especificados.
+**Respuestas:**
+
+1. **Paso 0:** meter la fachada enrutando todo al monolito. No extrae nada todavía; solo prepara la infraestructura de redirección con riesgo casi nulo.
+
+2. **Datos de pacientes:** el servicio nuevo los lee vía una **API interna** del monolito (no accediendo a sus tablas), y pasa esa entrada por una **ACL** que traduce el modelo del paciente legacy al modelo limpio del servicio de citas. Así, cuando los datos se separen de verdad (Sesión 3), solo cambia la implementación detrás de la ACL. *Estrangular el código no estrangula los datos.*
+
+3. **Verificar antes de borrar:** la verificación ocurre **mientras conviven** (paso 2), no conservando el código viejo para siempre. Dos niveles: (a) la propia redirección gradual observando métricas/errores en cada escalón; (b) si el riesgo fuera alto y la salida comparable, un **Parallel Run** en sombra que compara la respuesta del servicio nuevo con la del monolito (ver Ejercicio 2.4). El rollback durante esta fase **no** depende del código viejo: se hace re-apuntando la ruta en la fachada. **Se borra** (paso 3) solo tras estabilizar al 100 % durante un periodo (p. ej. varias semanas). No borrar es el anti-patrón de **estrangulamiento eterno**: dos implementaciones y doble mantenimiento para siempre.
+
+**Lección:** el Strangler es seguro porque cada paso es pequeño, reversible por configuración y verificable con tráfico real *antes* del corte definitivo; y porque tiene un final explícito (borrar), no un "híbrido para siempre".
 
 </details>
 
@@ -439,7 +449,34 @@ Vais a sustituir el cálculo de comisiones de los agentes comerciales (legacy CO
 
 ---
 
-### Ejercicio 2.5 — Combinar patrones: plan integral
+### Ejercicio 2.5 — Elegir patrón para cada situación
+
+Para cada escenario, indica el patrón (o combinación) más adecuado y por qué:
+
+- **A.** Una aplicación web monolítica de RR. HH. Quieres extraer el módulo de "gestión de vacaciones", que tiene sus propias pantallas bajo `/vacaciones/*`.
+- **B.** El monolito usa una librería interna de cálculo de impuestos llamada desde 47 puntos del código. Quieres sustituirla por un nuevo `tax-service`.
+- **C.** Vas a reemplazar el motor de tarificación de seguros. Un error de cálculo en producción tendría consecuencias regulatorias.
+- **D.** El negocio lanza una línea de producto totalmente nueva ("seguros para mascotas") que apenas comparte reglas con el legacy, pero necesita los datos de clientes existentes.
+- **E.** Una utilidad interna de 3.000 líneas que genera un informe semanal, sin cambios funcionales en 4 años y con una suite de tests que cubre todos los casos. Hay que sacarla de una plataforma que se apaga en 6 meses.
+
+<details>
+<summary>💡 Solución</summary>
+
+- **A — Strangler Fig.** Existe un borde perfecto: las rutas `/vacaciones/*` son interceptables por un proxy. Pasos: fachada delante del monolito → construir `vacation-service` → redirigir las rutas (gradualmente si se quiere) → borrar el módulo del monolito. Con una **ACL** si el servicio nuevo necesita leer datos del legacy (empleados, calendarios).
+
+- **B — Branch by Abstraction.** No hay borde externo: 47 llamantes *internos*. Crear la interfaz `TaxCalculator`, migrar los 47 puntos a la interfaz (refactorización segura), implementar detrás una versión que llama a `tax-service`, conmutar con feature flag, borrar la librería vieja. Strangler no aplica porque no hay nada que interceptar desde fuera.
+
+- **C — Parallel Run** (montado sobre Branch by Abstraction o Strangler). El riesgo es alto y la salida (una prima calculada) es perfectamente comparable. Ejecutar ambos motores en sombra con tráfico real, medir el porcentaje de coincidencia, investigar discrepancias (¡algunas serán bugs del *legacy*!), y conmutar solo con evidencia cuantitativa. Atención a los efectos secundarios y al no determinismo (redondeos) en la comparación.
+
+- **D — Bubble Context** (con su ACL). El motor es modelar un dominio **nuevo** con reglas propias: nace como contexto limpio con su propio modelo, y la ACL traduce/sincroniza los datos de clientes desde el legacy. Con el tiempo, si crece, se convierte en servicio independiente. Empezar esta línea *dentro* del modelo legacy lo contaminaría desde el día uno.
+
+- **E — Big-Bang (reescritura directa), y es la elección correcta.** Es el caso acotado donde se justifica: pequeño (3.000 líneas), congelado (4 años sin cambios), especificado por una suite de tests completa, y con una fecha límite externa real. Montar un Strangler con convivencia para esto sería sobreingeniería. Lección: big-bang no está prohibido; está prohibido para sistemas grandes, vivos y mal especificados.
+
+</details>
+
+---
+
+### Ejercicio 2.6 — Combinar patrones: plan integral
 
 **MediaStream** (plataforma de vídeo, monolito de 12 años, 6 equipos) quiere: (1) extraer las recomendaciones, que hoy son llamadas internas desde 30 puntos del código y quieren reescribirse con un modelo de dominio nuevo basado en ML; (2) extraer la facturación, accesible solo vía las rutas `/billing/*`, cuyo cálculo de prorrateos es delicado; (3) que nada se rompa.
 
