@@ -80,11 +80,40 @@ Construir una **caja de herramientas** completa de patrones de migración.
 <!--
 ES: Recorrido de la sesión. Avisar de que habrá ejercicios intercalados tras cada
 bloque de patrones. Idea transversal: estos patrones existen para TROCEAR la
-migración en pasos pequeños, seguros y reversibles.
+migración en pasos pequeños, seguros y reversibles. Vistazo rápido a cada uno:
+- Strangler Fig: meter una fachada delante del monolito y mover funcionalidad al
+  servicio nuevo ruta a ruta, hasta que el viejo queda vacío.
+- ACL (capa anticorrupción): capa de traducción en la frontera para que el modelo
+  legacy no se filtre y contamine el modelo nuevo. Es transversal: aparece dentro de
+  casi todos los demás.
+- Big-Bang: reescribirlo todo y conmutar de golpe. Casi siempre mala idea; el "casi"
+  son piezas pequeñas, congeladas y bien especificadas.
+- Branch by Abstraction: el "strangler de interior" — una abstracción con dos
+  implementaciones y un flag, para reemplazar algo enterrado sin borde interceptable.
+- Parallel Run: ejecutar viejo y nuevo a la vez con tráfico real y comparar; valida
+  lo crítico antes de confiar en lo nuevo.
+- Bubble Context: arrancar un contexto nuevo y limpio (protegido por una ACL) para
+  remodelar un dominio dentro del entorno legacy.
+- Comparativa: cómo elegir entre ellos y, sobre todo, cómo combinarlos (no compiten).
 
 EN: Roadmap of the session. Warn them there will be exercises after each block of
 patterns. Cross-cutting idea: these patterns exist to BREAK the migration into
-small, safe, reversible steps.
+small, safe, reversible steps. Quick gloss of each one:
+- Strangler Fig: put a facade in front of the monolith and move functionality to the
+  new service route by route, until the old one is empty.
+- ACL (anticorruption layer): a translation layer at the boundary so the legacy model
+  doesn't leak in and pollute the new model. It's cross-cutting: it shows up inside
+  almost all the others.
+- Big-Bang: rewrite everything and switch over at once. Almost always a bad idea; the
+  "almost" is small, frozen, well-specified pieces.
+- Branch by Abstraction: the "strangler of the interior" — an abstraction with two
+  implementations and a flag, to replace something buried with no interceptable edge.
+- Parallel Run: run old and new at once with real traffic and compare; validates the
+  critical stuff before trusting the new one.
+- Bubble Context: start a clean new context (protected by an ACL) to reshape a domain
+  inside the legacy environment.
+- Comparison: how to choose among them and, above all, how to combine them (they
+  don't compete).
 -->
 
 ---
@@ -159,7 +188,7 @@ split (resolved in Session 3).
 ## Propiedades clave
 
 - **Paso 0:** la fachada se introduce **antes** de extraer nada (enruta 100 % al monolito). Bajo riesgo, infraestructura lista.
-- **Redirección gradual** (canary): 1 % → 10 % → 100 % del tráfico.
+- **Redirección gradual** (*canary*): 1 % → 10 % → 100 % del tráfico.
 - **Rollback trivial:** volver a apuntar la ruta al monolito.
 - El corte natural es por **funcionalidad vertical** visible (URLs, operaciones de API), no por capas internas.
 
@@ -168,11 +197,77 @@ ES: Estas cuatro propiedades son las que hacen al Strangler tan seguro. El paso 
 clave y a menudo se olvida: meter el proxy primero, sin cambiar comportamiento. La
 gradualidad y el rollback trivial son lo que distingue migrar de jugársela. "Corte
 vertical" = una funcionalidad completa de punta a punta, no la capa de datos sola.
+Explicar "canary" (primera vez que aparece): viene del "canario en la mina" — los
+mineros bajaban un canario, más sensible a los gases tóxicos; si caía, les avisaba del
+peligro ANTES de que les afectara. Aquí igual: liberas a una porción pequeña (la
+"canary") y, si algo va mal, solo afecta a ese grupo, que actúa de alarma temprana
+antes de exponer a todos. Eso es el 1%→10%→100%; "solo empleados internos" es elegir
+QUIÉN forma esa primera cohorte.
 
 EN: These four properties are what make the Strangler so safe. Step 0 is key and
 often forgotten: put the proxy in first, with no behavior change. Graduality and
 trivial rollback are what separate migrating from gambling. "Vertical cut" = a whole
-feature end-to-end, not the data layer alone.
+feature end-to-end, not the data layer alone. Explain "canary" (first time it appears):
+it comes from the "canary in a coal mine" — miners took a canary down, more sensitive
+to toxic gas; if it collapsed it warned them of danger BEFORE it harmed them. Same here:
+you release to a small slice (the "canary") and, if something goes wrong, only that group
+is affected — they act as an early warning before you expose everyone. That's the
+1%→10%→100%; "internal employees only" is choosing WHO that first cohort is.
+-->
+
+---
+
+## Enrutado gradual: ¿cómo se elige la cohorte?
+
+La ruta dice *qué* funcionalidad; un **predicado extra** sobre la petición dice *a quién* se le da lo nuevo:
+
+1. **Identity / claims** — gateway tras el login: lee `role=employee` del JWT/sesión.
+2. **Red / IP** — personal interno por VPN/IP de oficina → allowlist, sin identidad.
+3. **Cabecera upstream** — auth en el borde sella `X-User-Type: internal`.
+4. **Cookie / feature-flag** — cookie de cohorte para usuarios opt-in.
+5. **Porcentaje** — hash del user/sesión → bucket del 1 %.
+
+> (1) y (3) exigen que el gateway **vea la identidad**; si no, solo IP o %.
+
+💡 Si el monolito gestiona su propia auth, su token es opaco al gateway → **externalizar el auth suele ser de las primeras extracciones**: desbloquea el enrutado por identidad.
+
+<!--
+ES: Esta slide resuelve la duda natural de "si la fachada enruta por ruta, ¿cómo
+redirige 'solo a empleados internos'?". Respuesta: la ruta es el selector grueso (¿es
+una petición de devoluciones?); encima se evalúa un predicado de cohorte. Cuatro
+mecanismos habituales (claims, IP, cabecera, cookie) + el porcentaje del canary. El
+matiz importante es el requisito: enrutar por identidad (1 y 3) necesita que el gateway
+esté DESPUÉS del login o pueda leer el token; si está delante del auth, te quedan IP (2)
+o porcentaje. Es el primo a nivel de gateway del feature flag de Branch by Abstraction:
+misma pregunta ("¿quién recibe lo nuevo?"), una decidida en el borde por atributos de la
+petición, la otra en proceso por configuración.
+Sobre el punto 💡: si el monolito es el dueño del auth, su token/cookie es opaco para el
+gateway, así que (1) y (3) no funcionan de fábrica — solo IP o porcentaje. Para
+desbloquearlas: o le das al gateway capacidad de validar el token (secreto compartido /
+introspección), o —mejor— externalizas el auth al borde. Por eso la autenticación es a
+menudo de los primeros candidatos a extraer: no por ser la función de más valor, sino
+porque DESBLOQUEA pasos posteriores (enrutado por identidad, que otros servicios confíen
+en un principal verificado). Buen ejemplo del tema de la Sesión 1: el orden de extracción
+importa, y a veces se extrae algo pronto para habilitar lo demás. (Enlaza con API Gateway
+y concerns transversales de la Sesión 4.)
+
+EN: This slide resolves the natural doubt: "if the facade routes by path, how does it
+redirect 'only to internal employees'?". Answer: the path is the coarse selector (is this
+a returns request?); on top of it you evaluate a cohort predicate. Four common mechanisms
+(claims, IP, header, cookie) + the canary percentage. The key nuance is the prerequisite:
+identity-based routing (1 and 3) needs the gateway to sit AFTER login or be able to read
+the token; if it sits in front of auth, you're left with IP (2) or percentage. It's the
+gateway-level cousin of Branch by Abstraction's feature flag: same question ("who gets the
+new thing?"), one decided at the edge by request attributes, the other in-process by config.
+On the 💡 point: if the monolith owns auth, its token/cookie is opaque to the gateway, so
+(1) and (3) don't work out of the box — only IP or percentage. To unlock them: either give
+the gateway token-validation ability (shared secret / introspection), or —better—
+externalize auth to the edge. That's why authentication is often one of the first
+extraction candidates: not because it's the highest-value feature, but because it UNBLOCKS
+later steps (identity-based routing, other services trusting a verified principal). A good
+example of the Session 1 theme: extraction order matters, and sometimes you extract
+something early to enable everything else. (Links to API Gateway and cross-cutting concerns
+in Session 4.)
 -->
 
 ---
@@ -210,7 +305,7 @@ edge to intercept at. When there's none, the sibling pattern is Branch by Abstra
 E-commerce monolítico → extraer gestión de devoluciones:
 
 1. Gateway delante; todo el tráfico pasa por él (sin cambios)
-2. `returns-service` con su propia BD; lee datos maestros del monolito vía API interna
+2. `returns-service` con su propia BD **para lo que posee**; **todavía** lee datos maestros (clientes, pedidos) del monolito vía API interna *— los datos aún no están separados (Sesión 3)*
 3. Redirigir `/devoluciones/*` solo a empleados internos (1 %) → observar → 100 %
    *(aquí se verifica; si el riesgo lo pide, comparando con el monolito vía Parallel Run → §5)*
 4. **Borrar** el código de devoluciones del monolito ✂️ *← el paso que nadie debe olvidar*
@@ -227,7 +322,11 @@ viejo: se hace re-apuntando la ruta en la fachada. El orden correcto es verifica
 estabilizar (p. ej. semanas al 100%) → borrar. El paso 4 es el FINAL: si no se borra,
 caes en el "estrangulamiento eterno" — dos implementaciones, doble mantenimiento, un
 sitio más donde corregir cada bug, y una migración que nunca termina. "Por si acaso"
-no tiene fecha de fin.
+no tiene fecha de fin. Ojo a la posible confusión con la slide anterior: "su propia BD"
+NO significa que los datos estén resueltos. El servicio tiene almacén para lo que posee,
+pero todavía depende de datos maestros del monolito (los lee por API) — exactamente la
+limitación "los datos no se estrangulan solos". Estrangular el código mueve las
+PETICIONES; separar/migrar los datos es un trabajo aparte (Sesión 3).
 
 EN: A concrete example of the full loop. Typical question: "shouldn't I keep the old
 code to verify the new one does the same?". Important nuance: YES you verify against the
@@ -239,6 +338,11 @@ keeping the old code: you re-point the route in the facade. The correct order is
 stabilize (e.g. weeks at 100%) → delete. Step 4 is the LAST one: if you don't delete, you
 fall into "eternal strangling" — two implementations, double maintenance, one more place
 to fix every bug, and a migration that never ends. "Just in case" has no end date.
+Watch for the possible confusion with the previous slide: "its own DB" does NOT mean the
+data is solved. The service has a store for what it owns, but it still depends on master
+data from the monolith (reads it via API) — exactly the "data isn't strangled by itself"
+limitation. Strangling the code moves the REQUESTS; splitting/migrating the data is a
+separate job (Session 3).
 -->
 
 ---

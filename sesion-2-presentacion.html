@@ -139,7 +139,7 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 <h2 id="objetivo-de-hoy">Objetivo de hoy</h2>
 <p>Construir una <strong>caja de herramientas</strong> completa de patrones de migración.</p>
@@ -216,7 +216,7 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 
 <h1 id="1-patr%C3%B3n-estrangulador">1. Patrón Estrangulador</h1>
@@ -285,7 +285,7 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 <h2 id="concepto-y-origen">Concepto y origen</h2>
 <p>La <strong>higuera estranguladora</strong>: crece alrededor del árbol hasta reemplazarlo, sin un corte abrupto. <em>(Martin Fowler, 2004.)</em></p>
@@ -363,7 +363,7 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 <h2 id="arquitectura-la-fachada-de-enrutado">Arquitectura: la fachada de enrutado</h2>
 <pre is="marp-pre" data-auto-scaling="downscale-only"><code>                      ┌──────────────┐
@@ -444,12 +444,12 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 <h2 id="propiedades-clave">Propiedades clave</h2>
 <ul>
 <li><strong>Paso 0:</strong> la fachada se introduce <strong>antes</strong> de extraer nada (enruta 100 % al monolito). Bajo riesgo, infraestructura lista.</li>
-<li><strong>Redirección gradual</strong> (canary): 1 % → 10 % → 100 % del tráfico.</li>
+<li><strong>Redirección gradual</strong> (<em>canary</em>): 1 % → 10 % → 100 % del tráfico.</li>
 <li><strong>Rollback trivial:</strong> volver a apuntar la ruta al monolito.</li>
 <li>El corte natural es por <strong>funcionalidad vertical</strong> visible (URLs, operaciones de API), no por capas internas.</li>
 </ul>
@@ -517,23 +517,21 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-<h2 id="ventajas-y-limitaciones">Ventajas y limitaciones</h2>
-<p><strong>Ventajas</strong></p>
-<ul>
-<li>Incremental; el sistema funciona siempre</li>
-<li>Reversible en cada paso</li>
-<li>Progreso visible y medible (% de tráfico en lo nuevo)</li>
-<li>No exige tocar el interior del monolito</li>
-</ul>
-<p><strong>Limitaciones</strong></p>
-<ul>
-<li>Necesita un <strong>borde interceptable</strong> (HTTP ideal); si está enterrado → <em>Branch by Abstraction</em></li>
-<li><strong>Los datos no se estrangulan solos</strong> (Sesión 3)</li>
-<li>La fachada es un punto único: fiable y observable</li>
-<li>Riesgo de <strong>estrangulamiento eterno</strong> si nadie prioriza terminar</li>
-</ul>
+<h2 id="enrutado-gradual-%C2%BFc%C3%B3mo-se-elige-la-cohorte">Enrutado gradual: ¿cómo se elige la cohorte?</h2>
+<p>La ruta dice <em>qué</em> funcionalidad; un <strong>predicado extra</strong> sobre la petición dice <em>a quién</em> se le da lo nuevo:</p>
+<ol>
+<li><strong>Identity / claims</strong> — gateway tras el login: lee <code>role=employee</code> del JWT/sesión.</li>
+<li><strong>Red / IP</strong> — personal interno por VPN/IP de oficina → allowlist, sin identidad.</li>
+<li><strong>Cabecera upstream</strong> — auth en el borde sella <code>X-User-Type: internal</code>.</li>
+<li><strong>Cookie / feature-flag</strong> — cookie de cohorte para usuarios opt-in.</li>
+<li><strong>Porcentaje</strong> — hash del user/sesión → bucket del 1 %.</li>
+</ol>
+<blockquote>
+<p>(1) y (3) exigen que el gateway <strong>vea la identidad</strong>; si no, solo IP o %.</p>
+</blockquote>
+<p><img class="emoji" draggable="false" alt="💡" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@17.0.2/assets/svg/1f4a1.svg" data-marp-twemoji=""/> Si el monolito gestiona su propia auth, su token es opaco al gateway → <strong>externalizar el auth suele ser de las primeras extracciones</strong>: desbloquea el enrutado por identidad.</p>
 <footer>Sesión 2 — Patrones de migración</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="8" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-theme="default" data-style="section {
@@ -598,87 +596,98 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
+<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
+<h2 id="ventajas-y-limitaciones">Ventajas y limitaciones</h2>
+<p><strong>Ventajas</strong></p>
+<ul>
+<li>Incremental; el sistema funciona siempre</li>
+<li>Reversible en cada paso</li>
+<li>Progreso visible y medible (% de tráfico en lo nuevo)</li>
+<li>No exige tocar el interior del monolito</li>
+</ul>
+<p><strong>Limitaciones</strong></p>
+<ul>
+<li>Necesita un <strong>borde interceptable</strong> (HTTP ideal); si está enterrado → <em>Branch by Abstraction</em></li>
+<li><strong>Los datos no se estrangulan solos</strong> (Sesión 3)</li>
+<li>La fachada es un punto único: fiable y observable</li>
+<li>Riesgo de <strong>estrangulamiento eterno</strong> si nadie prioriza terminar</li>
+</ul>
+<footer>Sesión 2 — Patrones de migración</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="9" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-theme="default" data-style="section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+" lang="en-US" data-marpit-pagination="9" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--theme:default;--style:section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 <h2 id="ejemplo-extraer-devoluciones">Ejemplo: extraer &quot;devoluciones&quot;</h2>
 <p>E-commerce monolítico → extraer gestión de devoluciones:</p>
 <ol>
 <li>Gateway delante; todo el tráfico pasa por él (sin cambios)</li>
-<li><code>returns-service</code> con su propia BD; lee datos maestros del monolito vía API interna</li>
+<li><code>returns-service</code> con su propia BD <strong>para lo que posee</strong>; <strong>todavía</strong> lee datos maestros (clientes, pedidos) del monolito vía API interna <em>— los datos aún no están separados (Sesión 3)</em></li>
 <li>Redirigir <code>/devoluciones/*</code> solo a empleados internos (1 %) → observar → 100 %<br />
 <em>(aquí se verifica; si el riesgo lo pide, comparando con el monolito vía Parallel Run → §5)</em></li>
 <li><strong>Borrar</strong> el código de devoluciones del monolito <img class="emoji" draggable="false" alt="✂️" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@17.0.2/assets/svg/2702.svg" data-marp-twemoji=""/> <em>← el paso que nadie debe olvidar</em></li>
 </ol>
-<footer>Sesión 2 — Patrones de migración</footer>
-</section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="9" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-class="lead" data-theme="default" data-style="section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-" lang="en-US" class="lead" data-marpit-pagination="9" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--class:lead;--theme:default;--style:section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-;" data-marpit-pagination-total="42">
-<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-
-<h1 id="ejercicio-21">Ejercicio 2.1</h1>
-<h2 id="el-bucle-del-estrangulador">El bucle del estrangulador</h2>
-<p><em>(ver cuaderno de ejercicios)</em></p>
 <footer>Sesión 2 — Patrones de migración</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="10" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-class="lead" data-theme="default" data-style="section {
@@ -743,84 +752,81 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
+<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
+
+<h1 id="ejercicio-21">Ejercicio 2.1</h1>
+<h2 id="el-bucle-del-estrangulador">El bucle del estrangulador</h2>
+<p><em>(ver cuaderno de ejercicios)</em></p>
+<footer>Sesión 2 — Patrones de migración</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="11" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-class="lead" data-theme="default" data-style="section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+" lang="en-US" class="lead" data-marpit-pagination="11" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--class:lead;--theme:default;--style:section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 
 <h1 id="2-capa-anticorrupci%C3%B3n">2. Capa Anticorrupción</h1>
 <h2 id="anticorruption-layer-acl">Anticorruption Layer (ACL)</h2>
-<footer>Sesión 2 — Patrones de migración</footer>
-</section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="11" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-theme="default" data-style="section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-" lang="en-US" data-marpit-pagination="11" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--theme:default;--style:section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-;" data-marpit-pagination-total="42">
-<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-<h2 id="concepto-y-relaci%C3%B3n-con-ddd">Concepto y relación con DDD</h2>
-<p><em>(Término de Domain-Driven Design, Eric Evans.)</em></p>
-<p><strong>Problema:</strong> cuando lo nuevo habla con el legacy, el modelo del legacy (nombres confusos, campos sobrecargados, reglas implícitas) <strong>se filtra</strong> y corrompe el modelo nuevo.</p>
-<blockquote>
-<p>Si el servicio nuevo acaba lleno de <code>flagEstado2</code> y <code>tipo_cliente_aux</code>, la reescritura no ha limpiado nada.</p>
-</blockquote>
-<p><strong>Solución:</strong> una capa de <strong>traducción explícita</strong> entre los dos modelos.</p>
 <footer>Sesión 2 — Patrones de migración</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="12" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-theme="default" data-style="section {
@@ -885,22 +891,15 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-<h2 id="la-capa-de-traducci%C3%B3n">La capa de traducción</h2>
-<pre is="marp-pre" data-auto-scaling="downscale-only"><code>┌────────────────────┐     ┌─────────────────────────┐     ┌──────────────┐
-│  Servicio nuevo    │     │   ACL                   │     │   Monolito   │
-│  (modelo limpio)   │◄──► │  · adaptadores          │◄──► │   (modelo    │
-│                    │     │  · traductores de modelo│     │    legacy)   │
-│  Customer          │     │  · fachadas             │     │  KUNDE_STAMM │
-│  PolicyStatus      │     │  KUNDE_STAMM→Customer   │     │  FLAG_ST_2   │
-└────────────────────┘     └─────────────────────────┘     └──────────────┘
-</code></pre>
-<ul>
-<li><strong>Adaptador:</strong> convierte protocolo/tecnología (SOAP→REST, tablas→objetos)</li>
-<li><strong>Traductor de modelo:</strong> mapea conceptos (<code>FLAG_ST_2='X'</code> → <code>PolicyStatus.SUSPENDED</code>)</li>
-<li><strong>Fachada:</strong> simplifica una interfaz legacy enrevesada</li>
-</ul>
+<h2 id="concepto-y-relaci%C3%B3n-con-ddd">Concepto y relación con DDD</h2>
+<p><em>(Término de Domain-Driven Design, Eric Evans.)</em></p>
+<p><strong>Problema:</strong> cuando lo nuevo habla con el legacy, el modelo del legacy (nombres confusos, campos sobrecargados, reglas implícitas) <strong>se filtra</strong> y corrompe el modelo nuevo.</p>
+<blockquote>
+<p>Si el servicio nuevo acaba lleno de <code>flagEstado2</code> y <code>tipo_cliente_aux</code>, la reescritura no ha limpiado nada.</p>
+</blockquote>
+<p><strong>Solución:</strong> una capa de <strong>traducción explícita</strong> entre los dos modelos.</p>
 <footer>Sesión 2 — Patrones de migración</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="13" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-theme="default" data-style="section {
@@ -965,13 +964,21 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-<h2 id="reglas-de-oro-de-la-acl">Reglas de oro de la ACL</h2>
+<h2 id="la-capa-de-traducci%C3%B3n">La capa de traducción</h2>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code>┌────────────────────┐     ┌─────────────────────────┐     ┌──────────────┐
+│  Servicio nuevo    │     │   ACL                   │     │   Monolito   │
+│  (modelo limpio)   │◄──► │  · adaptadores          │◄──► │   (modelo    │
+│                    │     │  · traductores de modelo│     │    legacy)   │
+│  Customer          │     │  · fachadas             │     │  KUNDE_STAMM │
+│  PolicyStatus      │     │  KUNDE_STAMM→Customer   │     │  FLAG_ST_2   │
+└────────────────────┘     └─────────────────────────┘     └──────────────┘
+</code></pre>
 <ul>
-<li>La ACL <strong>pertenece al sistema nuevo</strong> (la escribe y mantiene su equipo, en sus términos)</li>
-<li>El modelo legacy <strong>no cruza</strong> la ACL: ningún tipo, nombre ni convención del legacy aparece más allá</li>
-<li>Es <strong>código de usar y tirar a largo plazo</strong>: cuando el legacy muera, la ACL se borra con él → puede ser pragmática, no perfecta</li>
+<li><strong>Adaptador:</strong> convierte protocolo/tecnología (SOAP→REST, tablas→objetos)</li>
+<li><strong>Traductor de modelo:</strong> mapea conceptos (<code>FLAG_ST_2='X'</code> → <code>PolicyStatus.SUSPENDED</code>)</li>
+<li><strong>Fachada:</strong> simplifica una interfaz legacy enrevesada</li>
 </ul>
 <footer>Sesión 2 — Patrones de migración</footer>
 </section>
@@ -1037,20 +1044,13 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-<h2 id="beneficios-y-limitaciones">Beneficios y limitaciones</h2>
-<p><strong>Beneficios</strong></p>
+<h2 id="reglas-de-oro-de-la-acl">Reglas de oro de la ACL</h2>
 <ul>
-<li>Protege la integridad del modelo nuevo (la razón de la reescritura)</li>
-<li>Aísla el cambio: si el legacy cambia, solo se toca la ACL</li>
-<li>Documenta de forma ejecutable el mapeo viejo<img class="emoji" draggable="false" alt="↔" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@17.0.2/assets/svg/2194.svg" data-marp-twemoji=""/>nuevo</li>
-</ul>
-<p><strong>Limitaciones / costes</strong></p>
-<ul>
-<li>Código adicional que escribir y mantener (semánticas que no mapean 1:1, datos sucios)</li>
-<li>Un salto más (latencia, posible punto de fallo)</li>
-<li>Riesgo de <strong>mini-monolito</strong> si una sola ACL gigante lo centraliza todo → mejor <strong>una ACL por contexto</strong></li>
+<li>La ACL <strong>pertenece al sistema nuevo</strong> (la escribe y mantiene su equipo, en sus términos)</li>
+<li>El modelo legacy <strong>no cruza</strong> la ACL: ningún tipo, nombre ni convención del legacy aparece más allá</li>
+<li>Es <strong>código de usar y tirar a largo plazo</strong>: cuando el legacy muera, la ACL se borra con él → puede ser pragmática, no perfecta</li>
 </ul>
 <footer>Sesión 2 — Patrones de migración</footer>
 </section>
@@ -1116,7 +1116,86 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
+<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
+<h2 id="beneficios-y-limitaciones">Beneficios y limitaciones</h2>
+<p><strong>Beneficios</strong></p>
+<ul>
+<li>Protege la integridad del modelo nuevo (la razón de la reescritura)</li>
+<li>Aísla el cambio: si el legacy cambia, solo se toca la ACL</li>
+<li>Documenta de forma ejecutable el mapeo viejo<img class="emoji" draggable="false" alt="↔" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@17.0.2/assets/svg/2194.svg" data-marp-twemoji=""/>nuevo</li>
+</ul>
+<p><strong>Limitaciones / costes</strong></p>
+<ul>
+<li>Código adicional que escribir y mantener (semánticas que no mapean 1:1, datos sucios)</li>
+<li>Un salto más (latencia, posible punto de fallo)</li>
+<li>Riesgo de <strong>mini-monolito</strong> si una sola ACL gigante lo centraliza todo → mejor <strong>una ACL por contexto</strong></li>
+</ul>
+<footer>Sesión 2 — Patrones de migración</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="16" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-theme="default" data-style="section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+" lang="en-US" data-marpit-pagination="16" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--theme:default;--style:section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 <h2 id="ejemplo-la-aseguradora">Ejemplo: la aseguradora</h2>
 <p><code>policy-service</code> nuevo necesita pólizas que viven en un <strong>mainframe</strong>.</p>
@@ -1125,76 +1204,6 @@ section.lead h1 {
 </blockquote>
 <p>La ACL encapsula esa <strong>lógica arqueológica</strong> en <code>isActive(policyId)</code> y expone <code>Policy</code> con el modelo limpio.</p>
 <p>Cuando el mainframe se apague → se borra la ACL y <code>policy-service</code> ni se entera.</p>
-<footer>Sesión 2 — Patrones de migración</footer>
-</section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="16" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-class="lead" data-theme="default" data-style="section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-" lang="en-US" class="lead" data-marpit-pagination="16" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--class:lead;--theme:default;--style:section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-;" data-marpit-pagination-total="42">
-<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-
-<h1 id="ejercicio-22">Ejercicio 2.2</h1>
-<h2 id="dise%C3%B1ar-una-acl">Diseñar una ACL</h2>
-<p><em>(ver cuaderno de ejercicios)</em></p>
 <footer>Sesión 2 — Patrones de migración</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="17" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-class="lead" data-theme="default" data-style="section {
@@ -1259,82 +1268,80 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
+<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
+
+<h1 id="ejercicio-22">Ejercicio 2.2</h1>
+<h2 id="dise%C3%B1ar-una-acl">Diseñar una ACL</h2>
+<p><em>(ver cuaderno de ejercicios)</em></p>
+<footer>Sesión 2 — Patrones de migración</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="18" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-class="lead" data-theme="default" data-style="section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+" lang="en-US" class="lead" data-marpit-pagination="18" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--class:lead;--theme:default;--style:section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 
 <h1 id="3-reescritura-big-bang">3. Reescritura Big-Bang</h1>
-<footer>Sesión 2 — Patrones de migración</footer>
-</section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="18" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-theme="default" data-style="section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-" lang="en-US" data-marpit-pagination="18" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--theme:default;--style:section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-;" data-marpit-pagination-total="42">
-<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-<h2 id="por-qu%C3%A9-es-tentadora">Por qué es tentadora</h2>
-<ul>
-<li><em>&quot;El código viejo no tiene arreglo; de cero será más rápido.&quot;</em></li>
-<li>Psicológicamente atractiva: <strong>campo verde</strong>, tecnología nueva, sin deuda</li>
-<li>Evita la complejidad de la <strong>convivencia</strong> (proxies, sincronización, dos sistemas)</li>
-</ul>
 <footer>Sesión 2 — Patrones de migración</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="19" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-theme="default" data-style="section {
@@ -1399,15 +1406,13 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-<h2 id="por-qu%C3%A9-es-arriesgada">Por qué es arriesgada</h2>
+<h2 id="por-qu%C3%A9-es-tentadora">Por qué es tentadora</h2>
 <ul>
-<li><strong>Objetivo móvil:</strong> el monolito sigue evolucionando durante la reescritura (el negocio no para)</li>
-<li><strong>El conocimiento está en el código:</strong> miles de reglas no documentadas que se redescubren… en producción</li>
-<li><strong>Cero valor hasta el final:</strong> todo se entrega de golpe en un corte de altísimo riesgo</li>
-<li><strong>Segundo sistema (Brooks):</strong> la tentación de añadir &quot;todo lo que faltaba&quot; infla el alcance</li>
-<li>La evidencia es contundente: las reescrituras big-bang grandes <strong>fracasan o se desbordan</strong> con muchísima frecuencia</li>
+<li><em>&quot;El código viejo no tiene arreglo; de cero será más rápido.&quot;</em></li>
+<li>Psicológicamente atractiva: <strong>campo verde</strong>, tecnología nueva, sin deuda</li>
+<li>Evita la complejidad de la <strong>convivencia</strong> (proxies, sincronización, dos sistemas)</li>
 </ul>
 <footer>Sesión 2 — Patrones de migración</footer>
 </section>
@@ -1473,7 +1478,81 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
+<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
+<h2 id="por-qu%C3%A9-es-arriesgada">Por qué es arriesgada</h2>
+<ul>
+<li><strong>Objetivo móvil:</strong> el monolito sigue evolucionando durante la reescritura (el negocio no para)</li>
+<li><strong>El conocimiento está en el código:</strong> miles de reglas no documentadas que se redescubren… en producción</li>
+<li><strong>Cero valor hasta el final:</strong> todo se entrega de golpe en un corte de altísimo riesgo</li>
+<li><strong>Segundo sistema (Brooks):</strong> la tentación de añadir &quot;todo lo que faltaba&quot; infla el alcance</li>
+<li>La evidencia es contundente: las reescrituras big-bang grandes <strong>fracasan o se desbordan</strong> con muchísima frecuencia</li>
+</ul>
+<footer>Sesión 2 — Patrones de migración</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="21" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-theme="default" data-style="section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+" lang="en-US" data-marpit-pagination="21" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--theme:default;--style:section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 <h2 id="cu%C3%A1ndo-puede-justificarse">Cuándo <em>puede</em> justificarse</h2>
 <p>Casos acotados donde es defendible:</p>
@@ -1488,7 +1567,7 @@ section.lead h1 {
 </blockquote>
 <footer>Sesión 2 — Patrones de migración</footer>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="21" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-class="lead" data-theme="default" data-style="section {
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="22" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-class="lead" data-theme="default" data-style="section {
   font-size: 26px;
 }
 header {
@@ -1519,7 +1598,7 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-" lang="en-US" class="lead" data-marpit-pagination="21" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--class:lead;--theme:default;--style:section {
+" lang="en-US" class="lead" data-marpit-pagination="22" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--class:lead;--theme:default;--style:section {
   font-size: 26px;
 }
 header {
@@ -1550,80 +1629,10 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 
 <h1 id="4-branch-by-abstraction">4. Branch by Abstraction</h1>
-<footer>Sesión 2 — Patrones de migración</footer>
-</section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="22" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-theme="default" data-style="section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-" lang="en-US" data-marpit-pagination="22" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--theme:default;--style:section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-;" data-marpit-pagination-total="42">
-<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-<h2 id="el-problema-que-resuelve">El problema que resuelve</h2>
-<p>Strangler intercepta <strong>desde fuera</strong>. Pero ¿y si lo que quieres reemplazar está <strong>enterrado dentro</strong> del monolito, llamado desde decenas de sitios?</p>
-<p>→ No hay borde donde poner un proxy.</p>
-<p>La alternativa clásica era una <strong>rama de larga vida</strong> (&quot;la rama de la migración&quot;) y su infierno de merges. Branch by Abstraction logra lo mismo <strong>en trunk</strong>, desplegando continuamente.</p>
 <footer>Sesión 2 — Patrones de migración</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="23" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-theme="default" data-style="section {
@@ -1688,16 +1697,12 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-<h2 id="los-cinco-pasos">Los cinco pasos</h2>
-<ol>
-<li><strong>Crear una abstracción</strong> (interfaz) sobre la funcionalidad a reemplazar</li>
-<li><strong>Migrar los clientes</strong> internos a la abstracción <em>(pasos 1–2 = pura refactorización)</em></li>
-<li><strong>Crear la implementación nueva</strong> detrás de la misma abstracción (desplegada pero inactiva)</li>
-<li><strong>Conmutar</strong> con un <em>feature flag</em> (configurable, rollback al instante)</li>
-<li><strong>Limpiar:</strong> borrar la implementación vieja y, si ya no aporta, la abstracción/flag</li>
-</ol>
+<h2 id="el-problema-que-resuelve">El problema que resuelve</h2>
+<p>Strangler intercepta <strong>desde fuera</strong>. Pero ¿y si lo que quieres reemplazar está <strong>enterrado dentro</strong> del monolito, llamado desde decenas de sitios?</p>
+<p>→ No hay borde donde poner un proxy.</p>
+<p>La alternativa clásica era una <strong>rama de larga vida</strong> (&quot;la rama de la migración&quot;) y su infierno de merges. Branch by Abstraction logra lo mismo <strong>en trunk</strong>, desplegando continuamente.</p>
 <footer>Sesión 2 — Patrones de migración</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="24" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-theme="default" data-style="section {
@@ -1762,23 +1767,16 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-<h2 id="visualmente">Visualmente</h2>
-<pre is="marp-pre" data-auto-scaling="downscale-only"><code>Paso 1-2:                       Paso 3-4:
-  clientes                        clientes
-     │                               │
-     ▼                               ▼
- ┌──────────────┐               ┌──────────────┐
- │ INotificador │               │ INotificador │  ← flag decide
- └──────┬───────┘               └───┬──────┬───┘
-        ▼                           ▼      ▼
- ┌──────────────┐            ┌────────┐ ┌─────────────────┐
- │ impl. legacy │            │ legacy │ │ nueva (llama al │
- └──────────────┘            └────────┘ │ servicio nuevo) │
-                                        └─────────────────┘
-</code></pre>
-<p>Ambas implementaciones <strong>conviven</strong> detrás de la interfaz; el flag elige.</p>
+<h2 id="los-cinco-pasos">Los cinco pasos</h2>
+<ol>
+<li><strong>Crear una abstracción</strong> (interfaz) sobre la funcionalidad a reemplazar</li>
+<li><strong>Migrar los clientes</strong> internos a la abstracción <em>(pasos 1–2 = pura refactorización)</em></li>
+<li><strong>Crear la implementación nueva</strong> detrás de la misma abstracción (desplegada pero inactiva)</li>
+<li><strong>Conmutar</strong> con un <em>feature flag</em> (configurable, rollback al instante)</li>
+<li><strong>Limpiar:</strong> borrar la implementación vieja y, si ya no aporta, la abstracción/flag</li>
+</ol>
 <footer>Sesión 2 — Patrones de migración</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="25" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-theme="default" data-style="section {
@@ -1843,7 +1841,88 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
+<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
+<h2 id="visualmente">Visualmente</h2>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code>Paso 1-2:                       Paso 3-4:
+  clientes                        clientes
+     │                               │
+     ▼                               ▼
+ ┌──────────────┐               ┌──────────────┐
+ │ INotificador │               │ INotificador │  ← flag decide
+ └──────┬───────┘               └───┬──────┬───┘
+        ▼                           ▼      ▼
+ ┌──────────────┐            ┌────────┐ ┌─────────────────┐
+ │ impl. legacy │            │ legacy │ │ nueva (llama al │
+ └──────────────┘            └────────┘ │ servicio nuevo) │
+                                        └─────────────────┘
+</code></pre>
+<p>Ambas implementaciones <strong>conviven</strong> detrás de la interfaz; el flag elige.</p>
+<footer>Sesión 2 — Patrones de migración</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="26" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-theme="default" data-style="section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+" lang="en-US" data-marpit-pagination="26" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--theme:default;--style:section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 <h2 id="ventajas-y-limitaciones-1">Ventajas y limitaciones</h2>
 <p><strong>Ventajas</strong></p>
@@ -1858,76 +1937,6 @@ section.lead h1 {
 <li>Una buena abstracción puede ser difícil si la funcionalidad está esparcida</li>
 <li>Coste doble de mantenimiento mientras conviven; requiere disciplina para el paso 5</li>
 </ul>
-<footer>Sesión 2 — Patrones de migración</footer>
-</section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="26" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-class="lead" data-theme="default" data-style="section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-" lang="en-US" class="lead" data-marpit-pagination="26" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--class:lead;--theme:default;--style:section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-;" data-marpit-pagination-total="42">
-<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-
-<h1 id="ejercicio-23">Ejercicio 2.3</h1>
-<h2 id="branch-by-abstraction-paso-a-paso">Branch by Abstraction, paso a paso</h2>
-<p><em>(ver cuaderno de ejercicios)</em></p>
 <footer>Sesión 2 — Patrones de migración</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="27" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-class="lead" data-theme="default" data-style="section {
@@ -1992,83 +2001,80 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
+<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
+
+<h1 id="ejercicio-23">Ejercicio 2.3</h1>
+<h2 id="branch-by-abstraction-paso-a-paso">Branch by Abstraction, paso a paso</h2>
+<p><em>(ver cuaderno de ejercicios)</em></p>
+<footer>Sesión 2 — Patrones de migración</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="28" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-class="lead" data-theme="default" data-style="section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+" lang="en-US" class="lead" data-marpit-pagination="28" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--class:lead;--theme:default;--style:section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 
 <h1 id="5-parallel-run">5. Parallel Run</h1>
-<footer>Sesión 2 — Patrones de migración</footer>
-</section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="28" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-theme="default" data-style="section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-" lang="en-US" data-marpit-pagination="28" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--theme:default;--style:section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-;" data-marpit-pagination-total="42">
-<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-<h2 id="concepto-y-variantes">Concepto y variantes</h2>
-<p>A veces conmutar —aunque sea gradual— <strong>da miedo</strong>: cálculos financieros, tarificación, decisiones regulatorias.</p>
-<p><strong>Parallel Run:</strong> ejecutar <strong>las dos implementaciones a la vez</strong> con las mismas peticiones reales y <strong>comparar resultados</strong>.</p>
-<ul>
-<li><strong>Lo viejo es la verdad</strong> (<em>shadow mode</em>): el cliente recibe la respuesta del legacy; la del nuevo se registra y compara. Las discrepancias no afectan a nadie.</li>
-<li><strong>Lo nuevo es la verdad:</strong> el cliente recibe la respuesta nueva; el legacy corre detrás como verificación, antes de apagarse.</li>
-</ul>
 <footer>Sesión 2 — Patrones de migración</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="29" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-theme="default" data-style="section {
@@ -2133,14 +2139,14 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-<h2 id="qu%C3%A9-se-compara-y-c%C3%B3mo">Qué se compara y cómo</h2>
+<h2 id="concepto-y-variantes">Concepto y variantes</h2>
+<p>A veces conmutar —aunque sea gradual— <strong>da miedo</strong>: cálculos financieros, tarificación, decisiones regulatorias.</p>
+<p><strong>Parallel Run:</strong> ejecutar <strong>las dos implementaciones a la vez</strong> con las mismas peticiones reales y <strong>comparar resultados</strong>.</p>
 <ul>
-<li>Resultados funcionales (¿la prima es la misma?), efectos esperados, y lo <strong>no funcional</strong> (¿latencia aceptable?)</li>
-<li>Hace falta un <strong>comparador</strong> (desde un job nocturno hasta comparación en línea)</li>
-<li><img class="emoji" draggable="false" alt="⚠️" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@17.0.2/assets/svg/26a0.svg" data-marp-twemoji=""/> <strong>Efectos secundarios:</strong> en sombra el nuevo <strong>no</strong> debe enviar emails, cobrar tarjetas ni escribir fuera → stubs/sandbox</li>
-<li><img class="emoji" draggable="false" alt="⚠️" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@17.0.2/assets/svg/26a0.svg" data-marp-twemoji=""/> <strong>No determinismo:</strong> timestamps, redondeos, IDs… las reglas deben tolerarlo o las falsas discrepancias ahogan a las reales</li>
+<li><strong>Lo viejo es la verdad</strong> (<em>shadow mode</em>): el cliente recibe la respuesta del legacy; la del nuevo se registra y compara. Las discrepancias no afectan a nadie.</li>
+<li><strong>Lo nuevo es la verdad:</strong> el cliente recibe la respuesta nueva; el legacy corre detrás como verificación, antes de apagarse.</li>
 </ul>
 <footer>Sesión 2 — Patrones de migración</footer>
 </section>
@@ -2206,82 +2212,85 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
+<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
+<h2 id="qu%C3%A9-se-compara-y-c%C3%B3mo">Qué se compara y cómo</h2>
+<ul>
+<li>Resultados funcionales (¿la prima es la misma?), efectos esperados, y lo <strong>no funcional</strong> (¿latencia aceptable?)</li>
+<li>Hace falta un <strong>comparador</strong> (desde un job nocturno hasta comparación en línea)</li>
+<li><img class="emoji" draggable="false" alt="⚠️" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@17.0.2/assets/svg/26a0.svg" data-marp-twemoji=""/> <strong>Efectos secundarios:</strong> en sombra el nuevo <strong>no</strong> debe enviar emails, cobrar tarjetas ni escribir fuera → stubs/sandbox</li>
+<li><img class="emoji" draggable="false" alt="⚠️" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@17.0.2/assets/svg/26a0.svg" data-marp-twemoji=""/> <strong>No determinismo:</strong> timestamps, redondeos, IDs… las reglas deben tolerarlo o las falsas discrepancias ahogan a las reales</li>
+</ul>
+<footer>Sesión 2 — Patrones de migración</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="31" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-theme="default" data-style="section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+" lang="en-US" data-marpit-pagination="31" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--theme:default;--style:section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 <h2 id="ventajas-limitaciones-y-encaje">Ventajas, limitaciones y encaje</h2>
 <p><strong>Ventajas:</strong> la validación más fuerte posible — datos reales, sin riesgo; confianza cuantificable (<em>&quot;99,98 % de coincidencia en 3M de peticiones&quot;</em>); detecta lo que ningún test sintético encuentra.</p>
 <p><strong>Limitaciones:</strong> coste doble de ejecución; la infra de comparación es trabajo real; difícil con escrituras; solo verifica lo que el tráfico real ejercita.</p>
 <p><strong>Encaje:</strong> alto riesgo + <strong>resultado comparable</strong> (cálculos, scoring). Va <em>dentro</em> de un Strangler o un BbA, no aislado.</p>
-<footer>Sesión 2 — Patrones de migración</footer>
-</section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="31" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-class="lead" data-theme="default" data-style="section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-" lang="en-US" class="lead" data-marpit-pagination="31" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--class:lead;--theme:default;--style:section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-;" data-marpit-pagination-total="42">
-<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-
-<h1 id="ejercicio-24">Ejercicio 2.4</h1>
-<h2 id="parallel-run-dise%C3%B1ar-la-comparaci%C3%B3n">Parallel Run: diseñar la comparación</h2>
-<p><em>(ver cuaderno de ejercicios)</em></p>
 <footer>Sesión 2 — Patrones de migración</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="32" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-class="lead" data-theme="default" data-style="section {
@@ -2346,88 +2355,80 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
+<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
+
+<h1 id="ejercicio-24">Ejercicio 2.4</h1>
+<h2 id="parallel-run-dise%C3%B1ar-la-comparaci%C3%B3n">Parallel Run: diseñar la comparación</h2>
+<p><em>(ver cuaderno de ejercicios)</em></p>
+<footer>Sesión 2 — Patrones de migración</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="33" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-class="lead" data-theme="default" data-style="section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+" lang="en-US" class="lead" data-marpit-pagination="33" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--class:lead;--theme:default;--style:section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 
 <h1 id="6-bubble-context">6. Bubble Context</h1>
-<footer>Sesión 2 — Patrones de migración</footer>
-</section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="33" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-theme="default" data-style="section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-" lang="en-US" data-marpit-pagination="33" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--theme:default;--style:section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-;" data-marpit-pagination-total="42">
-<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-<h2 id="concepto">Concepto</h2>
-<p><em>(Patrón DDD, Eric Evans.)</em> Cuando quieres modelar <strong>bien</strong> un dominio nuevo pero todo el entorno es legacy: creas una <strong>burbuja</strong> — un contexto nuevo, pequeño y limpio, <strong>protegido por una ACL</strong>.</p>
-<pre is="marp-pre" data-auto-scaling="downscale-only"><code>┌────────────────────────── legacy ─────────────────────────┐
-│            ┌─ ACL ─┐   ┌──────────────────────┐           │
-│   datos ◄──┤ trad. ├──►│   BURBUJA            │           │
-│   legacy   └───────┘   │  modelo limpio,      │           │
-│                        │  lenguaje ubicuo,    │           │
-│                        │  reglas nuevas       │           │
-│                        └──────────────────────┘           │
-└───────────────────────────────────────────────────────────┘
-</code></pre>
-<p>La burbuja se centra en <strong>el modelo</strong>, no en la infraestructura: puede vivir <em>dentro</em> del despliegue del monolito.</p>
 <footer>Sesión 2 — Patrones de migración</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="34" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-theme="default" data-style="section {
@@ -2492,14 +2493,20 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-<h2 id="evoluci%C3%B3n-t%C3%ADpica">Evolución típica</h2>
-<ol>
-<li><strong>Burbuja simple:</strong> sin persistencia propia; la ACL traduce desde los datos del legacy en cada acceso</li>
-<li><strong>Burbuja con BD propia</strong> (<em>autonomous bubble</em>): la ACL pasa a ser una capa de <strong>sincronización</strong> (a menudo asíncrona)</li>
-<li>La burbuja crece y se le da despliegue propio → <strong>microservicio nacido sano</strong>; o revienta la frontera y absorbe al legacy</li>
-</ol>
+<h2 id="concepto">Concepto</h2>
+<p><em>(Patrón DDD, Eric Evans.)</em> Cuando quieres modelar <strong>bien</strong> un dominio nuevo pero todo el entorno es legacy: creas una <strong>burbuja</strong> — un contexto nuevo, pequeño y limpio, <strong>protegido por una ACL</strong>.</p>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code>┌────────────────────────── legacy ─────────────────────────┐
+│            ┌─ ACL ─┐   ┌──────────────────────┐           │
+│   datos ◄──┤ trad. ├──►│   BURBUJA            │           │
+│   legacy   └───────┘   │  modelo limpio,      │           │
+│                        │  lenguaje ubicuo,    │           │
+│                        │  reglas nuevas       │           │
+│                        └──────────────────────┘           │
+└───────────────────────────────────────────────────────────┘
+</code></pre>
+<p>La burbuja se centra en <strong>el modelo</strong>, no en la infraestructura: puede vivir <em>dentro</em> del despliegue del monolito.</p>
 <footer>Sesión 2 — Patrones de migración</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="35" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-theme="default" data-style="section {
@@ -2564,7 +2571,79 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
+<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
+<h2 id="evoluci%C3%B3n-t%C3%ADpica">Evolución típica</h2>
+<ol>
+<li><strong>Burbuja simple:</strong> sin persistencia propia; la ACL traduce desde los datos del legacy en cada acceso</li>
+<li><strong>Burbuja con BD propia</strong> (<em>autonomous bubble</em>): la ACL pasa a ser una capa de <strong>sincronización</strong> (a menudo asíncrona)</li>
+<li>La burbuja crece y se le da despliegue propio → <strong>microservicio nacido sano</strong>; o revienta la frontera y absorbe al legacy</li>
+</ol>
+<footer>Sesión 2 — Patrones de migración</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="36" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-theme="default" data-style="section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+" lang="en-US" data-marpit-pagination="36" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--theme:default;--style:section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 <h2 id="ventajas-y-limitaciones-2">Ventajas y limitaciones</h2>
 <p><strong>Ventajas</strong></p>
@@ -2581,7 +2660,7 @@ section.lead h1 {
 </ul>
 <footer>Sesión 2 — Patrones de migración</footer>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="36" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-class="lead" data-theme="default" data-style="section {
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="37" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-class="lead" data-theme="default" data-style="section {
   font-size: 26px;
 }
 header {
@@ -2612,7 +2691,7 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-" lang="en-US" class="lead" data-marpit-pagination="36" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--class:lead;--theme:default;--style:section {
+" lang="en-US" class="lead" data-marpit-pagination="37" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--class:lead;--theme:default;--style:section {
   font-size: 26px;
 }
 header {
@@ -2643,125 +2722,10 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 
 <h1 id="7-comparativa-de-patrones">7. Comparativa de patrones</h1>
-<footer>Sesión 2 — Patrones de migración</footer>
-</section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="37" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-theme="default" data-style="section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-" lang="en-US" data-marpit-pagination="37" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--theme:default;--style:section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-;" data-marpit-pagination-total="42">
-<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-<h2 id="tabla-de-decisi%C3%B3n">Tabla de decisión</h2>
-<table>
-<thead>
-<tr>
-<th>Patrón</th>
-<th>Pregunta que responde</th>
-<th>Mejor cuando…</th>
-<th>Riesgo principal</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Strangler Fig</strong></td>
-<td>¿Reemplazo funcionalidad del borde?</td>
-<td>Hay un punto de entrada interceptable</td>
-<td>Quedarse a medias; ignorar datos</td>
-</tr>
-<tr>
-<td><strong>ACL</strong></td>
-<td>¿Evito que el legacy contamine lo nuevo?</td>
-<td>Siempre que lo nuevo hable con lo viejo</td>
-<td>Mini-monolito; mantenimiento</td>
-</tr>
-<tr>
-<td><strong>Big-Bang</strong></td>
-<td>¿Lo reescribo todo de golpe?</td>
-<td>Sistema pequeño, congelado, especificado</td>
-<td>Objetivo móvil; cero valor</td>
-</tr>
-<tr>
-<td><strong>Branch by Abstraction</strong></td>
-<td>¿Reemplazo algo enterrado?</td>
-<td>Puedes tocar el código; muchos llamantes</td>
-<td>No ejecutar la limpieza</td>
-</tr>
-<tr>
-<td><strong>Parallel Run</strong></td>
-<td>¿Gano confianza en lo nuevo?</td>
-<td>Alto riesgo + salida comparable</td>
-<td>Coste doble; efectos 2arios</td>
-</tr>
-<tr>
-<td><strong>Bubble Context</strong></td>
-<td>¿Modelo limpio dentro del legacy?</td>
-<td>El motor es remodelar el dominio</td>
-<td>Sincronización; burbuja estancada</td>
-</tr>
-</tbody>
-</table>
 <footer>Sesión 2 — Patrones de migración</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="38" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-theme="default" data-style="section {
@@ -2826,17 +2790,57 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-<h2 id="no-son-excluyentes-se-combinan">No son excluyentes: se combinan</h2>
-<p>Una migración real los <strong>apila</strong>:</p>
-<ul>
-<li><strong>Strangler Fig</strong> como estrategia global de redirección desde el borde…</li>
-<li>…usando <strong>Branch by Abstraction</strong> para las piezas internas sin borde…</li>
-<li>…con una <strong>ACL</strong> en cada frontera entre lo nuevo y lo viejo…</li>
-<li>…validando lo crítico con <strong>Parallel Run</strong> antes de conmutar…</li>
-<li>…y arrancando los dominios a remodelar como <strong>Bubble Contexts</strong>.</li>
-</ul>
+<h2 id="tabla-de-decisi%C3%B3n">Tabla de decisión</h2>
+<table>
+<thead>
+<tr>
+<th>Patrón</th>
+<th>Pregunta que responde</th>
+<th>Mejor cuando…</th>
+<th>Riesgo principal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Strangler Fig</strong></td>
+<td>¿Reemplazo funcionalidad del borde?</td>
+<td>Hay un punto de entrada interceptable</td>
+<td>Quedarse a medias; ignorar datos</td>
+</tr>
+<tr>
+<td><strong>ACL</strong></td>
+<td>¿Evito que el legacy contamine lo nuevo?</td>
+<td>Siempre que lo nuevo hable con lo viejo</td>
+<td>Mini-monolito; mantenimiento</td>
+</tr>
+<tr>
+<td><strong>Big-Bang</strong></td>
+<td>¿Lo reescribo todo de golpe?</td>
+<td>Sistema pequeño, congelado, especificado</td>
+<td>Objetivo móvil; cero valor</td>
+</tr>
+<tr>
+<td><strong>Branch by Abstraction</strong></td>
+<td>¿Reemplazo algo enterrado?</td>
+<td>Puedes tocar el código; muchos llamantes</td>
+<td>No ejecutar la limpieza</td>
+</tr>
+<tr>
+<td><strong>Parallel Run</strong></td>
+<td>¿Gano confianza en lo nuevo?</td>
+<td>Alto riesgo + salida comparable</td>
+<td>Coste doble; efectos 2arios</td>
+</tr>
+<tr>
+<td><strong>Bubble Context</strong></td>
+<td>¿Modelo limpio dentro del legacy?</td>
+<td>El motor es remodelar el dominio</td>
+<td>Sincronización; burbuja estancada</td>
+</tr>
+</tbody>
+</table>
 <footer>Sesión 2 — Patrones de migración</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="39" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-theme="default" data-style="section {
@@ -2901,7 +2905,82 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
+<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
+<h2 id="no-son-excluyentes-se-combinan">No son excluyentes: se combinan</h2>
+<p>Una migración real los <strong>apila</strong>:</p>
+<ul>
+<li><strong>Strangler Fig</strong> como estrategia global de redirección desde el borde…</li>
+<li>…usando <strong>Branch by Abstraction</strong> para las piezas internas sin borde…</li>
+<li>…con una <strong>ACL</strong> en cada frontera entre lo nuevo y lo viejo…</li>
+<li>…validando lo crítico con <strong>Parallel Run</strong> antes de conmutar…</li>
+<li>…y arrancando los dominios a remodelar como <strong>Bubble Contexts</strong>.</li>
+</ul>
+<footer>Sesión 2 — Patrones de migración</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="40" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-theme="default" data-style="section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+" lang="en-US" data-marpit-pagination="40" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--theme:default;--style:section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 <h2 id="criterios-transversales-de-elecci%C3%B3n">Criterios transversales de elección</h2>
 <ol>
@@ -2913,7 +2992,7 @@ section.lead h1 {
 </ol>
 <footer>Sesión 2 — Patrones de migración</footer>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="40" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-class="lead" data-theme="default" data-style="section {
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="41" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-class="lead" data-theme="default" data-style="section {
   font-size: 26px;
 }
 header {
@@ -2944,7 +3023,7 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-" lang="en-US" class="lead" data-marpit-pagination="40" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--class:lead;--theme:default;--style:section {
+" lang="en-US" class="lead" data-marpit-pagination="41" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--class:lead;--theme:default;--style:section {
   font-size: 26px;
 }
 header {
@@ -2975,7 +3054,7 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 
 <h1 id="ejercicio-25--26">Ejercicio 2.5 + 2.6</h1>
@@ -2984,7 +3063,7 @@ section.lead h1 {
 <p><em>(ver cuaderno de ejercicios)</em></p>
 <footer>Sesión 2 — Patrones de migración</footer>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="41" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-theme="default" data-style="section {
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="42" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-theme="default" data-style="section {
   font-size: 26px;
 }
 header {
@@ -3015,7 +3094,7 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-" lang="en-US" data-marpit-pagination="41" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--theme:default;--style:section {
+" lang="en-US" data-marpit-pagination="42" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--theme:default;--style:section {
   font-size: 26px;
 }
 header {
@@ -3046,7 +3125,7 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 <h2 id="resumen-de-la-sesi%C3%B3n">Resumen de la sesión</h2>
 <ul>
@@ -3060,7 +3139,7 @@ section.lead h1 {
 </ul>
 <footer>Sesión 2 — Patrones de migración</footer>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="42" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-class="lead" data-theme="default" data-style="section {
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="43" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 2 — Patrones de migración" data-class="lead" data-theme="default" data-style="section {
   font-size: 26px;
 }
 header {
@@ -3091,7 +3170,7 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-" lang="en-US" class="lead" data-marpit-pagination="42" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--class:lead;--theme:default;--style:section {
+" lang="en-US" class="lead" data-marpit-pagination="43" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 2 — Patrones de migración;--class:lead;--theme:default;--style:section {
   font-size: 26px;
 }
 header {
@@ -3122,7 +3201,7 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="42">
+;" data-marpit-pagination-total="43">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 
 <h1 id="%C2%BFpreguntas">¿Preguntas?</h1>
@@ -3141,11 +3220,40 @@ HOW. The goal is to build a toolbox of proven migration patterns, understanding
 each one's strengths, limits and where it fits. There's no single &quot;winning&quot;
 pattern: the craft is in choosing and combining them.</p></div><div class="bespoke-marp-note" data-index="1" tabindex="0"><p>ES: Recorrido de la sesión. Avisar de que habrá ejercicios intercalados tras cada
 bloque de patrones. Idea transversal: estos patrones existen para TROCEAR la
-migración en pasos pequeños, seguros y reversibles.
+migración en pasos pequeños, seguros y reversibles. Vistazo rápido a cada uno:
+- Strangler Fig: meter una fachada delante del monolito y mover funcionalidad al
+  servicio nuevo ruta a ruta, hasta que el viejo queda vacío.
+- ACL (capa anticorrupción): capa de traducción en la frontera para que el modelo
+  legacy no se filtre y contamine el modelo nuevo. Es transversal: aparece dentro de
+  casi todos los demás.
+- Big-Bang: reescribirlo todo y conmutar de golpe. Casi siempre mala idea; el &quot;casi&quot;
+  son piezas pequeñas, congeladas y bien especificadas.
+- Branch by Abstraction: el &quot;strangler de interior&quot; — una abstracción con dos
+  implementaciones y un flag, para reemplazar algo enterrado sin borde interceptable.
+- Parallel Run: ejecutar viejo y nuevo a la vez con tráfico real y comparar; valida
+  lo crítico antes de confiar en lo nuevo.
+- Bubble Context: arrancar un contexto nuevo y limpio (protegido por una ACL) para
+  remodelar un dominio dentro del entorno legacy.
+- Comparativa: cómo elegir entre ellos y, sobre todo, cómo combinarlos (no compiten).
 
 EN: Roadmap of the session. Warn them there will be exercises after each block of
 patterns. Cross-cutting idea: these patterns exist to BREAK the migration into
-small, safe, reversible steps.</p></div><div class="bespoke-marp-note" data-index="3" tabindex="0"><p>ES: La metáfora es potente: en ningún momento talas el árbol viejo de un hachazo.
+small, safe, reversible steps. Quick gloss of each one:
+- Strangler Fig: put a facade in front of the monolith and move functionality to the
+  new service route by route, until the old one is empty.
+- ACL (anticorruption layer): a translation layer at the boundary so the legacy model
+  doesn't leak in and pollute the new model. It's cross-cutting: it shows up inside
+  almost all the others.
+- Big-Bang: rewrite everything and switch over at once. Almost always a bad idea; the
+  &quot;almost&quot; is small, frozen, well-specified pieces.
+- Branch by Abstraction: the &quot;strangler of the interior&quot; — an abstraction with two
+  implementations and a flag, to replace something buried with no interceptable edge.
+- Parallel Run: run old and new at once with real traffic and compare; validates the
+  critical stuff before trusting the new one.
+- Bubble Context: start a clean new context (protected by an ACL) to reshape a domain
+  inside the legacy environment.
+- Comparison: how to choose among them and, above all, how to combine them (they
+  don't compete).</p></div><div class="bespoke-marp-note" data-index="3" tabindex="0"><p>ES: La metáfora es potente: en ningún momento talas el árbol viejo de un hachazo.
 El sistema viejo sigue sosteniendo todo lo que aún no has reemplazado. Fowler la
 popularizó en 2004; sigue siendo el patrón de migración por defecto.
 El bucle de 3 pasos se repite una y otra vez, una funcionalidad cada vez.
@@ -3165,11 +3273,57 @@ split (resolved in Session 3).</p></div><div class="bespoke-marp-note" data-inde
 clave y a menudo se olvida: meter el proxy primero, sin cambiar comportamiento. La
 gradualidad y el rollback trivial son lo que distingue migrar de jugársela. &quot;Corte
 vertical&quot; = una funcionalidad completa de punta a punta, no la capa de datos sola.
+Explicar &quot;canary&quot; (primera vez que aparece): viene del &quot;canario en la mina&quot; — los
+mineros bajaban un canario, más sensible a los gases tóxicos; si caía, les avisaba del
+peligro ANTES de que les afectara. Aquí igual: liberas a una porción pequeña (la
+&quot;canary&quot;) y, si algo va mal, solo afecta a ese grupo, que actúa de alarma temprana
+antes de exponer a todos. Eso es el 1%→10%→100%; &quot;solo empleados internos&quot; es elegir
+QUIÉN forma esa primera cohorte.
 
 EN: These four properties are what make the Strangler so safe. Step 0 is key and
 often forgotten: put the proxy in first, with no behavior change. Graduality and
 trivial rollback are what separate migrating from gambling. &quot;Vertical cut&quot; = a whole
-feature end-to-end, not the data layer alone.</p></div><div class="bespoke-marp-note" data-index="6" tabindex="0"><p>ES: La limitación más importante de cara al resto de la sesión: el Strangler necesita
+feature end-to-end, not the data layer alone. Explain &quot;canary&quot; (first time it appears):
+it comes from the &quot;canary in a coal mine&quot; — miners took a canary down, more sensitive
+to toxic gas; if it collapsed it warned them of danger BEFORE it harmed them. Same here:
+you release to a small slice (the &quot;canary&quot;) and, if something goes wrong, only that group
+is affected — they act as an early warning before you expose everyone. That's the
+1%→10%→100%; &quot;internal employees only&quot; is choosing WHO that first cohort is.</p></div><div class="bespoke-marp-note" data-index="6" tabindex="0"><p>ES: Esta slide resuelve la duda natural de &quot;si la fachada enruta por ruta, ¿cómo
+redirige 'solo a empleados internos'?&quot;. Respuesta: la ruta es el selector grueso (¿es
+una petición de devoluciones?); encima se evalúa un predicado de cohorte. Cuatro
+mecanismos habituales (claims, IP, cabecera, cookie) + el porcentaje del canary. El
+matiz importante es el requisito: enrutar por identidad (1 y 3) necesita que el gateway
+esté DESPUÉS del login o pueda leer el token; si está delante del auth, te quedan IP (2)
+o porcentaje. Es el primo a nivel de gateway del feature flag de Branch by Abstraction:
+misma pregunta (&quot;¿quién recibe lo nuevo?&quot;), una decidida en el borde por atributos de la
+petición, la otra en proceso por configuración.
+Sobre el punto 💡: si el monolito es el dueño del auth, su token/cookie es opaco para el
+gateway, así que (1) y (3) no funcionan de fábrica — solo IP o porcentaje. Para
+desbloquearlas: o le das al gateway capacidad de validar el token (secreto compartido /
+introspección), o —mejor— externalizas el auth al borde. Por eso la autenticación es a
+menudo de los primeros candidatos a extraer: no por ser la función de más valor, sino
+porque DESBLOQUEA pasos posteriores (enrutado por identidad, que otros servicios confíen
+en un principal verificado). Buen ejemplo del tema de la Sesión 1: el orden de extracción
+importa, y a veces se extrae algo pronto para habilitar lo demás. (Enlaza con API Gateway
+y concerns transversales de la Sesión 4.)
+
+EN: This slide resolves the natural doubt: &quot;if the facade routes by path, how does it
+redirect 'only to internal employees'?&quot;. Answer: the path is the coarse selector (is this
+a returns request?); on top of it you evaluate a cohort predicate. Four common mechanisms
+(claims, IP, header, cookie) + the canary percentage. The key nuance is the prerequisite:
+identity-based routing (1 and 3) needs the gateway to sit AFTER login or be able to read
+the token; if it sits in front of auth, you're left with IP (2) or percentage. It's the
+gateway-level cousin of Branch by Abstraction's feature flag: same question (&quot;who gets the
+new thing?&quot;), one decided at the edge by request attributes, the other in-process by config.
+On the 💡 point: if the monolith owns auth, its token/cookie is opaque to the gateway, so
+(1) and (3) don't work out of the box — only IP or percentage. To unlock them: either give
+the gateway token-validation ability (shared secret / introspection), or —better—
+externalize auth to the edge. That's why authentication is often one of the first
+extraction candidates: not because it's the highest-value feature, but because it UNBLOCKS
+later steps (identity-based routing, other services trusting a verified principal). A good
+example of the Session 1 theme: extraction order matters, and sometimes you extract
+something early to enable everything else. (Links to API Gateway and cross-cutting concerns
+in Session 4.)</p></div><div class="bespoke-marp-note" data-index="7" tabindex="0"><p>ES: La limitación más importante de cara al resto de la sesión: el Strangler necesita
 un borde donde interceptar. Cuando no lo hay, el patrón hermano es Branch by
 Abstraction (sección 4). Y recordar siempre: estrangular el código NO estrangula los
 datos. El &quot;estrangulamiento eterno&quot; es el equivalente aquí del &quot;modo híbrido eterno&quot;.
@@ -3177,7 +3331,7 @@ datos. El &quot;estrangulamiento eterno&quot; es el equivalente aquí del &quot;
 EN: The most important limitation for the rest of the session: the Strangler needs an
 edge to intercept at. When there's none, the sibling pattern is Branch by Abstraction
 (section 4). And always remember: strangling the code does NOT strangle the data. The
-&quot;eternal strangling&quot; is the equivalent here of the &quot;eternal hybrid mode&quot;.</p></div><div class="bespoke-marp-note" data-index="7" tabindex="0"><p>ES: Un ejemplo concreto del bucle completo. Pregunta típica: &quot;¿no debería conservar el
+&quot;eternal strangling&quot; is the equivalent here of the &quot;eternal hybrid mode&quot;.</p></div><div class="bespoke-marp-note" data-index="8" tabindex="0"><p>ES: Un ejemplo concreto del bucle completo. Pregunta típica: &quot;¿no debería conservar el
 código viejo para verificar que el nuevo hace lo mismo?&quot;. Matiz importante: SÍ se
 verifica contra el viejo, pero eso ocurre en el paso 3 (mientras conviven), no
 conservándolo para siempre. La verificación tiene dos niveles: (a) la propia
@@ -3188,7 +3342,11 @@ viejo: se hace re-apuntando la ruta en la fachada. El orden correcto es verifica
 estabilizar (p. ej. semanas al 100%) → borrar. El paso 4 es el FINAL: si no se borra,
 caes en el &quot;estrangulamiento eterno&quot; — dos implementaciones, doble mantenimiento, un
 sitio más donde corregir cada bug, y una migración que nunca termina. &quot;Por si acaso&quot;
-no tiene fecha de fin.
+no tiene fecha de fin. Ojo a la posible confusión con la slide anterior: &quot;su propia BD&quot;
+NO significa que los datos estén resueltos. El servicio tiene almacén para lo que posee,
+pero todavía depende de datos maestros del monolito (los lee por API) — exactamente la
+limitación &quot;los datos no se estrangulan solos&quot;. Estrangular el código mueve las
+PETICIONES; separar/migrar los datos es un trabajo aparte (Sesión 3).
 
 EN: A concrete example of the full loop. Typical question: &quot;shouldn't I keep the old
 code to verify the new one does the same?&quot;. Important nuance: YES you verify against the
@@ -3199,7 +3357,12 @@ the new output against the monolith's (covered in §5). Also, rollback does NOT 
 keeping the old code: you re-point the route in the facade. The correct order is verify →
 stabilize (e.g. weeks at 100%) → delete. Step 4 is the LAST one: if you don't delete, you
 fall into &quot;eternal strangling&quot; — two implementations, double maintenance, one more place
-to fix every bug, and a migration that never ends. &quot;Just in case&quot; has no end date.</p></div><div class="bespoke-marp-note" data-index="8" tabindex="0"><p>ES: Pausa para ejercicio. 2.1: el bucle completo del Strangler sobre SaludPlus (gestión
+to fix every bug, and a migration that never ends. &quot;Just in case&quot; has no end date.
+Watch for the possible confusion with the previous slide: &quot;its own DB&quot; does NOT mean the
+data is solved. The service has a store for what it owns, but it still depends on master
+data from the monolith (reads it via API) — exactly the &quot;data isn't strangled by itself&quot;
+limitation. Strangling the code moves the REQUESTS; splitting/migrating the data is a
+separate job (Session 3).</p></div><div class="bespoke-marp-note" data-index="9" tabindex="0"><p>ES: Pausa para ejercicio. 2.1: el bucle completo del Strangler sobre SaludPlus (gestión
 de citas, rutas /citas/*). Recorrer paso 0 (fachada enrutando el 100 % al monolito) →
 construir el servicio (lee pacientes vía API interna + ACL) → redirección canary 1 %→100 %
 → borrar. Insistir en: verificar ANTES de borrar (canary + opcional Parallel Run), rollback
@@ -3211,7 +3374,7 @@ routes /citas/*). Walk through step 0 (facade routing 100 % to the monolith) →
 service (reads patients via internal API + ACL) → canary redirect 1 %→100 % → delete.
 Stress: verify BEFORE deleting (canary + optional Parallel Run), rollback by re-routing at
 the facade, and that &quot;strangling the code doesn't strangle the data&quot;. ~15-20 min with
-group discussion.</p></div><div class="bespoke-marp-note" data-index="10" tabindex="0"><p>ES: La ACL responde a un problema muy real: el modelo legacy es &quot;pegajoso&quot;. Si dejas
+group discussion.</p></div><div class="bespoke-marp-note" data-index="11" tabindex="0"><p>ES: La ACL responde a un problema muy real: el modelo legacy es &quot;pegajoso&quot;. Si dejas
 que sus conceptos crucen al servicio nuevo, en seis meses tu servicio &quot;limpio&quot; está
 tan sucio como el monolito. La ACL es la frontera que lo impide. Es el patrón más
 transversal de la sesión: aparece dentro de casi todos los demás.
@@ -3219,7 +3382,7 @@ transversal de la sesión: aparece dentro de casi todos los demás.
 EN: The ACL answers a very real problem: the legacy model is &quot;sticky&quot;. If you let its
 concepts cross into the new service, in six months your &quot;clean&quot; service is as dirty
 as the monolith. The ACL is the boundary that prevents it. It's the most cross-cutting
-pattern of the session: it shows up inside almost all the others.</p></div><div class="bespoke-marp-note" data-index="11" tabindex="0"><p>ES: Tres componentes con nombres de patrones clásicos. El adaptador es traducción
+pattern of the session: it shows up inside almost all the others.</p></div><div class="bespoke-marp-note" data-index="12" tabindex="0"><p>ES: Tres componentes con nombres de patrones clásicos. El adaptador es traducción
 TÉCNICA (cómo hablo con el legacy); el traductor de modelo es traducción de
 SIGNIFICADO (qué significan sus datos en mi mundo). La fachada agrupa operaciones
 legacy en algo con sentido de negocio. No siempre hacen falta los tres.
@@ -3227,7 +3390,7 @@ legacy en algo con sentido de negocio. No siempre hacen falta los tres.
 EN: Three components named after classic patterns. The adapter is TECHNICAL
 translation (how I talk to the legacy); the model translator is MEANING translation
 (what its data means in my world). The facade groups legacy operations into something
-with business sense. You don't always need all three.</p></div><div class="bespoke-marp-note" data-index="12" tabindex="0"><p>ES: Estas tres reglas son las que se evalúan en el ejercicio 2.2. La propiedad de la
+with business sense. You don't always need all three.</p></div><div class="bespoke-marp-note" data-index="13" tabindex="0"><p>ES: Estas tres reglas son las que se evalúan en el ejercicio 2.2. La propiedad de la
 ACL es lo más importante: si la pone el equipo legacy, el acoplamiento vuelve por la
 puerta de atrás. Y recordar que la ACL es mortal: nace para morir con el legacy, así
 que no hay que sobreingenierizarla.
@@ -3235,13 +3398,13 @@ que no hay que sobreingenierizarla.
 EN: These three rules are what's assessed in exercise 2.2. ACL ownership is the most
 important: if the legacy team builds it, coupling comes back through the back door.
 And remember the ACL is mortal: it's born to die with the legacy, so don't
-over-engineer it.</p></div><div class="bespoke-marp-note" data-index="13" tabindex="0"><p>ES: La ACL no es gratis, pero el coste es pequeño comparado con la alternativa (un
+over-engineer it.</p></div><div class="bespoke-marp-note" data-index="14" tabindex="0"><p>ES: La ACL no es gratis, pero el coste es pequeño comparado con la alternativa (un
 servicio nuevo contaminado). La trampa a evitar: la ACL única y central que todos
 usan. Eso recrea el acoplamiento que querías eliminar. Una ACL por frontera/servicio.
 
 EN: The ACL isn't free, but the cost is small compared to the alternative (a polluted
 new service). The trap to avoid: the single, central ACL everyone shares. That
-recreates the coupling you wanted to remove. One ACL per boundary/service.</p></div><div class="bespoke-marp-note" data-index="14" tabindex="0"><p>ES: El ejemplo perfecto de por qué existe la ACL: la regla &quot;ST=02 salvo MIGR_FLAG&quot;
+recreates the coupling you wanted to remove. One ACL per boundary/service.</p></div><div class="bespoke-marp-note" data-index="15" tabindex="0"><p>ES: El ejemplo perfecto de por qué existe la ACL: la regla &quot;ST=02 salvo MIGR_FLAG&quot;
 es exactamente el tipo de conocimiento arqueológico que NO debe filtrarse al servicio
 nuevo. Queda encapsulado tras isActive(). El día que muera el mainframe, solo cambia
 la implementación del puerto; el dominio nuevo no nota nada. Esa es la meta.
@@ -3249,7 +3412,7 @@ la implementación del puerto; el dominio nuevo no nota nada. Esa es la meta.
 EN: The perfect example of why the ACL exists: the &quot;ST=02 unless MIGR_FLAG&quot; rule is
 exactly the kind of archaeological knowledge that must NOT leak into the new service.
 It stays encapsulated behind isActive(). The day the mainframe dies, only the port's
-implementation changes; the new domain notices nothing. That's the goal.</p></div><div class="bespoke-marp-note" data-index="15" tabindex="0"><p>ES: Pausa para ejercicio. 2.2: traducir clientes del legacy (KD_TYP, STATUS_KZ…) al
+implementation changes; the new domain notices nothing. That's the goal.</p></div><div class="bespoke-marp-note" data-index="16" tabindex="0"><p>ES: Pausa para ejercicio. 2.2: traducir clientes del legacy (KD_TYP, STATUS_KZ…) al
 modelo limpio Customer. Puntos clave: el caso 'X' arqueológico, el STATUS_KZ=9 que se
 descompone en DOS conceptos (active + creditHold), y la pregunta trampa: ¿dejar que el
 legacy traduzca en su vista? No — la traducción de modelo se queda en el lado nuevo.
@@ -3258,7 +3421,7 @@ legacy traduzca en su vista? No — la traducción de modelo se queda en el lado
 EN: Exercise break. 2.2: translate legacy customers (KD_TYP, STATUS_KZ…) into the clean
 Customer model. Key points: the archaeological 'X' case, STATUS_KZ=9 splitting into TWO
 concepts (active + creditHold), and the trick question: let the legacy translate in its
-view? No — model translation stays on the new side. ~15-20 min with group discussion.</p></div><div class="bespoke-marp-note" data-index="17" tabindex="0"><p>ES: Importante reconocer la tentación con honestidad: hay razones emocionales reales
+view? No — model translation stays on the new side. ~15-20 min with group discussion.</p></div><div class="bespoke-marp-note" data-index="18" tabindex="0"><p>ES: Importante reconocer la tentación con honestidad: hay razones emocionales reales
 para querer el big-bang. Empezar de cero es liberador. Por eso es peligroso: la
 decisión se toma con el corazón, no con los datos. La siguiente slide es el
 contrapeso.
@@ -3266,7 +3429,7 @@ contrapeso.
 EN: It's important to honestly acknowledge the temptation: there are real emotional
 reasons to want the big-bang. Starting clean is liberating. That's exactly why it's
 dangerous: the decision is made with the heart, not the data. The next slide is the
-counterweight.</p></div><div class="bespoke-marp-note" data-index="18" tabindex="0"><p>ES: Los cuatro riesgos clásicos. El &quot;objetivo móvil&quot; y &quot;el conocimiento está en el
+counterweight.</p></div><div class="bespoke-marp-note" data-index="19" tabindex="0"><p>ES: Los cuatro riesgos clásicos. El &quot;objetivo móvil&quot; y &quot;el conocimiento está en el
 código&quot; son los que matan proyectos. Un monolito de 10 años es una especificación
 ejecutable de miles de reglas que nadie ha escrito en ningún sitio. Reescribir desde
 cero es prometer reimplementarlas todas… sin tener la lista.
@@ -3274,7 +3437,7 @@ cero es prometer reimplementarlas todas… sin tener la lista.
 EN: The four classic risks. The &quot;moving target&quot; and &quot;knowledge is in the code&quot; are the
 project-killers. A 10-year-old monolith is an executable spec of thousands of rules no
 one has written down anywhere. Rewriting from scratch is promising to reimplement them
-all… without having the list.</p></div><div class="bespoke-marp-note" data-index="19" tabindex="0"><p>ES: El matiz que evita el dogmatismo: big-bang no está prohibido, está prohibido para
+all… without having the list.</p></div><div class="bespoke-marp-note" data-index="20" tabindex="0"><p>ES: El matiz que evita el dogmatismo: big-bang no está prohibido, está prohibido para
 sistemas grandes, vivos y mal especificados. De hecho, cada extracción del Strangler
 ES una reescritura big-bang en miniatura de esa pieza. El ejercicio 2.5 caso E es
 justo el caso defendible. Lo veremos al final.
@@ -3282,7 +3445,7 @@ justo el caso defendible. Lo veremos al final.
 EN: The nuance that avoids dogmatism: big-bang isn't forbidden, it's forbidden for
 large, live, poorly-specified systems. In fact, every Strangler extraction IS a
 miniature big-bang rewrite of that piece. Exercise 2.5 case E is exactly the
-defensible case. We'll see it at the end.</p></div><div class="bespoke-marp-note" data-index="21" tabindex="0"><p>ES: Aquí se ve la complementariedad con el Strangler. Strangler = bordes externos.
+defensible case. We'll see it at the end.</p></div><div class="bespoke-marp-note" data-index="22" tabindex="0"><p>ES: Aquí se ve la complementariedad con el Strangler. Strangler = bordes externos.
 BbA = entrañas internas. La gran aportación de BbA: nada de ramas de larga vida.
 Todo ocurre en trunk, con la rama &quot;lógica&quot; creada por la abstracción, no por el
 control de versiones. De ahí el nombre.
@@ -3290,7 +3453,7 @@ control de versiones. De ahí el nombre.
 EN: Here you see the complementarity with the Strangler. Strangler = external edges.
 BbA = internal guts. BbA's big contribution: no long-lived branches. Everything
 happens in trunk, with the &quot;branch&quot; created logically by the abstraction, not by
-version control. Hence the name.</p></div><div class="bespoke-marp-note" data-index="22" tabindex="0"><p>ES: Los pasos 1-2 no cambian comportamiento: son refactorización segura. El paso 3
+version control. Hence the name.</p></div><div class="bespoke-marp-note" data-index="23" tabindex="0"><p>ES: Los pasos 1-2 no cambian comportamiento: son refactorización segura. El paso 3
 despliega código nuevo pero apagado. El paso 4 es el único que cambia comportamiento,
 y el feature flag lo hace reversible en segundos SIN redesplegar. El paso 5 es el que
 todos olvidan (igual que el &quot;borrar&quot; del Strangler): sin él, flags zombis para siempre.
@@ -3298,13 +3461,13 @@ todos olvidan (igual que el &quot;borrar&quot; del Strangler): sin él, flags zo
 EN: Steps 1-2 don't change behavior: safe refactoring. Step 3 deploys new code but
 switched off. Step 4 is the only one that changes behavior, and the feature flag makes
 it reversible in seconds WITHOUT redeploying. Step 5 is the one everyone forgets (like
-the Strangler's &quot;delete&quot;): without it, zombie flags forever.</p></div><div class="bespoke-marp-note" data-index="23" tabindex="0"><p>ES: La clave visual: en el paso 3-4 las dos implementaciones existen a la vez detrás
+the Strangler's &quot;delete&quot;): without it, zombie flags forever.</p></div><div class="bespoke-marp-note" data-index="24" tabindex="0"><p>ES: La clave visual: en el paso 3-4 las dos implementaciones existen a la vez detrás
 de la MISMA interfaz, y el flag decide cuál corre. Esa convivencia no es solo un
 estado de transición: es una red de seguridad (puedes hacer fallback a la vieja).
 
 EN: The visual key: in step 3-4 both implementations exist at once behind the SAME
 interface, and the flag decides which runs. That coexistence isn't just a transitional
-state: it's a safety net (you can fall back to the old one).</p></div><div class="bespoke-marp-note" data-index="24" tabindex="0"><p>ES: La frase a recordar: &quot;Strangler para los bordes, BbA para las entrañas&quot;. Son el
+state: it's a safety net (you can fall back to the old one).</p></div><div class="bespoke-marp-note" data-index="25" tabindex="0"><p>ES: La frase a recordar: &quot;Strangler para los bordes, BbA para las entrañas&quot;. Son el
 mismo espíritu (reemplazo incremental y reversible) aplicado a niveles distintos. La
 limitación dura: necesitas las fuentes y poder tocarlas. Para legacy de terceros solo
 te quedan los bordes (Strangler + ACL).
@@ -3312,7 +3475,7 @@ te quedan los bordes (Strangler + ACL).
 EN: The phrase to remember: &quot;Strangler for the edges, BbA for the guts&quot;. Same spirit
 (incremental, reversible replacement) at different levels. The hard limitation: you
 need the sources and the ability to touch them. For third-party legacy you're left
-with only the edges (Strangler + ACL).</p></div><div class="bespoke-marp-note" data-index="25" tabindex="0"><p>ES: Pausa para ejercicio. 2.3: el monolito llama SmtpMailer.send() desde 23 sitios;
+with only the edges (Strangler + ACL).</p></div><div class="bespoke-marp-note" data-index="26" tabindex="0"><p>ES: Pausa para ejercicio. 2.3: el monolito llama SmtpMailer.send() desde 23 sitios;
 moverlo a notification-service sin romper nada. Para cada paso: qué se despliega, si
 cambia el comportamiento, cómo se hace rollback. Insistir en el papel del feature flag
 (rollback por config) y en la política de fallos del envío nuevo. ~20 min.
@@ -3320,7 +3483,7 @@ cambia el comportamiento, cómo se hace rollback. Insistir en el papel del featu
 EN: Exercise break. 2.3: the monolith calls SmtpMailer.send() from 23 places; move it
 to notification-service without breaking anything. For each step: what's deployed,
 whether behavior changes, how to roll back. Stress the feature flag's role (config
-rollback) and the failure policy for the new sender. ~20 min.</p></div><div class="bespoke-marp-note" data-index="27" tabindex="0"><p>ES: Parallel Run no es un patrón de &quot;movimiento&quot; como Strangler o BbA: es un patrón de
+rollback) and the failure policy for the new sender. ~20 min.</p></div><div class="bespoke-marp-note" data-index="28" tabindex="0"><p>ES: Parallel Run no es un patrón de &quot;movimiento&quot; como Strangler o BbA: es un patrón de
 VALIDACIÓN. Suele montarse encima de uno de los otros. El modo sombra es el habitual al
 principio: el usuario nunca ve el resultado nuevo, así que cero riesgo, pero acumulas
 evidencia con tráfico real.
@@ -3328,7 +3491,7 @@ evidencia con tráfico real.
 EN: Parallel Run isn't a &quot;movement&quot; pattern like Strangler or BbA: it's a VALIDATION
 pattern. It's usually layered on top of one of the others. Shadow mode is the usual
 starting point: the user never sees the new result, so zero risk, but you accumulate
-evidence with real traffic.</p></div><div class="bespoke-marp-note" data-index="28" tabindex="0"><p>ES: Los dos &quot;cuidados&quot; son donde está el trabajo real de ingeniería. Desconectar los
+evidence with real traffic.</p></div><div class="bespoke-marp-note" data-index="29" tabindex="0"><p>ES: Los dos &quot;cuidados&quot; son donde está el trabajo real de ingeniería. Desconectar los
 efectos secundarios del sistema en sombra es DISEÑO, no es gratis: un parallel run que
 cobra dos veces es el incidente, no su prevención. Y el no determinismo genera ruido:
 si no lo controlas, te ahogas en discrepancias falsas y dejas de mirar el informe.
@@ -3336,7 +3499,7 @@ si no lo controlas, te ahogas en discrepancias falsas y dejas de mirar el inform
 EN: The two &quot;cautions&quot; are where the real engineering work lives. Disconnecting the
 shadow system's side effects is DESIGN, not free: a parallel run that charges twice is
 the incident, not its prevention. And non-determinism generates noise: if you don't
-control it, you drown in false discrepancies and stop reading the report.</p></div><div class="bespoke-marp-note" data-index="29" tabindex="0"><p>ES: El encaje es la idea a llevarse: Parallel Run no se usa solo. BbA pone las dos
+control it, you drown in false discrepancies and stop reading the report.</p></div><div class="bespoke-marp-note" data-index="30" tabindex="0"><p>ES: El encaje es la idea a llevarse: Parallel Run no se usa solo. BbA pone las dos
 implementaciones detrás de la abstracción; Parallel Run las ejecuta ambas y compara.
 Y solo tiene sentido cuando hay una &quot;respuesta correcta&quot; comparable. Para algo cuyo
 resultado QUIERE ser distinto (recomendaciones), no aplica — ahí va un A/B.
@@ -3344,7 +3507,7 @@ resultado QUIERE ser distinto (recomendaciones), no aplica — ahí va un A/B.
 EN: The fit is the takeaway: Parallel Run isn't used alone. BbA puts both implementations
 behind the abstraction; Parallel Run runs both and compares. And it only makes sense when
 there's a comparable &quot;correct answer&quot;. For something whose result is MEANT to differ
-(recommendations), it doesn't apply — there you use an A/B test.</p></div><div class="bespoke-marp-note" data-index="30" tabindex="0"><p>ES: Pausa para ejercicio. 2.4: sustituir el cálculo de comisiones (COBOL) que paga por
+(recommendations), it doesn't apply — there you use an A/B test.</p></div><div class="bespoke-marp-note" data-index="31" tabindex="0"><p>ES: Pausa para ejercicio. 2.4: sustituir el cálculo de comisiones (COBOL) que paga por
 transferencia a fin de mes; &quot;cero errores en nóminas&quot;. Discutir: variante (sombra, legacy
 como verdad) y duración (varios cierres mensuales); el efecto secundario crítico (¡no
 pagar de verdad!); 3 discrepancias falsas (redondeos, snapshot, formato); y qué hacer
@@ -3354,7 +3517,7 @@ EN: Exercise break. 2.4: replace the commission calculation (COBOL) that pays by
 at month-end; &quot;zero payroll errors&quot;. Discuss: variant (shadow, legacy as truth) and
 duration (several monthly closes); the critical side effect (don't actually pay!); 3 false
 discrepancies (rounding, snapshot, format); and what to do when COBOL is the wrong one
-(escalate to business, don't replicate the bug). ~20-25 min.</p></div><div class="bespoke-marp-note" data-index="32" tabindex="0"><p>ES: El matiz que distingue Bubble de &quot;extraer un servicio&quot;: aquí lo primero es la
+(escalate to business, don't replicate the bug). ~20-25 min.</p></div><div class="bespoke-marp-note" data-index="33" tabindex="0"><p>ES: El matiz que distingue Bubble de &quot;extraer un servicio&quot;: aquí lo primero es la
 FRONTERA DE MODELO, no la de proceso. Puedes tener una burbuja con su modelo limpio
 viviendo todavía dentro del mismo despliegue del monolito. Lo que la protege es la ACL.
 El motor de este patrón no es escalar ni desplegar aparte: es remodelar el dominio.
@@ -3362,7 +3525,7 @@ El motor de este patrón no es escalar ni desplegar aparte: es remodelar el domi
 EN: The nuance that distinguishes Bubble from &quot;extract a service&quot;: here the MODEL
 BOUNDARY comes first, not the process boundary. You can have a bubble with its clean
 model still living inside the monolith's deployment. What protects it is the ACL. This
-pattern's driver isn't scaling or separate deployment: it's reshaping the domain.</p></div><div class="bespoke-marp-note" data-index="33" tabindex="0"><p>ES: La burbuja es un punto de partida que evoluciona. Empieza barata (sin BD propia) y
+pattern's driver isn't scaling or separate deployment: it's reshaping the domain.</p></div><div class="bespoke-marp-note" data-index="34" tabindex="0"><p>ES: La burbuja es un punto de partida que evoluciona. Empieza barata (sin BD propia) y
 va ganando autonomía. El destino feliz: se convierte en un microservicio que nació
 limpio, con buen modelo desde el día uno, en vez de un trozo de monolito mal cortado.
 El riesgo: que se quede estancada en el paso 1 como isla rara.
@@ -3370,7 +3533,7 @@ El riesgo: que se quede estancada en el paso 1 como isla rara.
 EN: The bubble is a starting point that evolves. It starts cheap (no own DB) and gains
 autonomy over time. The happy ending: it becomes a microservice that was born clean,
 with a good model from day one, instead of a badly-cut chunk of monolith. The risk:
-getting stuck at step 1 as a weird island.</p></div><div class="bespoke-marp-note" data-index="34" tabindex="0"><p>ES: La limitación técnica dura es la sincronización bidireccional de datos: si ambos
+getting stuck at step 1 as a weird island.</p></div><div class="bespoke-marp-note" data-index="35" tabindex="0"><p>ES: La limitación técnica dura es la sincronización bidireccional de datos: si ambos
 lados escriben los mismos datos, la ACL de sync se complica mucho (es un anticipo del
 problema de datos de la Sesión 3). La limitación humana: la disciplina de no perforar
 la frontera. Basta una excepción &quot;solo por hoy&quot; para empezar a recontaminar.
@@ -3378,7 +3541,7 @@ la frontera. Basta una excepción &quot;solo por hoy&quot; para empezar a recont
 EN: The hard technical limitation is bidirectional data sync: if both sides write the
 same data, the sync ACL gets very complex (a preview of Session 3's data problem). The
 human limitation: the discipline not to pierce the boundary. One &quot;just for today&quot;
-exception is enough to start re-contaminating.</p></div><div class="bespoke-marp-note" data-index="36" tabindex="0"><p>ES: Esta tabla es la chuleta de la sesión. La columna clave para decidir es la segunda
+exception is enough to start re-contaminating.</p></div><div class="bespoke-marp-note" data-index="37" tabindex="0"><p>ES: Esta tabla es la chuleta de la sesión. La columna clave para decidir es la segunda
 (&quot;¿qué pregunta responde?&quot;): cada patrón responde a una pregunta distinta, así que no
 compiten — se eligen según la situación. Sugerir hacerle foto. Es la base del ejercicio
 2.5.
@@ -3386,7 +3549,7 @@ compiten — se eligen según la situación. Sugerir hacerle foto. Es la base de
 EN: This table is the session's cheat sheet. The key column for deciding is the second
 one (&quot;what question does it answer?&quot;): each pattern answers a different question, so
 they don't compete — you pick by situation. Suggest taking a photo. It's the basis for
-exercise 2.5.</p></div><div class="bespoke-marp-note" data-index="37" tabindex="0"><p>ES: El mensaje central de la sesión: no se elige UN patrón, se compone una estrategia
+exercise 2.5.</p></div><div class="bespoke-marp-note" data-index="38" tabindex="0"><p>ES: El mensaje central de la sesión: no se elige UN patrón, se compone una estrategia
 con varios operando a niveles distintos. El error de novato es preguntarse &quot;¿uso
 Strangler O BbA?&quot; cuando la respuesta casi siempre es &quot;ambos, en sitios distintos, con
 ACLs por todas las fronteras&quot;. El ejercicio 2.6 practica exactamente esto.
@@ -3394,7 +3557,7 @@ ACLs por todas las fronteras&quot;. El ejercicio 2.6 practica exactamente esto.
 EN: The session's central message: you don't pick ONE pattern, you compose a strategy
 with several operating at different levels. The rookie mistake is asking &quot;Strangler OR
 BbA?&quot; when the answer is almost always &quot;both, in different places, with ACLs at every
-boundary&quot;. Exercise 2.6 practices exactly this.</p></div><div class="bespoke-marp-note" data-index="38" tabindex="0"><p>ES: Estas cinco preguntas son un árbol de decisión práctico. Las preguntas 1 y 4 son
+boundary&quot;. Exercise 2.6 practices exactly this.</p></div><div class="bespoke-marp-note" data-index="39" tabindex="0"><p>ES: Estas cinco preguntas son un árbol de decisión práctico. Las preguntas 1 y 4 son
 las más discriminantes (dónde cortas y si puedes tocar el código). La 5 es el recordatorio
 permanente: ACL en cada frontera y, como en la Sesión 1, el paso de BORRAR el legacy que
 todo el mundo olvida.
@@ -3402,7 +3565,7 @@ todo el mundo olvida.
 EN: These five questions are a practical decision tree. Questions 1 and 4 are the most
 discriminating (where you cut and whether you can touch the code). Number 5 is the
 permanent reminder: ACL at every boundary and, as in Session 1, the DELETE-the-legacy
-step everyone forgets.</p></div><div class="bespoke-marp-note" data-index="39" tabindex="0"><p>ES: Pausa para ejercicios finales. 2.5: cinco escenarios (A-E), elegir patrón y
+step everyone forgets.</p></div><div class="bespoke-marp-note" data-index="40" tabindex="0"><p>ES: Pausa para ejercicios finales. 2.5: cinco escenarios (A-E), elegir patrón y
 justificar — incluye el caso E donde Big-Bang SÍ es correcto. 2.6: MediaStream — plan
 integral combinando patrones para dos extracciones (recomendaciones con BbA+Bubble;
 facturación con Strangler+Parallel Run), señalando ACLs y validación. ~30 min con puesta
@@ -3412,7 +3575,7 @@ EN: Final exercise break. 2.5: five scenarios (A-E), pick a pattern and justify 
 including case E where Big-Bang IS correct. 2.6: MediaStream — a full plan combining
 patterns for two extractions (recommendations with BbA+Bubble; billing with Strangler+
 Parallel Run), marking ACLs and validation. ~30 min with group discussion. They're the
-synthesis of the whole session.</p></div><div class="bespoke-marp-note" data-index="40" tabindex="0"><p>ES: El destilado de la sesión. Si solo se llevan una idea: los patrones no compiten, se
+synthesis of the whole session.</p></div><div class="bespoke-marp-note" data-index="41" tabindex="0"><p>ES: El destilado de la sesión. Si solo se llevan una idea: los patrones no compiten, se
 combinan, y cada uno responde a una pregunta distinta. La siguiente sesión ataca el
 problema que todos estos patrones dejan abierto: DÓNDE cortar (DDD) y cómo partir los
 DATOS, que es lo más difícil de todo.
@@ -3420,7 +3583,7 @@ DATOS, que es lo más difícil de todo.
 EN: The session's distillate. If they take away one idea: patterns don't compete, they
 combine, and each answers a different question. The next session tackles the problem all
 these patterns leave open: WHERE to cut (DDD) and how to split the DATA, which is the
-hardest part of all.</p></div><div class="bespoke-marp-note" data-index="41" tabindex="0"><p>ES: Abrir turno de preguntas. Recordar dónde está el material y el cuaderno de ejercicios.
+hardest part of all.</p></div><div class="bespoke-marp-note" data-index="42" tabindex="0"><p>ES: Abrir turno de preguntas. Recordar dónde está el material y el cuaderno de ejercicios.
 Hacer de puente: hoy hemos visto CÓMO mover funcionalidad con seguridad; la Sesión 3
 responde DÓNDE cortar y resuelve el cabo suelto que ha aparecido en casi todos los
 patrones de hoy: los datos.
