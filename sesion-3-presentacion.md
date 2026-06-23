@@ -100,14 +100,18 @@ La pregunta más cara de la migración: **¿por dónde corto?** Un corte malo = 
 
 **DDD** (Eric Evans, 2003) alinea los límites del software con los del **negocio** — los límites más estables que existen.
 
-- **DDD estratégico** — cómo trocear un dominio: *bounded contexts*, lenguaje ubicuo, context maps. ← **esto necesita la migración**
-- **DDD táctico** — diseño *dentro* de un contexto: entidades, agregados… (solo tocaremos *agregados*)
+- **DDD estratégico** — *el mapa: ENTRE contextos, dónde están los límites* (bounded contexts, lenguaje ubicuo, context maps). ← **esto necesita la migración**
+- **DDD táctico** — *el interior: DENTRO de un contexto, cómo se construye* (entidades, agregados…). Solo tocaremos *agregados*.
 
 <!--
 ES: El mensaje clave: los límites del negocio son los más estables, por eso cortar por
 ahí da servicios que no hay que rehacer cada trimestre. DDD tiene dos planos; para
 decidir LÍMITES DE SERVICIO solo necesitamos el estratégico. El táctico (agregados,
 repositorios) es diseño interno — lo mencionamos solo donde toca la consistencia.
+Nota sobre los nombres: "estratégico/táctico" son los términos ESTÁNDAR de la literatura
+DDD (Evans; Vernon, "Implementing DDD") — por eso se mantienen, para que se puedan buscar.
+Si suenan abstractos, el truco mnemotécnico es espacial: estratégico = ENTRE contextos
+(el mapa, los límites); táctico = DENTRO de un contexto (el interior, cómo se construye).
 
 EN: Key message: business boundaries are the most stable, so cutting along them yields
 services you don't have to redo every quarter. DDD has two planes; for deciding SERVICE

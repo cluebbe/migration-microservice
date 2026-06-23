@@ -71,7 +71,7 @@ section.lead h1 {
   font-size: 1.8em;
 }
 ;">
-<p><img src="logo.png" alt="" style="width:520px;" /></p>
+<p><img src="logo.png" alt="" style="width:700px;" /></p>
 <h1 id="sesi%C3%B3n-3">Sesión 3</h1>
 <h2 id="domain-driven-design-y-descomposici%C3%B3n-de-datos">Domain-Driven Design y descomposición de datos</h2>
 <p><strong>Migración de Monolitos a Microservicios</strong><br />
@@ -287,8 +287,8 @@ section.lead h1 {
 <p>La pregunta más cara de la migración: <strong>¿por dónde corto?</strong> Un corte malo = monolito distribuido (Sesión 1).</p>
 <p><strong>DDD</strong> (Eric Evans, 2003) alinea los límites del software con los del <strong>negocio</strong> — los límites más estables que existen.</p>
 <ul>
-<li><strong>DDD estratégico</strong> — cómo trocear un dominio: <em>bounded contexts</em>, lenguaje ubicuo, context maps. ← <strong>esto necesita la migración</strong></li>
-<li><strong>DDD táctico</strong> — diseño <em>dentro</em> de un contexto: entidades, agregados… (solo tocaremos <em>agregados</em>)</li>
+<li><strong>DDD estratégico</strong> — <em>el mapa: ENTRE contextos, dónde están los límites</em> (bounded contexts, lenguaje ubicuo, context maps). ← <strong>esto necesita la migración</strong></li>
+<li><strong>DDD táctico</strong> — <em>el interior: DENTRO de un contexto, cómo se construye</em> (entidades, agregados…). Solo tocaremos <em>agregados</em>.</li>
 </ul>
 <footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
 </section>
@@ -2413,6 +2413,10 @@ the BUSINESS, not technology; and splitting the data is what turns &quot;extract
 ahí da servicios que no hay que rehacer cada trimestre. DDD tiene dos planos; para
 decidir LÍMITES DE SERVICIO solo necesitamos el estratégico. El táctico (agregados,
 repositorios) es diseño interno — lo mencionamos solo donde toca la consistencia.
+Nota sobre los nombres: &quot;estratégico/táctico&quot; son los términos ESTÁNDAR de la literatura
+DDD (Evans; Vernon, &quot;Implementing DDD&quot;) — por eso se mantienen, para que se puedan buscar.
+Si suenan abstractos, el truco mnemotécnico es espacial: estratégico = ENTRE contextos
+(el mapa, los límites); táctico = DENTRO de un contexto (el interior, cómo se construye).
 
 EN: Key message: business boundaries are the most stable, so cutting along them yields
 services you don't have to redo every quarter. DDD has two planes; for deciding SERVICE
