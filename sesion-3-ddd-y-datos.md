@@ -47,6 +47,8 @@ Consecuencia liberadora: **no hay que construir un modelo único de toda la empr
 - En el monolito existente: grupos de tablas/módulos que cambian juntos, "traducciones" implícitas en el código (mappers, columnas que se reinterpretan).
 - Talleres colaborativos tipo **EventStorming**: negocio y desarrollo mapean juntos los eventos del dominio en una pared; los racimos de eventos y los cambios de actor/vocabulario sugieren contextos.
 
+En un **EventStorming** el dominio se mapea en orden temporal con post-its de colores: **eventos de dominio** (naranja — algo relevante que pasó, "Pedido confirmado"), **comandos** (azul — lo que lo provoca, "Confirmar pedido"), **agregados** (amarillo — sobre qué recae el comando) y **políticas/procesos** (lila — "cuando pasa X, automáticamente Y"). Los racimos de eventos que van juntos y los cambios de vocabulario a lo largo de la pared dibujan los bounded contexts; es la vía más rápida (post-its y una pared, una mañana) de encontrar fronteras *con* el negocio en la sala, no en una reunión técnica aparte.
+
 ### 1.4 Microservicios por dominio de negocio
 
 La regla de oro de la descomposición:
@@ -77,6 +79,21 @@ Un **context map** es el plano de los contextos y de las **relaciones entre ello
 | **Separate Ways** | No se integran: duplicar es más barato que coordinar |
 
 En una migración, el context map sirve para: ver qué fronteras ya existen de facto en el monolito, decidir dónde hacen falta ACLs, y detectar relaciones enfermas (p. ej. todo el mundo *conformista* con el modelo de la base de datos central).
+
+**Ejemplo.** El mismo catálogo de relaciones, dibujado sobre un e-commerce:
+
+```
+  ┌──────────┐  conformist     ┌──────────┐  Customer–Supplier  ┌──────────┐
+  │ Catálogo │◄────────────────│ Pedidos  │────────────────────►│  Pagos   │
+  └──────────┘  (acepta su     └────┬─────┘  (negocia contrato)  └────┬─────┘
+                 modelo)            │ evento                          │ ACL
+                                    ▼ PedidoCreado                    ▼
+                             ┌──────────┐               ┌──────────────────────┐
+                             │  Envíos  │               │ Pasarela pago (ext.) │
+                             └──────────┘               └──────────────────────┘
+```
+
+Lecturas: Pedidos es *upstream* de Pagos (customer–supplier: el contrato se negocia); es *conformista* con Catálogo (acepta su modelo de producto sin discutir); Pagos se protege de la pasarela externa con un **ACL**; y Envíos no se llama directamente, reacciona al evento `PedidoCreado`. Dibujarlo es lo que convierte "tenemos contextos" en "sabemos qué romper primero".
 
 ### 2.2 Descomposición por capacidad de negocio vs. por subdominio
 
@@ -148,6 +165,8 @@ Hay que decirlo sin anestesia: al partir los datos **se pierden** cosas que la B
 
 Este coste es la razón por la que los límites importan tanto: si el corte es bueno, las transacciones y joins *entre* servicios son raros; si es malo, son constantes y el sistema se vuelve inmanejable. **Los invariantes que necesitan consistencia fuerte deben quedar dentro de un mismo servicio** (en DDD táctico: dentro de un *agregado* — la unidad de consistencia transaccional).
 
+Conviene definir ese único concepto de DDD táctico que la migración sí necesita. Un **agregado** es un grupo de objetos que cambian juntos bajo una regla de negocio (un *invariante*) y se tratan como una sola unidad: tiene una **raíz** y, desde fuera, solo se habla con la raíz. Ejemplo: un **Pedido y sus líneas** forman un agregado — el invariante "el total no supera el límite de crédito" obliga a validarlas juntas, así que las líneas no se modifican por separado. De ahí la regla operativa que conecta el DDD con todo el bloque siguiente: un invariante que exige ACID debe caber dentro de un agregado, y por tanto dentro de **un** servicio; lo que cruza agregados o servicios va con consistencia **eventual** (sagas).
+
 ---
 
 ## 4. Consistencia sin transacciones distribuidas
@@ -183,7 +202,7 @@ Ejemplo — "realizar pedido": 1) Pedidos crea el pedido → 2) Stock reserva lo
 
 Problema sutil pero omnipresente: un servicio debe **guardar en su BD y publicar un evento**. Si guarda y luego se cae antes de publicar → los demás no se enteran (saga colgada). Si publica y luego falla el guardado → el mundo cree algo que no pasó. No hay transacción que abarque BD *y* broker.
 
-**Patrón Outbox (transactional outbox):** en la **misma transacción local** en que se guarda el cambio de negocio, se inserta el evento en una tabla `outbox` de la misma BD (eso sí es atómico). Un proceso aparte (relay) lee la outbox y publica los eventos al broker, marcándolos como enviados; si se cae, reintenta.
+**Patrón Outbox (transactional outbox):** en la **misma transacción local** en que se guarda el cambio de negocio, se inserta el evento en una tabla `outbox` de la misma BD (eso sí es atómico). Un proceso aparte (relay) lee la outbox y publica los eventos al broker, marcándolos como enviados; si se cae, reintenta. Ese relay puede implementarse por *polling* periódico de la tabla outbox, o por **CDC** (change data capture) leyendo el log de transacciones de la BD —p. ej. con **Debezium**—, que evita consultar la tabla y reduce la latencia.
 
 ```
 ┌───────────── Servicio Pedidos ─────────────┐
@@ -201,7 +220,7 @@ Consecuencia: la entrega es **al-menos-una-vez** (el relay puede reenviar tras u
 Sin JOINs globales, ¿cómo se responde "los 10 clientes con más pedidos este mes"? Opciones conceptuales:
 
 1. **Composición de APIs:** el llamante consulta varios servicios y combina en memoria. Bien para pocas entidades; mal para agregaciones masivas (N llamadas, paginación, latencia).
-2. **Vista materializada / CQRS a nivel de sistema:** un componente de consulta se **suscribe a los eventos** de los servicios implicados y mantiene una BD de lectura ya cruzada y optimizada para esas consultas. Eventualmente consistente (suele ser aceptable para informes).
+2. **Vista materializada / CQRS a nivel de sistema:** un componente de consulta se **suscribe a los eventos** de los servicios implicados y mantiene una BD de lectura ya cruzada y optimizada para esas consultas. La escritura y la lectura usan modelos distintos (eso es **CQRS**). Eventualmente consistente (suele ser aceptable para informes), y la vista es **desechable**: si se corrompe, se reconstruye reproduciendo los eventos.
 3. **Plataforma analítica:** para informes pesados/históricos, los servicios alimentan (por eventos o extracciones) un data warehouse/lake. El reporting *no* se hace contra las BDs operacionales de los servicios.
 
 Regla práctica: las consultas que cruzan dominios son **otro consumidor más de eventos**, no una excusa para volver a la BD compartida.

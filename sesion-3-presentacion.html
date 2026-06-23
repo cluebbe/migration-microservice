@@ -139,7 +139,7 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="32">
+;" data-marpit-pagination-total="38">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 <h2 id="objetivo-de-hoy">Objetivo de hoy</h2>
 <p>Encontrar <strong>buenos límites</strong> (DDD) y abordar lo más difícil: <strong>los datos</strong>.</p>
@@ -213,7 +213,7 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="32">
+;" data-marpit-pagination-total="38">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 
 <h1 id="1-domain-driven-design">1. Domain-Driven Design</h1>
@@ -281,7 +281,7 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="32">
+;" data-marpit-pagination-total="38">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 <h2 id="%C2%BFpor-qu%C3%A9-ddd-y-microservicios">¿Por qué DDD y microservicios?</h2>
 <p>La pregunta más cara de la migración: <strong>¿por dónde corto?</strong> Un corte malo = monolito distribuido (Sesión 1).</p>
@@ -354,7 +354,7 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="32">
+;" data-marpit-pagination-total="38">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 <h2 id="lenguaje-ubicuo">Lenguaje ubicuo</h2>
 <p>Vocabulario <strong>compartido</strong> entre negocio y desarrollo, usado igual en conversaciones, documentos <strong>y código</strong>. Si negocio dice &quot;póliza&quot; y el código dice <code>ContractRecord</code>, cada conversación necesita traducción.</p>
@@ -426,7 +426,7 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="32">
+;" data-marpit-pagination-total="38">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 <h2 id="bounded-contexts">Bounded contexts</h2>
 <p>Frontera dentro de la cual un <strong>modelo y su lenguaje</strong> son válidos y consistentes. No hace falta <strong>un modelo único de empresa</strong> (el &quot;Cliente canónico&quot; de 200 campos que no sirve a nadie):</p>
@@ -502,7 +502,7 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="32">
+;" data-marpit-pagination-total="38">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 <h2 id="c%C3%B3mo-detectar-fronteras-en-la-pr%C3%A1ctica">Cómo detectar fronteras en la práctica</h2>
 <ul>
@@ -576,7 +576,84 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="32">
+;" data-marpit-pagination-total="38">
+<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
+<h2 id="eventstorming-encontrar-fronteras-con-el-negocio">EventStorming: encontrar fronteras con el negocio</h2>
+<p>Taller donde negocio y desarrollo mapean el dominio en una pared, en orden temporal, con post-its de colores:</p>
+<ul>
+<li><strong>Evento de dominio</strong> <em>(naranja)</em> — algo relevante que pasó (&quot;Pedido confirmado&quot;)</li>
+<li><strong>Comando</strong> <em>(azul)</em> — lo que lo provoca (&quot;Confirmar pedido&quot;)</li>
+<li><strong>Agregado</strong> <em>(amarillo)</em> — sobre qué recae el comando</li>
+<li><strong>Política / proceso</strong> <em>(lila)</em> — &quot;cuando pasa X, automáticamente Y&quot;</li>
+</ul>
+<blockquote>
+<p>Los <strong>racimos</strong> de eventos que van juntos y los <strong>cambios de vocabulario</strong> a lo largo de la pared dibujan los bounded contexts. Es la vía más rápida de encontrar fronteras <em>con</em> el negocio en la sala, no en una reunión técnica aparte.</p>
+</blockquote>
+<footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="9" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-theme="default" data-style="section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+" lang="en-US" data-marpit-pagination="9" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 3 — Domain-Driven Design y descomposición de datos;--theme:default;--style:section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+;" data-marpit-pagination-total="38">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 <h2 id="un-servicio-%E2%89%88-un-bounded-context">Un servicio ≈ un bounded context</h2>
 <blockquote>
@@ -584,76 +661,6 @@ section.lead h1 {
 </blockquote>
 <p><strong>Por qué funciona:</strong> dentro de un contexto la cohesión es alta (cambia junto → vive junto); entre contextos el acoplamiento es bajo (pocas interacciones, formalizables como contratos). Justo lo que pide el despliegue independiente.</p>
 <p><strong>Por qué fracasa cortar por capa o entidad:</strong> &quot;añadir descuentos por volumen&quot; atraviesa capas y entidades → toca N servicios → monolito distribuido.</p>
-<footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
-</section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="9" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-class="lead" data-theme="default" data-style="section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-" lang="en-US" class="lead" data-marpit-pagination="9" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 3 — Domain-Driven Design y descomposición de datos;--class:lead;--theme:default;--style:section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-;" data-marpit-pagination-total="32">
-<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-
-<h1 id="ejercicio-31">Ejercicio 3.1</h1>
-<h2 id="detectar-bounded-contexts-por-el-lenguaje">Detectar bounded contexts por el lenguaje</h2>
-<p><em>(ver cuaderno de ejercicios)</em></p>
 <footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="10" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-class="lead" data-theme="default" data-style="section {
@@ -718,112 +725,80 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="32">
+;" data-marpit-pagination-total="38">
+<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
+
+<h1 id="ejercicio-31">Ejercicio 3.1</h1>
+<h2 id="detectar-bounded-contexts-por-el-lenguaje">Detectar bounded contexts por el lenguaje</h2>
+<p><em>(ver cuaderno de ejercicios)</em></p>
+<footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="11" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-class="lead" data-theme="default" data-style="section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+" lang="en-US" class="lead" data-marpit-pagination="11" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 3 — Domain-Driven Design y descomposición de datos;--class:lead;--theme:default;--style:section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+;" data-marpit-pagination-total="38">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 
 <h1 id="2-encontrar-los-l%C3%ADmites">2. Encontrar los límites</h1>
-<footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
-</section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="11" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-theme="default" data-style="section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-" lang="en-US" data-marpit-pagination="11" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 3 — Domain-Driven Design y descomposición de datos;--theme:default;--style:section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-;" data-marpit-pagination-total="32">
-<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-<h2 id="context-maps">Context maps</h2>
-<p>El <strong>plano de los contextos y sus relaciones</strong>. Saber cuáles son no basta: hay que saber cómo se influyen (eso fija contratos y poder de negociación).</p>
-<table>
-<thead>
-<tr>
-<th>Relación</th>
-<th>Significado</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Customer–Supplier</strong></td>
-<td>El proveedor tiene en cuenta al consumidor (hay negociación)</td>
-</tr>
-<tr>
-<td><strong>Conformist</strong></td>
-<td>El consumidor acepta el modelo del proveedor tal cual</td>
-</tr>
-<tr>
-<td><strong>Anticorruption Layer</strong></td>
-<td>El consumidor se protege traduciendo (Sesión 2)</td>
-</tr>
-<tr>
-<td><strong>Shared Kernel</strong></td>
-<td>Comparten parte del modelo (acoplamiento fuerte — con moderación)</td>
-</tr>
-<tr>
-<td><strong>Open Host / Published Language</strong></td>
-<td>API/formato estable y documentado para muchos</td>
-</tr>
-<tr>
-<td><strong>Separate Ways</strong></td>
-<td>No se integran: duplicar es más barato que coordinar</td>
-</tr>
-</tbody>
-</table>
 <footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="12" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-theme="default" data-style="section {
@@ -888,23 +863,44 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="32">
+;" data-marpit-pagination-total="38">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-<h2 id="capacidad-de-negocio-vs-subdominio">Capacidad de negocio vs. subdominio</h2>
-<p>Dos heurísticas para proponer contextos:</p>
-<ul>
-<li><strong>Por capacidad de negocio:</strong> ¿qué <em>hace</em> la empresa? (gestionar pedidos, facturar). Estable, de fuera adentro. Riesgo: copiar el organigrama actual.</li>
-<li><strong>Por subdominio:</strong> ¿de qué <em>se compone</em> el dominio?
-<ul>
-<li><strong>Core</strong> — lo que te diferencia. Mejor equipo, mejor diseño.</li>
-<li><strong>Supporting</strong> — necesario, no diferencial; a medida porque no hay alternativa.</li>
-<li><strong>Generic</strong> — lo resuelve una solución comprada (contabilidad, login, email).</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p><strong>core / supporting / generic</strong> = cómo <strong>repartir el esfuerzo</strong>: modelado fino al core; lo genérico a menudo <strong>ni se migra — se reemplaza</strong> por SaaS.</p>
-</blockquote>
+<h2 id="context-maps">Context maps</h2>
+<p>El <strong>plano de los contextos y sus relaciones</strong>. Saber cuáles son no basta: hay que saber cómo se influyen (eso fija contratos y poder de negociación).</p>
+<table>
+<thead>
+<tr>
+<th>Relación</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Customer–Supplier</strong></td>
+<td>El proveedor tiene en cuenta al consumidor (hay negociación)</td>
+</tr>
+<tr>
+<td><strong>Conformist</strong></td>
+<td>El consumidor acepta el modelo del proveedor tal cual</td>
+</tr>
+<tr>
+<td><strong>Anticorruption Layer</strong></td>
+<td>El consumidor se protege traduciendo (Sesión 2)</td>
+</tr>
+<tr>
+<td><strong>Shared Kernel</strong></td>
+<td>Comparten parte del modelo (acoplamiento fuerte — con moderación)</td>
+</tr>
+<tr>
+<td><strong>Open Host / Published Language</strong></td>
+<td>API/formato estable y documentado para muchos</td>
+</tr>
+<tr>
+<td><strong>Separate Ways</strong></td>
+<td>No se integran: duplicar es más barato que coordinar</td>
+</tr>
+</tbody>
+</table>
 <footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="13" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-theme="default" data-style="section {
@@ -969,7 +965,168 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="32">
+;" data-marpit-pagination-total="38">
+<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
+<h2 id="un-context-map-de-ejemplo">Un context map de ejemplo</h2>
+<p>Las mismas relaciones, dibujadas sobre los contextos de un e-commerce:</p>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code>  ┌──────────┐  conformist     ┌──────────┐  Customer–Supplier  ┌──────────┐
+  │ Catálogo │◄────────────────│ Pedidos  │────────────────────►│  Pagos   │
+  └──────────┘  (acepta su     └────┬─────┘  (negocia contrato)  └────┬─────┘
+                 modelo)            │ evento                          │ ACL
+                                    ▼ PedidoCreado                    ▼
+                             ┌──────────┐               ┌──────────────────────┐
+                             │  Envíos  │               │ Pasarela pago (ext.) │
+                             └──────────┘               └──────────────────────┘
+</code></pre>
+<blockquote>
+<p>Saber los contextos no basta: el mapa fija <strong>quién depende de quién</strong>, dónde pones un <strong>ACL</strong> y quién tiene <strong>poder de negociación</strong> sobre el contrato.</p>
+</blockquote>
+<footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="14" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-theme="default" data-style="section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+" lang="en-US" data-marpit-pagination="14" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 3 — Domain-Driven Design y descomposición de datos;--theme:default;--style:section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+;" data-marpit-pagination-total="38">
+<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
+<h2 id="capacidad-de-negocio-vs-subdominio">Capacidad de negocio vs. subdominio</h2>
+<p>Dos heurísticas para proponer contextos:</p>
+<ul>
+<li><strong>Por capacidad de negocio:</strong> ¿qué <em>hace</em> la empresa? (gestionar pedidos, facturar). Estable, de fuera adentro. Riesgo: copiar el organigrama actual.</li>
+<li><strong>Por subdominio:</strong> ¿de qué <em>se compone</em> el dominio?
+<ul>
+<li><strong>Core</strong> — lo que te diferencia. Mejor equipo, mejor diseño.</li>
+<li><strong>Supporting</strong> — necesario, no diferencial; a medida porque no hay alternativa.</li>
+<li><strong>Generic</strong> — lo resuelve una solución comprada (contabilidad, login, email).</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>core / supporting / generic</strong> = cómo <strong>repartir el esfuerzo</strong>: modelado fino al core; lo genérico a menudo <strong>ni se migra — se reemplaza</strong> por SaaS.</p>
+</blockquote>
+<footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="15" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-theme="default" data-style="section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+" lang="en-US" data-marpit-pagination="15" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 3 — Domain-Driven Design y descomposición de datos;--theme:default;--style:section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+;" data-marpit-pagination-total="38">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 <h2 id="granularidad-%C2%BFdemasiado-peque%C3%B1o">Granularidad: ¿demasiado pequeño?</h2>
 <p>Señales de haber cortado <strong>demasiado fino</strong>:</p>
@@ -985,7 +1142,7 @@ section.lead h1 {
 </blockquote>
 <footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="14" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-class="lead" data-theme="default" data-style="section {
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="16" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-class="lead" data-theme="default" data-style="section {
   font-size: 26px;
 }
 header {
@@ -1016,7 +1173,7 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-" lang="en-US" class="lead" data-marpit-pagination="14" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 3 — Domain-Driven Design y descomposición de datos;--class:lead;--theme:default;--style:section {
+" lang="en-US" class="lead" data-marpit-pagination="16" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 3 — Domain-Driven Design y descomposición de datos;--class:lead;--theme:default;--style:section {
   font-size: 26px;
 }
 header {
@@ -1047,7 +1204,7 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="32">
+;" data-marpit-pagination-total="38">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 
 <h1 id="ejercicio-32">Ejercicio 3.2</h1>
@@ -1055,7 +1212,7 @@ section.lead h1 {
 <p><em>(ver cuaderno de ejercicios)</em></p>
 <footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="15" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-class="lead" data-theme="default" data-style="section {
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="17" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-class="lead" data-theme="default" data-style="section {
   font-size: 26px;
 }
 header {
@@ -1086,7 +1243,7 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-" lang="en-US" class="lead" data-marpit-pagination="15" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 3 — Domain-Driven Design y descomposición de datos;--class:lead;--theme:default;--style:section {
+" lang="en-US" class="lead" data-marpit-pagination="17" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 3 — Domain-Driven Design y descomposición de datos;--class:lead;--theme:default;--style:section {
   font-size: 26px;
 }
 header {
@@ -1117,161 +1274,10 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="32">
+;" data-marpit-pagination-total="38">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 
 <h1 id="3-descomposici%C3%B3n-de-datos">3. Descomposición de datos</h1>
-<footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
-</section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="16" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-theme="default" data-style="section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-" lang="en-US" data-marpit-pagination="16" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 3 — Domain-Driven Design y descomposición de datos;--theme:default;--style:section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-;" data-marpit-pagination-total="32">
-<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-<h2 id="el-problema-la-bd-compartida">El problema: la BD compartida</h2>
-<p>Extrae todo el código que quieras: mientras <strong>compartan base de datos, siguen acoplados</strong>.</p>
-<ul>
-<li>El <strong>esquema es un contrato implícito</strong>: nadie cambia una tabla sin romper a los demás → adiós despliegue independiente</li>
-<li>La lógica acaba en el sitio equivocado (se reimplementa y diverge en cada consumidor)</li>
-<li>No puedes cambiar de tecnología de almacenamiento por servicio</li>
-<li>El rendimiento de uno afecta a todos (bloqueos, pools, picos)</li>
-</ul>
-<footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
-</section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="17" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-theme="default" data-style="section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-" lang="en-US" data-marpit-pagination="17" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 3 — Domain-Driven Design y descomposición de datos;--theme:default;--style:section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-;" data-marpit-pagination-total="32">
-<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-<h2 id="objetivo-base-de-datos-por-servicio">Objetivo: base de datos por servicio</h2>
-<blockquote>
-<p>Cada servicio es el <strong>único</strong> que accede a sus datos; los demás pasan por su <strong>API</strong>.</p>
-</blockquote>
-<ul>
-<li>Restaura el <strong>despliegue independiente</strong> (cada uno cambia su esquema)</li>
-<li>La lógica de negocio vive en <strong>un</strong> sitio (su dueño)</li>
-<li>Cada servicio elige su <strong>tecnología</strong> de almacenamiento</li>
-<li>Aísla el rendimiento</li>
-</ul>
-<p>Es la parte <strong>más difícil y más aplazada</strong> de toda migración.</p>
 <footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="18" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-theme="default" data-style="section {
@@ -1336,15 +1342,16 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="32">
+;" data-marpit-pagination-total="38">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-<h2 id="dividir-los-datos-propiedad-primero">Dividir los datos: propiedad primero</h2>
-<ol>
-<li><strong>Mapear propiedad:</strong> por cada tabla, ¿qué contexto la <em>escribe</em>? (las que escribe todo el mundo = alarma)</li>
-<li><strong>Separar el esquema lógicamente:</strong> esquemas/usuarios distintos en la misma instancia, sin cruces. Barato, revela todos los acoplamientos</li>
-<li><strong>Romper los accesos cruzados</strong> uno a uno → API del dueño · copia local por eventos · mover el dato de dueño</li>
-<li><strong>Separar físicamente</strong> (instancia propia) cuando ya no hay cruces</li>
-</ol>
+<h2 id="el-problema-la-bd-compartida">El problema: la BD compartida</h2>
+<p>Extrae todo el código que quieras: mientras <strong>compartan base de datos, siguen acoplados</strong>.</p>
+<ul>
+<li>El <strong>esquema es un contrato implícito</strong>: nadie cambia una tabla sin romper a los demás → adiós despliegue independiente</li>
+<li>La lógica acaba en el sitio equivocado (se reimplementa y diverge en cada consumidor)</li>
+<li>No puedes cambiar de tecnología de almacenamiento por servicio</li>
+<li>El rendimiento de uno afecta a todos (bloqueos, pools, picos)</li>
+</ul>
 <footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="19" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-theme="default" data-style="section {
@@ -1409,14 +1416,19 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="32">
+;" data-marpit-pagination-total="38">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-<h2 id="casos-t%C3%ADpicos-dif%C3%ADciles">Casos típicos difíciles</h2>
+<h2 id="objetivo-base-de-datos-por-servicio">Objetivo: base de datos por servicio</h2>
+<blockquote>
+<p>Cada servicio es el <strong>único</strong> que accede a sus datos; los demás pasan por su <strong>API</strong>.</p>
+</blockquote>
 <ul>
-<li><strong>Tabla de referencia compartida</strong> (<code>paises</code>): duplicar en cada servicio (cambia poco) o un servicio de referencia</li>
-<li><strong>Una tabla, dos dueños</strong> (<code>pedidos</code> con columnas de pedido + de envío): <strong>partirla</strong>; la clave (<code>pedido_id</code>) pasa a ser referencia entre servicios</li>
-<li><strong>Joins entre dominios</strong> (informe clientes × pedidos): ya no hay JOIN entre BDs → composición en el llamante, o <strong>vista materializada</strong> por eventos (§4.5)</li>
+<li>Restaura el <strong>despliegue independiente</strong> (cada uno cambia su esquema)</li>
+<li>La lógica de negocio vive en <strong>un</strong> sitio (su dueño)</li>
+<li>Cada servicio elige su <strong>tecnología</strong> de almacenamiento</li>
+<li>Aísla el rendimiento</li>
 </ul>
+<p>Es la parte <strong>más difícil y más aplazada</strong> de toda migración.</p>
 <footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="20" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-theme="default" data-style="section {
@@ -1481,178 +1493,169 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="32">
+;" data-marpit-pagination-total="38">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-<h2 id="el-coste-de-los-datos-distribuidos">El coste de los datos distribuidos</h2>
-<p>Sin anestesia: al partir los datos <strong>se pierde</strong> lo que la BD única regalaba.</p>
-<table>
-<thead>
-<tr>
-<th>Se pierde</th>
-<th>Lo sustituye (peor, más trabajo)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Transacciones ACID entre dominios</td>
-<td>Sagas + consistencia eventual</td>
-</tr>
-<tr>
-<td>JOIN entre cualquier par de tablas</td>
-<td>Composición por API / vistas materializadas</td>
-</tr>
-<tr>
-<td>Integridad referencial (FK) global</td>
-<td>Validación en app; tolerar referencias rotas</td>
-</tr>
-<tr>
-<td>Un único lugar donde mirar</td>
-<td>Datos repartidos; catálogo/linaje</td>
-</tr>
-</tbody>
-</table>
+<h2 id="dividir-los-datos-propiedad-primero">Dividir los datos: propiedad primero</h2>
+<ol>
+<li><strong>Mapear propiedad:</strong> por cada tabla, ¿qué contexto la <em>escribe</em>? (las que escribe todo el mundo = alarma)</li>
+<li><strong>Separar el esquema lógicamente:</strong> esquemas/usuarios distintos en la misma instancia, sin cruces. Barato, revela todos los acoplamientos</li>
+<li><strong>Romper los accesos cruzados</strong> uno a uno → API del dueño · copia local por eventos · mover el dato de dueño</li>
+<li><strong>Separar físicamente</strong> (instancia propia) cuando ya no hay cruces</li>
+</ol>
+<footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="21" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-theme="default" data-style="section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+" lang="en-US" data-marpit-pagination="21" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 3 — Domain-Driven Design y descomposición de datos;--theme:default;--style:section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+;" data-marpit-pagination-total="38">
+<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
+<h2 id="casos-t%C3%ADpicos-dif%C3%ADciles">Casos típicos difíciles</h2>
+<ul>
+<li><strong>Tabla de referencia compartida</strong> (<code>paises</code>): duplicar en cada servicio (cambia poco) o un servicio de referencia</li>
+<li><strong>Una tabla, dos dueños</strong> (<code>pedidos</code> con columnas de pedido + de envío): <strong>partirla</strong>; la clave (<code>pedido_id</code>) pasa a ser referencia entre servicios</li>
+<li><strong>Joins entre dominios</strong> (informe clientes × pedidos): ya no hay JOIN entre BDs → composición en el llamante, o <strong>vista materializada</strong> por eventos (§4.5)</li>
+</ul>
+<footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="22" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-theme="default" data-style="section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+" lang="en-US" data-marpit-pagination="22" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 3 — Domain-Driven Design y descomposición de datos;--theme:default;--style:section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+;" data-marpit-pagination-total="38">
+<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
+<h2 id="partir-una-tabla-en-la-pr%C3%A1ctica">Partir una tabla en la práctica</h2>
+<p><code>pedidos</code> esconde <strong>dos dueños</strong>: datos de pedido (→ Pedidos) y de envío (→ Envíos).</p>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code>ANTES — una tabla, dos dueños       DESPUÉS — dos servicios
+
+  pedidos                           pedidos-svc        envios-svc
+  ────────────────                  ───────────        ──────────────
+  id           (PK)                 id      (PK)       id          (PK)
+  cliente_id                        cliente_id         pedido_id   (ref→)
+  total                  ──►        total              direccion
+  direccion_envio                                      transportista
+  transportista                                        estado_envio
+  estado_envio
+</code></pre>
 <blockquote>
-<p>Por eso los <strong>límites importan tanto</strong>: buen corte → transacciones y joins entre servicios raros. Los invariantes con consistencia fuerte van <strong>dentro de un servicio</strong> (un <em>agregado</em>).</p>
+<p><code>pedido_id</code> deja de ser una FK con integridad de BD y pasa a ser una <strong>referencia entre servicios:</strong> la valida la app, puede quedar &quot;colgada&quot; un instante, y se sincroniza por <strong>eventos</strong> (<code>PedidoCreado</code> → Envíos crea su fila).</p>
 </blockquote>
-<footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
-</section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="21" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-class="lead" data-theme="default" data-style="section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-" lang="en-US" class="lead" data-marpit-pagination="21" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 3 — Domain-Driven Design y descomposición de datos;--class:lead;--theme:default;--style:section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-;" data-marpit-pagination-total="32">
-<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-
-<h1 id="ejercicio-33">Ejercicio 3.3</h1>
-<h2 id="partir-la-base-de-datos-compartida">Partir la base de datos compartida</h2>
-<p><em>(ver cuaderno de ejercicios)</em></p>
-<footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
-</section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="22" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-class="lead" data-theme="default" data-style="section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-" lang="en-US" class="lead" data-marpit-pagination="22" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 3 — Domain-Driven Design y descomposición de datos;--class:lead;--theme:default;--style:section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-;" data-marpit-pagination-total="32">
-<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-
-<h1 id="4-consistencia-sin">4. Consistencia sin</h1>
-<h1 id="transacciones-distribuidas">transacciones distribuidas</h1>
 <footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="23" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-theme="default" data-style="section {
@@ -1717,91 +1720,42 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="32">
+;" data-marpit-pagination-total="38">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-<h2 id="por-qu%C3%A9-no-usamos-2pc">Por qué no usamos 2PC</h2>
-<p>La transacción distribuida clásica (<em>two-phase commit</em>): un coordinador pide votar a todos y luego confirma. En microservicios <strong>se evita</strong>:</p>
-<ul>
-<li><strong>Bloquea recursos</strong> en todos los participantes mientras dura → mata el rendimiento</li>
-<li>El <strong>coordinador</strong> es un punto único de fallo, con estados &quot;en duda&quot; horribles</li>
-<li><strong>Acopla la disponibilidad</strong> de todos (avanza al ritmo del más lento/caído)</li>
-<li>Muchas tecnologías (colas, NoSQL, HTTP) <strong>no lo soportan</strong></li>
-</ul>
-<footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
-</section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="24" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-theme="default" data-style="section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-" lang="en-US" data-marpit-pagination="24" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 3 — Domain-Driven Design y descomposición de datos;--theme:default;--style:section {
-  font-size: 26px;
-}
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  left: 30px;
-  top: 18px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a5276;
-}
-h1 {
-  color: #1a5276;
-}
-h2 {
-  color: #1a5276;
-}
-code {
-  font-size: 0.85em;
-}
-table {
-  font-size: 0.8em;
-}
-section.lead {
-  text-align: center;
-}
-section.lead h1 {
-  font-size: 1.8em;
-}
-;" data-marpit-pagination-total="32">
-<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-<h2 id="consistencia-eventual">Consistencia eventual</h2>
-<p>Aceptar estados intermedios visibles y garantizar que el sistema <strong>converge</strong>: <em>&quot;el pedido está creado pero el stock aún no descontado… durante 200 ms.&quot;</em></p>
-<p><strong>No es (solo) un problema técnico, es una conversación de negocio.</strong> Casi todos los procesos reales <em>ya son</em> eventualmente consistentes (la tienda física vende y el stock central se entera por la noche).</p>
+<h2 id="el-coste-de-los-datos-distribuidos">El coste de los datos distribuidos</h2>
+<p>Sin anestesia: al partir los datos <strong>se pierde</strong> lo que la BD única regalaba.</p>
+<table>
+<thead>
+<tr>
+<th>Se pierde</th>
+<th>Lo sustituye (peor, más trabajo)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Transacciones ACID entre dominios</td>
+<td>Sagas + consistencia eventual</td>
+</tr>
+<tr>
+<td>JOIN entre cualquier par de tablas</td>
+<td>Composición por API / vistas materializadas</td>
+</tr>
+<tr>
+<td>Integridad referencial (FK) global</td>
+<td>Validación en app; tolerar referencias rotas</td>
+</tr>
+<tr>
+<td>Un único lugar donde mirar</td>
+<td>Datos repartidos; catálogo/linaje</td>
+</tr>
+</tbody>
+</table>
 <blockquote>
-<p>Preguntas correctas — <strong>las responde negocio:</strong> ¿qué desfase es aceptable aquí? ¿qué hacemos si al final no se puede completar?</p>
+<p>Por eso los <strong>límites importan tanto</strong>: buen corte → transacciones y joins entre servicios raros. Los invariantes con consistencia fuerte van <strong>dentro de un servicio</strong> (un <em>agregado</em>).</p>
 </blockquote>
 <footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="25" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-theme="default" data-style="section {
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="24" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-class="lead" data-theme="default" data-style="section {
   font-size: 26px;
 }
 header {
@@ -1832,7 +1786,7 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-" lang="en-US" data-marpit-pagination="25" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 3 — Domain-Driven Design y descomposición de datos;--theme:default;--style:section {
+" lang="en-US" class="lead" data-marpit-pagination="24" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 3 — Domain-Driven Design y descomposición de datos;--class:lead;--theme:default;--style:section {
   font-size: 26px;
 }
 header {
@@ -1863,15 +1817,81 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="32">
+;" data-marpit-pagination-total="38">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-<h2 id="el-patr%C3%B3n-saga">El patrón Saga</h2>
-<p>Una <strong>saga</strong> = secuencia de transacciones <strong>locales</strong> (cada una ACID en su servicio) que juntas implementan un proceso. Si un paso falla, no hay rollback global: se ejecutan <strong>compensaciones</strong> (acciones de negocio que deshacen).</p>
-<p><strong>&quot;Realizar pedido&quot;:</strong> 1) Pedidos crea → 2) Stock reserva → 3) Pagos cobra → 4) Pedidos confirma.<br />
-Si el cobro (3) falla → compensar 2 (liberar reserva) y 1 (marcar pedido <strong>cancelado</strong>, no borrado).</p>
-<blockquote>
-<p>La compensación es una <strong>acción de negocio</strong> con su semántica, no un &quot;deshacer&quot; mágico.</p>
-</blockquote>
+
+<h1 id="ejercicio-33">Ejercicio 3.3</h1>
+<h2 id="partir-la-base-de-datos-compartida">Partir la base de datos compartida</h2>
+<p><em>(ver cuaderno de ejercicios)</em></p>
+<footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="25" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-class="lead" data-theme="default" data-style="section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+" lang="en-US" class="lead" data-marpit-pagination="25" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 3 — Domain-Driven Design y descomposición de datos;--class:lead;--theme:default;--style:section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+;" data-marpit-pagination-total="38">
+<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
+
+<h1 id="4-consistencia-sin">4. Consistencia sin</h1>
+<h1 id="transacciones-distribuidas">transacciones distribuidas</h1>
 <footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="26" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-theme="default" data-style="section {
@@ -1936,18 +1956,15 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="32">
+;" data-marpit-pagination-total="38">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-<h2 id="orquestaci%C3%B3n-vs-coreograf%C3%ADa">Orquestación vs. coreografía</h2>
-<p><strong>Orquestación</strong> — un coordinador central llama a cada paso y decide compensar.<br />
-<img class="emoji" draggable="false" alt="✅" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@17.0.2/assets/svg/2705.svg" data-marp-twemoji=""/> proceso explícito en un sitio; fácil de razonar, depurar, modificar<br />
-<img class="emoji" draggable="false" alt="⚠️" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@17.0.2/assets/svg/26a0.svg" data-marp-twemoji=""/> concentra acoplamiento (lo conoce todo); puede volverse un &quot;dios&quot;</p>
-<p><strong>Coreografía</strong> — sin coordinador; cada servicio reacciona a eventos y emite los suyos.<br />
-<img class="emoji" draggable="false" alt="✅" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@17.0.2/assets/svg/2705.svg" data-marp-twemoji=""/> acoplamiento mínimo, servicios autónomos, encaja con eventos<br />
-<img class="emoji" draggable="false" alt="⚠️" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@17.0.2/assets/svg/26a0.svg" data-marp-twemoji=""/> el proceso global <strong>no está escrito</strong> en ningún sitio: emerge. &quot;¿Dónde está el pedido 4711?&quot;</p>
+<h2 id="agregados-la-unidad-de-consistencia">Agregados: la unidad de consistencia</h2>
+<p>El único trozo de DDD <strong>táctico</strong> que la migración necesita.</p>
+<p>Un <strong>agregado</strong> = grupo de objetos que cambian juntos bajo una <strong>regla de negocio</strong> (invariante) y se tratan como <strong>una sola unidad</strong>. Tiene una <strong>raíz</strong>; desde fuera solo se habla con la raíz.</p>
 <blockquote>
-<p>Procesos cortos y estables → coreografía. Largos, con ramas/compensaciones o que exigen visibilidad → orquestación. Mezclar vale.</p>
+<p>Ej.: <strong>Pedido + sus líneas</strong> = un agregado. El invariante &quot;el total no supera el límite de crédito&quot; obliga a validarlas juntas → no se tocan las líneas por separado.</p>
 </blockquote>
+<p><strong>Regla de oro de consistencia:</strong> un invariante que exige <strong>ACID</strong> debe caber dentro de un agregado → dentro de <strong>un</strong> servicio. Lo que cruza agregados/servicios va con consistencia <strong>eventual</strong> (sagas).</p>
 <footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="27" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-theme="default" data-style="section {
@@ -2012,17 +2029,16 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="32">
+;" data-marpit-pagination-total="38">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-<h2 id="la-idea-del-outbox">La idea del Outbox</h2>
-<p>Un servicio debe <strong>guardar en su BD y publicar un evento</strong>. No hay transacción que cubra BD <em>y</em> broker: si guarda y se cae antes de publicar → saga colgada; si publica y falla el guardado → el mundo cree algo falso.</p>
-<pre is="marp-pre" data-auto-scaling="downscale-only"><code>┌───────────── Servicio Pedidos ─────────────┐
-│  TX local: INSERT pedido + INSERT outbox   │ ← atómico <img class="emoji" draggable="false" alt="✔" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@17.0.2/assets/svg/2714.svg" data-marp-twemoji=""/>
-│                 ┌────────┐                 │
-│                 │ outbox │ ──► relay ──────┼──► broker ──► suscriptores
-│                 └────────┘  (reintenta)    │
-└─────────────────────────────────────────────┘
-</code></pre>
+<h2 id="por-qu%C3%A9-no-usamos-2pc">Por qué no usamos 2PC</h2>
+<p>La transacción distribuida clásica (<em>two-phase commit</em>): un coordinador pide votar a todos y luego confirma. En microservicios <strong>se evita</strong>:</p>
+<ul>
+<li><strong>Bloquea recursos</strong> en todos los participantes mientras dura → mata el rendimiento</li>
+<li>El <strong>coordinador</strong> es un punto único de fallo, con estados &quot;en duda&quot; horribles</li>
+<li><strong>Acopla la disponibilidad</strong> de todos (avanza al ritmo del más lento/caído)</li>
+<li>Muchas tecnologías (colas, NoSQL, HTTP) <strong>no lo soportan</strong></li>
+</ul>
 <footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="28" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-theme="default" data-style="section {
@@ -2087,17 +2103,13 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="32">
+;" data-marpit-pagination-total="38">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-<h2 id="outbox-%E2%86%92-al-menos-una-vez-%E2%86%92-idempotencia">Outbox → al-menos-una-vez → idempotencia</h2>
-<p>El relay puede <strong>reenviar</strong> tras un fallo → la entrega es <strong>al-menos-una-vez</strong>.</p>
-<p>→ Los consumidores deben ser <strong>idempotentes:</strong> procesar el mismo evento dos veces sin daño.</p>
-<ul>
-<li><strong>Deduplicar por <code>event_id</code></strong> (marca de procesado en la misma TX que el efecto), o</li>
-<li><strong>Idempotencia natural</strong> por clave de negocio (<code>INSERT … ON CONFLICT DO NOTHING</code>)</li>
-</ul>
+<h2 id="consistencia-eventual">Consistencia eventual</h2>
+<p>Aceptar estados intermedios visibles y garantizar que el sistema <strong>converge</strong>: <em>&quot;el pedido está creado pero el stock aún no descontado… durante 200 ms.&quot;</em></p>
+<p><strong>No es (solo) un problema técnico, es una conversación de negocio.</strong> Casi todos los procesos reales <em>ya son</em> eventualmente consistentes (la tienda física vende y el stock central se entera por la noche).</p>
 <blockquote>
-<p><strong>Outbox (productor) + idempotencia (consumidor)</strong> = el fundamento de fiabilidad de casi toda arquitectura de eventos.</p>
+<p>Preguntas correctas — <strong>las responde negocio:</strong> ¿qué desfase es aceptable aquí? ¿qué hacemos si al final no se puede completar?</p>
 </blockquote>
 <footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
 </section>
@@ -2163,21 +2175,18 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="32">
+;" data-marpit-pagination-total="38">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
-<h2 id="consultas-e-informes-entre-servicios">Consultas e informes entre servicios</h2>
-<p>Sin JOINs globales, ¿&quot;los 10 clientes con más pedidos este mes&quot;?</p>
-<ol>
-<li><strong>Composición de APIs:</strong> el llamante consulta varios servicios y combina. Bien para pocas entidades; mal para agregaciones masivas</li>
-<li><strong>Vista materializada / CQRS:</strong> un componente se <strong>suscribe a los eventos</strong> y mantiene una BD de lectura ya cruzada. Eventualmente consistente (suele bastar para informes)</li>
-<li><strong>Plataforma analítica:</strong> informes pesados → data warehouse alimentado por eventos, no contra las BDs operacionales</li>
-</ol>
+<h2 id="el-patr%C3%B3n-saga">El patrón Saga</h2>
+<p>Una <strong>saga</strong> = secuencia de transacciones <strong>locales</strong> (cada una ACID en su servicio) que juntas implementan un proceso. Si un paso falla, no hay rollback global: se ejecutan <strong>compensaciones</strong> (acciones de negocio que deshacen).</p>
+<p><strong>&quot;Realizar pedido&quot;:</strong> 1) Pedidos crea → 2) Stock reserva → 3) Pagos cobra → 4) Pedidos confirma.<br />
+Si el cobro (3) falla → compensar 2 (liberar reserva) y 1 (marcar pedido <strong>cancelado</strong>, no borrado).</p>
 <blockquote>
-<p>Las consultas que cruzan dominios son <strong>otro consumidor de eventos</strong>, no una excusa para volver a la BD compartida.</p>
+<p>La compensación es una <strong>acción de negocio</strong> con su semántica, no un &quot;deshacer&quot; mágico.</p>
 </blockquote>
 <footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="30" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-class="lead" data-theme="default" data-style="section {
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="30" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-theme="default" data-style="section {
   font-size: 26px;
 }
 header {
@@ -2208,7 +2217,7 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-" lang="en-US" class="lead" data-marpit-pagination="30" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 3 — Domain-Driven Design y descomposición de datos;--class:lead;--theme:default;--style:section {
+" lang="en-US" data-marpit-pagination="30" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 3 — Domain-Driven Design y descomposición de datos;--theme:default;--style:section {
   font-size: 26px;
 }
 header {
@@ -2239,13 +2248,21 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="32">
+;" data-marpit-pagination-total="38">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
+<h2 id="saga-camino-feliz-y-compensaci%C3%B3n">Saga: camino feliz y compensación</h2>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code>CAMINO FELIZ                     FALLO EN EL COBRO (paso 3)
 
-<h1 id="ejercicio-34--35">Ejercicio 3.4 + 3.5</h1>
-<h2 id="dise%C3%B1ar-una-saga">Diseñar una saga</h2>
-<h2 id="%C2%BFd%C3%B3nde-falla-esto-outbox-e-idempotencia">¿Dónde falla esto? (outbox e idempotencia)</h2>
-<p><em>(ver cuaderno de ejercicios)</em></p>
+1. Pedidos: crear pedido         1. Pedidos: crear pedido
+2. Stock:   reservar             2. Stock:   reservar
+3. Pagos:   cobrar               3. Pagos:   cobrar ──────► ✗ rechazado
+4. Pedidos: confirmar               ↺ Stock:   liberar reserva    (compensa 2)
+                                    ↺ Pedidos: marcar CANCELADO   (compensa 1)
+   = PEDIDO CONFIRMADO              = PEDIDO CANCELADO (no borrado)
+</code></pre>
+<blockquote>
+<p>No hay rollback global: cada compensación es una <strong>acción de negocio</strong> ejecutada hacia atrás. Por eso el <strong>orden</strong> de los pasos es una decisión (Ejercicio 3.4): deja lo más caro de compensar para el final.</p>
+</blockquote>
 <footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="31" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-theme="default" data-style="section {
@@ -2310,7 +2327,463 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="32">
+;" data-marpit-pagination-total="38">
+<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
+<h2 id="orquestaci%C3%B3n-vs-coreograf%C3%ADa">Orquestación vs. coreografía</h2>
+<p><strong>Orquestación</strong> — un coordinador central llama a cada paso y decide compensar.<br />
+<img class="emoji" draggable="false" alt="✅" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@17.0.2/assets/svg/2705.svg" data-marp-twemoji=""/> proceso explícito en un sitio; fácil de razonar, depurar, modificar<br />
+<img class="emoji" draggable="false" alt="⚠️" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@17.0.2/assets/svg/26a0.svg" data-marp-twemoji=""/> concentra acoplamiento (lo conoce todo); puede volverse un &quot;dios&quot;</p>
+<p><strong>Coreografía</strong> — sin coordinador; cada servicio reacciona a eventos y emite los suyos.<br />
+<img class="emoji" draggable="false" alt="✅" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@17.0.2/assets/svg/2705.svg" data-marp-twemoji=""/> acoplamiento mínimo, servicios autónomos, encaja con eventos<br />
+<img class="emoji" draggable="false" alt="⚠️" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@17.0.2/assets/svg/26a0.svg" data-marp-twemoji=""/> el proceso global <strong>no está escrito</strong> en ningún sitio: emerge. &quot;¿Dónde está el pedido 4711?&quot;</p>
+<blockquote>
+<p>Procesos cortos y estables → coreografía. Largos, con ramas/compensaciones o que exigen visibilidad → orquestación. Mezclar vale.</p>
+</blockquote>
+<footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="32" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-theme="default" data-style="section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+" lang="en-US" data-marpit-pagination="32" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 3 — Domain-Driven Design y descomposición de datos;--theme:default;--style:section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+;" data-marpit-pagination-total="38">
+<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
+<h2 id="la-idea-del-outbox">La idea del Outbox</h2>
+<p>Un servicio debe <strong>guardar en su BD y publicar un evento</strong>. No hay transacción que cubra BD <em>y</em> broker: si guarda y se cae antes de publicar → saga colgada; si publica y falla el guardado → el mundo cree algo falso.</p>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code>┌───────────── Servicio Pedidos ─────────────┐
+│  TX local: INSERT pedido + INSERT outbox   │ ← atómico <img class="emoji" draggable="false" alt="✔" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@17.0.2/assets/svg/2714.svg" data-marp-twemoji=""/>
+│                 ┌────────┐                 │
+│                 │ outbox │ ──► relay ──────┼──► broker ──► suscriptores
+│                 └────────┘  (reintenta)    │
+└─────────────────────────────────────────────┘
+</code></pre>
+<p><strong>El relay</strong> publica leyendo la outbox: por <em>polling</em> periódico de la tabla, o por <strong>CDC</strong> (change data capture) sobre el log de transacciones de la BD — p. ej. <strong>Debezium</strong> — sin consultar la tabla.</p>
+<footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="33" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-theme="default" data-style="section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+" lang="en-US" data-marpit-pagination="33" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 3 — Domain-Driven Design y descomposición de datos;--theme:default;--style:section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+;" data-marpit-pagination-total="38">
+<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
+<h2 id="outbox-%E2%86%92-al-menos-una-vez-%E2%86%92-idempotencia">Outbox → al-menos-una-vez → idempotencia</h2>
+<p>El relay puede <strong>reenviar</strong> tras un fallo → la entrega es <strong>al-menos-una-vez</strong>.</p>
+<p>→ Los consumidores deben ser <strong>idempotentes:</strong> procesar el mismo evento dos veces sin daño.</p>
+<ul>
+<li><strong>Deduplicar por <code>event_id</code></strong> (marca de procesado en la misma TX que el efecto), o</li>
+<li><strong>Idempotencia natural</strong> por clave de negocio (<code>INSERT … ON CONFLICT DO NOTHING</code>)</li>
+</ul>
+<blockquote>
+<p><strong>Outbox (productor) + idempotencia (consumidor)</strong> = el fundamento de fiabilidad de casi toda arquitectura de eventos.</p>
+</blockquote>
+<footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="34" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-theme="default" data-style="section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+" lang="en-US" data-marpit-pagination="34" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 3 — Domain-Driven Design y descomposición de datos;--theme:default;--style:section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+;" data-marpit-pagination-total="38">
+<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
+<h2 id="consultas-e-informes-entre-servicios">Consultas e informes entre servicios</h2>
+<p>Sin JOINs globales, ¿&quot;los 10 clientes con más pedidos este mes&quot;?</p>
+<ol>
+<li><strong>Composición de APIs:</strong> el llamante consulta varios servicios y combina. Bien para pocas entidades; mal para agregaciones masivas</li>
+<li><strong>Vista materializada / CQRS:</strong> un componente se <strong>suscribe a los eventos</strong> y mantiene una BD de lectura ya cruzada. Eventualmente consistente (suele bastar para informes)</li>
+<li><strong>Plataforma analítica:</strong> informes pesados → data warehouse alimentado por eventos, no contra las BDs operacionales</li>
+</ol>
+<blockquote>
+<p>Las consultas que cruzan dominios son <strong>otro consumidor de eventos</strong>, no una excusa para volver a la BD compartida.</p>
+</blockquote>
+<footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="35" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-theme="default" data-style="section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+" lang="en-US" data-marpit-pagination="35" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 3 — Domain-Driven Design y descomposición de datos;--theme:default;--style:section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+;" data-marpit-pagination-total="38">
+<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
+<h2 id="cqrs-vista-de-lectura-por-eventos">CQRS: vista de lectura por eventos</h2>
+<p>&quot;Los 10 clientes con más pedidos del mes&quot; cruza dos servicios. En vez de un JOIN, un componente mantiene una tabla ya cruzada, <strong>solo de lectura</strong>:</p>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code> Pedidos ──PedidoCreado──┐
+                         ├──► proyector ──► BD de lectura ──► consulta
+ Clientes ─ClienteAlta───┘                 (cruzada,          (rápida,
+                                            desnormalizada)    sin JOINs)
+</code></pre>
+<ul>
+<li><strong>Escritura</strong> y <strong>lectura</strong> usan modelos distintos → eso es <strong>CQRS</strong></li>
+<li>Es <strong>eventualmente consistente</strong> (desfase de segundos; suele bastar para informes)</li>
+<li>Si se corrompe, se <strong>reconstruye</strong> reproduciendo los eventos</li>
+</ul>
+<blockquote>
+<p>Reusa los <strong>mismos eventos</strong> de las sagas: el reporting es otro consumidor de eventos, no una excusa para volver a la BD compartida.</p>
+</blockquote>
+<footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="36" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-class="lead" data-theme="default" data-style="section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+" lang="en-US" class="lead" data-marpit-pagination="36" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 3 — Domain-Driven Design y descomposición de datos;--class:lead;--theme:default;--style:section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+;" data-marpit-pagination-total="38">
+<header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
+
+<h1 id="ejercicio-34--35">Ejercicio 3.4 + 3.5</h1>
+<h2 id="dise%C3%B1ar-una-saga">Diseñar una saga</h2>
+<h2 id="%C2%BFd%C3%B3nde-falla-esto-outbox-e-idempotencia">¿Dónde falla esto? (outbox e idempotencia)</h2>
+<p><em>(ver cuaderno de ejercicios)</em></p>
+<footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="37" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-theme="default" data-style="section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+" lang="en-US" data-marpit-pagination="37" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 3 — Domain-Driven Design y descomposición de datos;--theme:default;--style:section {
+  font-size: 26px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  left: 30px;
+  top: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a5276;
+}
+h1 {
+  color: #1a5276;
+}
+h2 {
+  color: #1a5276;
+}
+code {
+  font-size: 0.85em;
+}
+table {
+  font-size: 0.8em;
+}
+section.lead {
+  text-align: center;
+}
+section.lead h1 {
+  font-size: 1.8em;
+}
+;" data-marpit-pagination-total="38">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 <h2 id="resumen-de-la-sesi%C3%B3n">Resumen de la sesión</h2>
 <ul>
@@ -2322,7 +2795,7 @@ section.lead h1 {
 </ul>
 <footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
 </section>
-</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="32" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-class="lead" data-theme="default" data-style="section {
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="38" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-class="lead" data-theme="default" data-style="section {
   font-size: 26px;
 }
 header {
@@ -2353,7 +2826,7 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-" lang="en-US" class="lead" data-marpit-pagination="32" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 3 — Domain-Driven Design y descomposición de datos;--class:lead;--theme:default;--style:section {
+" lang="en-US" class="lead" data-marpit-pagination="38" style="--paginate:true;--header:![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL;--footer:Sesión 3 — Domain-Driven Design y descomposición de datos;--class:lead;--theme:default;--style:section {
   font-size: 26px;
 }
 header {
@@ -2384,7 +2857,7 @@ section.lead {
 section.lead h1 {
   font-size: 1.8em;
 }
-;" data-marpit-pagination-total="32">
+;" data-marpit-pagination-total="38">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 
 <h1 id="%C2%BFpreguntas">¿Preguntas?</h1>
@@ -2451,7 +2924,20 @@ técnica, no entrar en detalle.
 EN: Concrete clues for fieldwork. The first two come from ubiquitous language. The fourth
 is gold in a migration: the monolith already has the seams drawn if you look at which
 tables change together and where the code &quot;translates&quot; between models. EventStorming is
-the most-used collaborative workshop for this — mention it as a technique, don't go deep.</p></div><div class="bespoke-marp-note" data-index="7" tabindex="0"><p>ES: La regla de oro de la descomposición. Ejemplo: e-commerce por dominio (catalogo,
+the most-used collaborative workshop for this — mention it as a technique, don't go deep.</p></div><div class="bespoke-marp-note" data-index="7" tabindex="0"><p>ES: Desarrollamos la última viñeta de la slide anterior. EventStorming es el taller
+colaborativo de facto para descubrir el dominio. La mecánica importa poco para el examen;
+lo que importa es POR QUÉ funciona para una migración: pones a negocio y desarrollo a
+contar la historia del sistema en eventos, y las fronteras emergen solas donde el
+vocabulario cambia y donde los eventos se agrupan. Barato (post-its y una pared) y produce
+el primer borrador de bounded contexts en una mañana. No hace falta dominar los colores;
+basta con saber que existe y para qué sirve.
+
+EN: We expand the last bullet of the previous slide. EventStorming is the de-facto
+collaborative workshop to discover the domain. The exact mechanics matter little; what
+matters is WHY it works for a migration: you get business and dev to tell the system's
+story as events, and boundaries emerge on their own where vocabulary shifts and events
+cluster. Cheap (sticky notes and a wall) and produces the first draft of bounded contexts
+in a morning. No need to master the colors; just know it exists and what it's for.</p></div><div class="bespoke-marp-note" data-index="8" tabindex="0"><p>ES: La regla de oro de la descomposición. Ejemplo: e-commerce por dominio (catalogo,
 pedidos, pagos, envios, clientes) → un cambio toca UN servicio. El mismo sistema por
 capas (web-api / business-logic / data-access) obliga a tocar los tres para CUALQUIER
 cambio. &quot;No más pequeño que un contexto&quot; es el límite inferior: por debajo aparece el
@@ -2461,7 +2947,7 @@ EN: The golden rule of decomposition. Example: e-commerce by domain (catalog, or
 payments, shipping, customers) → one change touches ONE service. The same system by layers
 (web-api / business-logic / data-access) forces touching all three for ANY change. &quot;No
 smaller than a context&quot; is the lower bound: below it the distributed monolith appears. And
-to start: few services, one per context; subdivide later.</p></div><div class="bespoke-marp-note" data-index="8" tabindex="0"><p>ES: Pausa para ejercicio. 3.1: VuelaYa (aerolínea) — la palabra &quot;vuelo&quot; significa cosas
+to start: few services, one per context; subdivide later.</p></div><div class="bespoke-marp-note" data-index="9" tabindex="0"><p>ES: Pausa para ejercicio. 3.1: VuelaYa (aerolínea) — la palabra &quot;vuelo&quot; significa cosas
 distintas en Operaciones, Ventas, Fidelidad y Mantenimiento. Tareas: desambiguar los
 significados, proponer los bounded contexts, y razonar qué pasaría con una entidad Vuelo
 única (la entidad-dios → tabla compartida que bloquea la migración). El doble &quot;pasajero&quot;
@@ -2471,7 +2957,7 @@ EN: Exercise break. 3.1: VuelaYa (airline) — the word &quot;flight&quot; means
 Operations, Sales, Loyalty and Maintenance. Tasks: disambiguate the meanings, propose the
 bounded contexts, and reason what a single Flight entity would cause (the god-entity →
 shared table that blocks the migration). The double &quot;passenger&quot; (buyer vs. boarded)
-reinforces the boundary. ~15-20 min with group discussion.</p></div><div class="bespoke-marp-note" data-index="10" tabindex="0"><p>ES: El context map es el segundo entregable de DDD estratégico, después de la lista de
+reinforces the boundary. ~15-20 min with group discussion.</p></div><div class="bespoke-marp-note" data-index="11" tabindex="0"><p>ES: El context map es el segundo entregable de DDD estratégico, después de la lista de
 contextos. En una migración sirve para: ver qué fronteras ya existen de facto, decidir
 dónde hacen falta ACLs (relación Anticorruption Layer), y detectar relaciones enfermas —
 el caso clásico: todo el mundo &quot;conformista&quot; con el modelo de la BD central. ACL la vimos
@@ -2481,7 +2967,20 @@ EN: The context map is the second strategic-DDD deliverable, after the list of c
 In a migration it helps: see which boundaries already exist de facto, decide where ACLs
 are needed (the Anticorruption Layer relationship), and spot unhealthy relationships — the
 classic one: everyone &quot;conformist&quot; to the central DB model. We saw ACL in Session 2: here
-you see it's ONE of the possible relationships in Evans' catalog.</p></div><div class="bespoke-marp-note" data-index="11" tabindex="0"><p>ES: Las dos heurísticas son complementarias: una mira lo que la empresa hace, la otra de
+you see it's ONE of the possible relationships in Evans' catalog.</p></div><div class="bespoke-marp-note" data-index="12" tabindex="0"><p>ES: Aterrizamos la tabla anterior en un dibujo. Lecturas clave: Pedidos es upstream de
+Pagos (customer-supplier: el contrato se negocia); Pedidos es conformista con Catálogo
+(acepta su modelo de producto sin discutir); Pagos se protege de la pasarela externa con
+un ACL; y Envíos no se llama directamente, reacciona a un evento. En una migración el
+primer mapa casi siempre revela la relación enferma: todo el mundo conformista con el
+modelo de la BD central. Dibujarlo es lo que convierte &quot;tenemos contextos&quot; en &quot;sabemos
+qué romper primero&quot;.
+
+EN: We ground the previous table in a picture. Key readings: Orders is upstream of Payments
+(customer-supplier: the contract is negotiated); Orders is conformist to Catalog (accepts
+its product model without arguing); Payments shields itself from the external gateway with
+an ACL; and Shipping isn't called directly, it reacts to an event. In a migration the first
+map almost always reveals the sick relationship: everyone conformist to the central DB
+model. Drawing it is what turns &quot;we have contexts&quot; into &quot;we know what to break first&quot;.</p></div><div class="bespoke-marp-note" data-index="13" tabindex="0"><p>ES: Las dos heurísticas son complementarias: una mira lo que la empresa hace, la otra de
 qué se compone el problema. La clasificación core/supporting/generic es la herramienta de
 priorización más útil de la sesión: evita gastar el mismo esfuerzo de diseño (y de
 migración) en todo por igual. Lo genérico (email, contabilidad) no se reescribe como
@@ -2493,7 +2992,7 @@ what the problem is made of. The core/supporting/generic classification is the m
 prioritization tool of the session: it avoids spending the same design (and migration)
 effort on everything equally. Generic stuff (email, accounting) isn't rewritten as your
 own microservice: you buy it and delete the legacy module — the cheapest way to slim the
-monolith. It's the basis of Exercise 3.2.</p></div><div class="bespoke-marp-note" data-index="12" tabindex="0"><p>ES: La granularidad es asimétrica y por eso la heurística es clara: empezar grueso. Las
+monolith. It's the basis of Exercise 3.2.</p></div><div class="bespoke-marp-note" data-index="14" tabindex="0"><p>ES: La granularidad es asimétrica y por eso la heurística es clara: empezar grueso. Las
 cinco señales son síntomas del monolito distribuido aplicados a &quot;te pasaste de fino&quot;.
 Subdividir un servicio que resultó grande es un refactor local; fusionar dos que
 resultaron pequeños obliga a deshacer contratos ya publicados, unir datos y unir modelos
@@ -2504,7 +3003,7 @@ EN: Granularity is asymmetric, so the heuristic is clear: start coarse. The five
 are distributed-monolith symptoms applied to &quot;you cut too fine&quot;. Subdividing a service that
 turned out big is a local refactor; merging two that turned out small forces undoing
 published contracts, joining data and joining models — far costlier. Message: few services
-aligned to contexts, and subdivide only when the pain justifies it.</p></div><div class="bespoke-marp-note" data-index="13" tabindex="0"><p>ES: Pausa para ejercicio. 3.2: clasificar subdominios de VuelaYa (precios dinámicos,
+aligned to contexts, and subdivide only when the pain justifies it.</p></div><div class="bespoke-marp-note" data-index="15" tabindex="0"><p>ES: Pausa para ejercicio. 3.2: clasificar subdominios de VuelaYa (precios dinámicos,
 tripulaciones, emails, contabilidad, fidelidad) en core/supporting/generic y extraer
 consecuencias para la migración. Clave: precios = core (máxima inversión, bubble context);
 emails y contabilidad = generic (no se migran, se reemplazan por SaaS/ERP + ACL). El
@@ -2514,7 +3013,7 @@ EN: Exercise break. 3.2: classify VuelaYa subdomains (dynamic pricing, crew, ema
 accounting, loyalty) into core/supporting/generic and draw migration consequences. Key:
 pricing = core (max investment, bubble context); emails and accounting = generic (not
 migrated, replaced by SaaS/ERP + ACL). The reasoning (&quot;does this differentiate us?&quot;)
-matters more than the label. ~15 min.</p></div><div class="bespoke-marp-note" data-index="15" tabindex="0"><p>ES: Este es el corazón de la sesión y el cabo suelto de casi todos los patrones de la
+matters more than the label. ~15 min.</p></div><div class="bespoke-marp-note" data-index="17" tabindex="0"><p>ES: Este es el corazón de la sesión y el cabo suelto de casi todos los patrones de la
 Sesión 2 (el Strangler &quot;no estrangula los datos&quot;). La BD compartida es el acoplamiento que
 sobrevive por debajo aunque hayas separado todo el código. El esquema compartido es un
 contrato que nadie firmó pero todos dependen. Hasta que no se parte la BD, la migración
@@ -2524,7 +3023,7 @@ EN: This is the heart of the session and the loose end of almost every Session 2
 (the Strangler &quot;doesn't strangle the data&quot;). The shared DB is the coupling that survives
 underneath even after you've split all the code. The shared schema is a contract nobody
 signed but everyone depends on. Until the DB is split, the migration is NOT done — it just
-looks done.</p></div><div class="bespoke-marp-note" data-index="16" tabindex="0"><p>ES: &quot;BD por servicio&quot; no es purismo: es la condición sin la cual no hay despliegue
+looks done.</p></div><div class="bespoke-marp-note" data-index="18" tabindex="0"><p>ES: &quot;BD por servicio&quot; no es purismo: es la condición sin la cual no hay despliegue
 independiente, que era el motivo entero de migrar (Sesión 1). El precio es alto (lo vemos
 en la slide del coste), por eso se aplaza — pero aplazarlo indefinidamente es quedarse en
 monolito distribuido. La regla operativa: nadie toca la BD de otro; todo acceso cruzado
@@ -2534,7 +3033,7 @@ EN: &quot;DB per service&quot; isn't purism: it's the condition without which th
 deployment, which was the entire reason to migrate (Session 1). The price is high (see the
 cost slide), which is why it's deferred — but deferring it indefinitely means staying a
 distributed monolith. Operating rule: nobody touches another's DB; every cross access goes
-through an API or events.</p></div><div class="bespoke-marp-note" data-index="17" tabindex="0"><p>ES: El orden importa: PROPIEDAD primero. Quién escribe una tabla es su dueño natural; los
+through an API or events.</p></div><div class="bespoke-marp-note" data-index="19" tabindex="0"><p>ES: El orden importa: PROPIEDAD primero. Quién escribe una tabla es su dueño natural; los
 demás son lectores que hay que reconducir. El paso 2 (separar lógico antes que físico) es
 el truco barato: con esquemas distintos en la misma instancia, cualquier JOIN o escritura
 cruzada falla y aflora — detectas todo el acoplamiento sin mover datos. Solo al final se
@@ -2546,7 +3045,7 @@ are readers to redirect. Step 2 (logical before physical split) is the cheap tri
 separate schemas in the same instance, any cross JOIN or write fails and surfaces — you
 find all the coupling without moving data. Only at the end do you split physically.
 Breaking accesses: API if you need fresh data; event-fed copy if you tolerate lag; or
-reassign owner if the initial split was wrong.</p></div><div class="bespoke-marp-note" data-index="18" tabindex="0"><p>ES: Los tres casos que siempre aparecen. El de referencia (paises, monedas) casi siempre
+reassign owner if the initial split was wrong.</p></div><div class="bespoke-marp-note" data-index="20" tabindex="0"><p>ES: Los tres casos que siempre aparecen. El de referencia (paises, monedas) casi siempre
 se resuelve duplicando — montar un servicio para algo que cambia una vez al año es
 sobreingeniería. &quot;Una tabla, dos dueños&quot; delata que el reparto de columnas escondía dos
 conceptos: se parte por columnas y la clave queda como referencia. Los joins entre dominios
@@ -2557,7 +3056,21 @@ EN: The three cases that always appear. Reference data (countries, currencies) i
 always solved by duplicating — building a service for something that changes once a year is
 over-engineering. &quot;One table, two owners&quot; reveals the column split hid two concepts: split
 by columns, key stays as a reference. Cross-domain joins are the recurring pain and link to
-the session's last slide (queries via events, not a shared DB).</p></div><div class="bespoke-marp-note" data-index="19" tabindex="0"><p>ES: Hay que ser honesto: BD por servicio no es gratis, se pierden cosas valiosas y lo que
+the session's last slide (queries via events, not a shared DB).</p></div><div class="bespoke-marp-note" data-index="21" tabindex="0"><p>ES: La concreción de &quot;una tabla, dos dueños&quot; de la slide anterior, que es el caso que más
+asusta. El reparto de columnas ya delataba dos conceptos mezclados; se parte por columnas y
+cada grupo se va con su servicio. Lo importante es el cambio de naturaleza de la clave:
+dentro del monolito pedido_id era una FK que la BD garantizaba; tras partir, es una simple
+referencia que la app valida y que puede estar momentáneamente incoherente (Envíos aún no
+ha creado su fila). La coherencia se restablece por el evento PedidoCreado, no por la BD.
+Esto responde a la pregunta clásica &quot;¿y los joins y las claves?&quot;.
+
+EN: The concrete version of &quot;one table, two owners&quot; from the previous slide — the scariest
+case. The column split already revealed two mixed concepts; you split by columns and each
+group goes with its service. The key point is the change in the key's nature: inside the
+monolith pedido_id was an FK the DB guaranteed; after splitting it's just a reference the
+app validates and that can be momentarily inconsistent (Shipping hasn't created its row
+yet). Consistency is restored by the PedidoCreado event, not by the DB. This answers the
+classic &quot;what about joins and keys?&quot; question.</p></div><div class="bespoke-marp-note" data-index="22" tabindex="0"><p>ES: Hay que ser honesto: BD por servicio no es gratis, se pierden cosas valiosas y lo que
 las sustituye es más trabajo y peor. Esta tabla es el argumento de por qué el CORTE importa
 tanto (cierra el círculo con DDD): si los límites son buenos, las transacciones y joins
 ENTRE servicios son raros y el coste es asumible; si son malos, son constantes y el sistema
@@ -2569,7 +3082,7 @@ is more work and worse. This table is the argument for why the CUT matters so mu
 the loop with DDD): with good boundaries, transactions and joins BETWEEN services are rare
 and the cost is bearable; with bad ones, they're constant and the system is unmanageable.
 The golden consistency rule: an invariant needing ACID must fit inside ONE service — in
-tactical DDD, inside an aggregate (the unit of consistency).</p></div><div class="bespoke-marp-note" data-index="20" tabindex="0"><p>ES: Pausa para ejercicio. 3.3: ComidaFlash — pedidos y restaurantes comparten BD. Asignar
+tactical DDD, inside an aggregate (the unit of consistency).</p></div><div class="bespoke-marp-note" data-index="23" tabindex="0"><p>ES: Pausa para ejercicio. 3.3: ComidaFlash — pedidos y restaurantes comparten BD. Asignar
 propiedad por quién escribe; eliminar cada acceso cruzado (API vs. copia por eventos según
 frescura/frecuencia); decidir qué hacer con codigos_postales (datos de referencia →
 duplicar); y el punto clave: al separar, el menu_item puede agotarse entre el clic y la
@@ -2580,7 +3093,22 @@ EN: Exercise break. 3.3: ComidaFlash — orders and restaurants share a DB. Assi
 by who writes; remove each cross access (API vs. event copy by freshness/frequency); decide
 on postal_codes (reference data → duplicate); and the key point: after splitting, the
 menu_item can sell out between click and confirmation → a consistency problem solved with
-business semantics (the restaurant confirms/rejects = a saga compensation). ~25 min.</p></div><div class="bespoke-marp-note" data-index="22" tabindex="0"><p>ES: 2PC es la respuesta &quot;obvia&quot; a perder las transacciones ACID, y es una trampa en
+business semantics (the restaurant confirms/rejects = a saga compensation). ~25 min.</p></div><div class="bespoke-marp-note" data-index="25" tabindex="0"><p>ES: Esta slide es la bisagra entre DDD y el bloque de consistencia, y por eso abre la
+sección. Es el único concepto táctico que necesitamos: el agregado es la frontera de
+consistencia transaccional. La regla operativa que lo conecta todo: si un invariante
+necesita ACID (el total y las líneas SIEMPRE cuadran), ese invariante define el tamaño
+mínimo de algo que NO se puede partir entre servicios. Por eso un buen corte mete cada
+invariante fuerte dentro de un servicio; lo que queda entre servicios, por definición,
+tolera consistencia eventual. Cierra el círculo con la slide del coste de los datos:
+buenos límites = pocos invariantes cruzando fronteras.
+
+EN: This slide is the hinge between DDD and the consistency block, which is why it opens the
+section. It's the only tactical concept we need: the aggregate is the transactional
+consistency boundary. The operating rule that ties it all together: if an invariant needs
+ACID (total and lines ALWAYS reconcile), that invariant sets the minimum size of something
+that CANNOT be split across services. So a good cut puts each strong invariant inside one
+service; whatever remains between services, by definition, tolerates eventual consistency.
+Closes the loop with the data-cost slide: good boundaries = few invariants crossing borders.</p></div><div class="bespoke-marp-note" data-index="26" tabindex="0"><p>ES: 2PC es la respuesta &quot;obvia&quot; a perder las transacciones ACID, y es una trampa en
 microservicios. El problema de fondo: reintroduce el acoplamiento fuerte (de disponibilidad
 y de rendimiento) que migrar pretendía eliminar. Si A, B y C deben commitear juntos, han
 vuelto a estar acoplados aunque sean tres servicios. Por eso la industria eligió el otro
@@ -2592,7 +3120,7 @@ microservices. The underlying problem: it reintroduces the strong coupling (avai
 and performance) that migrating was meant to remove. If A, B and C must commit together,
 they're coupled again even as three services. That's why the industry chose the other path:
 eventual consistency + sagas. It's not that 2PC is impossible; it's that it rebuilds the
-monolith at the transaction level.</p></div><div class="bespoke-marp-note" data-index="23" tabindex="0"><p>ES: El salto mental más importante de la sesión: la consistencia fuerte instantánea era una
+monolith at the transaction level.</p></div><div class="bespoke-marp-note" data-index="27" tabindex="0"><p>ES: El salto mental más importante de la sesión: la consistencia fuerte instantánea era una
 comodidad de la BD única, no una ley del universo. El mundo real funciona por consistencia
 eventual desde siempre (bancos liquidando por lotes, almacenes reconciliando de noche). Por
 eso las preguntas clave son de NEGOCIO, no técnicas: cuánto desfase tolera ESTE proceso, y
@@ -2604,7 +3132,7 @@ convenience of the single DB, not a law of the universe. The real world has run 
 consistency forever (banks settling in batches, warehouses reconciling overnight). So the
 key questions are BUSINESS ones, not technical: how much lag THIS process tolerates, and
 what to do if it can't complete. The architect's job is to ask those questions, not invent
-the answers.</p></div><div class="bespoke-marp-note" data-index="24" tabindex="0"><p>ES: La saga es la respuesta a &quot;¿cómo coordino algo que antes era una transacción que cruzaba
+the answers.</p></div><div class="bespoke-marp-note" data-index="28" tabindex="0"><p>ES: La saga es la respuesta a &quot;¿cómo coordino algo que antes era una transacción que cruzaba
 tablas?&quot;. Clave: NO hay rollback automático; tú escribes las compensaciones, y son acciones
 de negocio. &quot;Cancelado, no borrado&quot; es el ejemplo perfecto: queda el rastro y el motivo; la
 compensación tiene significado de negocio (un pedido cancelado no es un pedido que nunca
@@ -2615,7 +3143,21 @@ EN: The saga answers &quot;how do I coordinate what used to be a transaction cro
 Key: there's NO automatic rollback; you write the compensations, and they're business
 actions. &quot;Cancelled, not deleted&quot; is the perfect example: the trace and reason remain; the
 compensation has business meaning (a cancelled order isn't an order that never existed).
-This links to Exercise 3.4 (design a saga) where step ORDER is a money decision.</p></div><div class="bespoke-marp-note" data-index="25" tabindex="0"><p>ES: Los dos estilos de coordinar una saga. El eje de decisión es VISIBILIDAD vs.
+This links to Exercise 3.4 (design a saga) where step ORDER is a money decision.</p></div><div class="bespoke-marp-note" data-index="29" tabindex="0"><p>ES: El diagrama que faltaba a la slide anterior. A la izquierda la secuencia de
+transacciones locales; a la derecha, qué pasa cuando una falla. Insistir en tres cosas: (1)
+no hay un &quot;deshacer&quot; automático — las compensaciones las escribes tú; (2) van en orden
+inverso y son acciones de negocio con significado (CANCELADO no es borrar: queda rastro y
+motivo); (3) el orden de los pasos minimiza el coste esperado de compensar, que es justo lo
+que se trabaja en 3.4 (lo barato/reversible primero, lo caro como el cobro lo más tarde
+posible). Esto convierte la saga de &quot;concepto&quot; a &quot;algo que veo ejecutarse&quot;.
+
+EN: The diagram the previous slide was missing. Left: the sequence of local transactions;
+right: what happens when one fails. Stress three things: (1) there's no automatic &quot;undo&quot; —
+you write the compensations; (2) they run in reverse order and are business actions with
+meaning (CANCELLED isn't delete: trace and reason remain); (3) step order minimizes the
+expected cost of compensating, which is exactly what 3.4 works on (cheap/reversible first,
+expensive like the charge as late as possible). This turns the saga from &quot;concept&quot; into
+&quot;something I can see execute&quot;.</p></div><div class="bespoke-marp-note" data-index="30" tabindex="0"><p>ES: Los dos estilos de coordinar una saga. El eje de decisión es VISIBILIDAD vs.
 ACOPLAMIENTO. Orquestación: el proceso vive en un sitio (sabes dónde está cada pedido y por
 qué se atascó), a cambio de un orquestador que conoce a todos. Coreografía: máxima autonomía
 y desacoplamiento, a cambio de que el flujo global no esté escrito en ninguna parte — bueno
@@ -2627,7 +3169,7 @@ Orchestration: the process lives in one place (you know where each order is and 
 stalled), at the cost of an orchestrator that knows everyone. Choreography: maximum autonomy
 and decoupling, at the cost of the global flow being written nowhere — good for simple
 cascades, dangerous for long processes. Practical heuristic on the slide; and mixing is
-legitimate (orchestrate the core, choreograph the peripheral reactions).</p></div><div class="bespoke-marp-note" data-index="26" tabindex="0"><p>ES: El outbox resuelve un problema sutil pero OMNIPRESENTE: &quot;guardar y publicar&quot; no es
+legitimate (orchestrate the core, choreograph the peripheral reactions).</p></div><div class="bespoke-marp-note" data-index="31" tabindex="0"><p>ES: El outbox resuelve un problema sutil pero OMNIPRESENTE: &quot;guardar y publicar&quot; no es
 atómico porque BD y broker son dos sistemas. El truco: meter el evento en una tabla outbox
 DENTRO de la misma transacción local que el cambio de negocio (eso sí es atómico). Un relay
 aparte lee la outbox y publica, reintentando. Así nunca hay &quot;pedido sin evento&quot;. Es el
@@ -2639,7 +3181,7 @@ because the DB and the broker are two systems. The trick: insert the event into 
 table INSIDE the same local transaction as the business change (that IS atomic). A separate
 relay reads the outbox and publishes, retrying. So there's never an &quot;order without event&quot;.
 It's the most important reliability pattern of event-driven architectures. Links to Exercise
-3.5.</p></div><div class="bespoke-marp-note" data-index="27" tabindex="0"><p>ES: La consecuencia inevitable del outbox (y de los brokers en general): entrega
+3.5.</p></div><div class="bespoke-marp-note" data-index="32" tabindex="0"><p>ES: La consecuencia inevitable del outbox (y de los brokers en general): entrega
 al-menos-una-vez, nunca exactamente-una. Por eso el consumidor TIENE que ser idempotente, o
 duplicará facturas/cobros. Dos técnicas: deduplicar por id de evento (¡la marca de procesado
 debe ir en la MISMA transacción que el efecto, o reaparece el problema del productor!), o
@@ -2651,7 +3193,7 @@ delivery, never exactly-once. So the consumer MUST be idempotent, or it'll dupli
 invoices/charges. Two techniques: dedupe by event id (the processed-marker must go in the
 SAME transaction as the effect, or the producer's problem reappears!), or lean on a business
 uniqueness constraint. The outbox+idempotency duo is the de-facto standard. Idempotency is
-covered more deeply in Session 4.</p></div><div class="bespoke-marp-note" data-index="28" tabindex="0"><p>ES: La objeción número uno a &quot;BD por servicio&quot; es &quot;¿y mis informes que cruzan todo?&quot;. La
+covered more deeply in Session 4.</p></div><div class="bespoke-marp-note" data-index="33" tabindex="0"><p>ES: La objeción número uno a &quot;BD por servicio&quot; es &quot;¿y mis informes que cruzan todo?&quot;. La
 respuesta: no vuelvas a la BD compartida — trata el reporting como otro consumidor de
 eventos. Para pocas entidades, componer por API; para consultas cruzadas, una vista
 materializada que se alimenta de eventos (CQRS a nivel de sistema); para analítica pesada, un
@@ -2662,7 +3204,23 @@ EN: The number-one objection to &quot;DB per service&quot; is &quot;what about m
 everything?&quot;. The answer: don't go back to the shared DB — treat reporting as another event
 consumer. For few entities, compose via API; for cross queries, a materialized view fed by
 events (system-level CQRS); for heavy analytics, a warehouse. The rule closes the session:
-the events you already publish for sagas also serve to build the read views.</p></div><div class="bespoke-marp-note" data-index="29" tabindex="0"><p>ES: Pausa para ejercicios finales. 3.4: ViajesTotal (vuelo+hotel+cobro) — diseñar la saga
+the events you already publish for sagas also serve to build the read views.</p></div><div class="bespoke-marp-note" data-index="34" tabindex="0"><p>ES: Desarrolla la opción 2 de la slide anterior, que es la respuesta seria a la objeción
+nº1 (&quot;¿y mis informes que cruzan todo?&quot;). CQRS = separar el modelo de escritura del de
+lectura; aquí, a nivel de sistema: un proyector escucha eventos y construye una vista ya
+cruzada y desnormalizada, optimizada para la consulta. Tres ideas que vender: es
+eventualmente consistente y normalmente no pasa nada (un informe con segundos de desfase
+sirve); es desechable y reconstruible desde los eventos; y NO añade un pipeline nuevo,
+reusa los eventos que ya emites para las sagas y el outbox. Es el cierre natural del bloque
+de datos: los eventos no son solo para coordinar, también para consultar.
+
+EN: Expands option 2 of the previous slide — the serious answer to objection #1 (&quot;what
+about my reports that cross everything?&quot;). CQRS = separate the write model from the read
+model; here, at system level: a projector listens to events and builds an already-crossed,
+denormalized view optimized for the query. Three selling points: it's eventually consistent
+and usually that's fine (a report seconds behind is fine); it's disposable and rebuildable
+from the events; and it adds NO new pipeline — it reuses the events you already emit for
+sagas and the outbox. The natural close of the data block: events aren't only for
+coordinating, also for querying.</p></div><div class="bespoke-marp-note" data-index="35" tabindex="0"><p>ES: Pausa para ejercicios finales. 3.4: ViajesTotal (vuelo+hotel+cobro) — diseñar la saga
 orquestada con compensaciones; clave: el ORDEN de los pasos minimiza el coste esperado de
 compensar (hotel gratis antes que vuelo de 10 €; cobro lo más tarde posible), y los 10 € los
 decide negocio (las compensaciones no son rollbacks gratis). 3.5: encontrar los dos fallos de
@@ -2674,7 +3232,7 @@ saga with compensations; key: step ORDER minimizes the expected cost of compensa
 hotel before the 10 € flight; charge as late as possible), and the 10 € is a business
 decision (compensations aren't free rollbacks). 3.5: find the two reliability bugs (commit
 without publishing; duplicate event) and fix them with outbox + idempotency. ~30 min with
-group discussion.</p></div><div class="bespoke-marp-note" data-index="30" tabindex="0"><p>ES: El destilado. Si solo se llevan dos ideas: (1) los límites correctos siguen al negocio
+group discussion.</p></div><div class="bespoke-marp-note" data-index="36" tabindex="0"><p>ES: El destilado. Si solo se llevan dos ideas: (1) los límites correctos siguen al negocio
 (DDD), y un corte malo hace inmanejable todo lo demás; (2) partir los datos es el trabajo de
 verdad, y se paga con consistencia eventual gestionada por semántica de negocio. La Sesión 4
 cierra el curso: comunicación, resiliencia, observabilidad y el lado organizativo (Conway),
@@ -2684,7 +3242,7 @@ EN: The distillate. If they take away two ideas: (1) the right boundaries follow
 (DDD), and a bad cut makes everything else unmanageable; (2) splitting the data is the real
 work, paid for with eventual consistency managed by business semantics. Session 4 closes the
 course: communication, resilience, observability and the organizational side (Conway), plus
-the final roadmap.</p></div><div class="bespoke-marp-note" data-index="31" tabindex="0"><p>ES: Abrir turno de preguntas. Recordar dónde está el material y el cuaderno. Puente: hoy
+the final roadmap.</p></div><div class="bespoke-marp-note" data-index="37" tabindex="0"><p>ES: Abrir turno de preguntas. Recordar dónde está el material y el cuaderno. Puente: hoy
 hemos decidido DÓNDE cortar y cómo partir los datos; la Sesión 4 hace que el resultado sea
 robusto en producción (resiliencia, observabilidad) y sostenible en la organización (Conway,
 Team Topologies), y lo junta todo en una hoja de ruta.

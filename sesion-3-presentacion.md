@@ -199,6 +199,36 @@ the most-used collaborative workshop for this — mention it as a technique, don
 
 ---
 
+## EventStorming: encontrar fronteras con el negocio
+
+Taller donde negocio y desarrollo mapean el dominio en una pared, en orden temporal, con post-its de colores:
+
+- **Evento de dominio** *(naranja)* — algo relevante que pasó ("Pedido confirmado")
+- **Comando** *(azul)* — lo que lo provoca ("Confirmar pedido")
+- **Agregado** *(amarillo)* — sobre qué recae el comando
+- **Política / proceso** *(lila)* — "cuando pasa X, automáticamente Y"
+
+> Los **racimos** de eventos que van juntos y los **cambios de vocabulario** a lo largo de la pared dibujan los bounded contexts. Es la vía más rápida de encontrar fronteras *con* el negocio en la sala, no en una reunión técnica aparte.
+
+<!--
+ES: Desarrollamos la última viñeta de la slide anterior. EventStorming es el taller
+colaborativo de facto para descubrir el dominio. La mecánica importa poco para el examen;
+lo que importa es POR QUÉ funciona para una migración: pones a negocio y desarrollo a
+contar la historia del sistema en eventos, y las fronteras emergen solas donde el
+vocabulario cambia y donde los eventos se agrupan. Barato (post-its y una pared) y produce
+el primer borrador de bounded contexts en una mañana. No hace falta dominar los colores;
+basta con saber que existe y para qué sirve.
+
+EN: We expand the last bullet of the previous slide. EventStorming is the de-facto
+collaborative workshop to discover the domain. The exact mechanics matter little; what
+matters is WHY it works for a migration: you get business and dev to tell the system's
+story as events, and boundaries emerge on their own where vocabulary shifts and events
+cluster. Cheap (sticky notes and a wall) and produces the first draft of bounded contexts
+in a morning. No need to master the colors; just know it exists and what it's for.
+-->
+
+---
+
 ## Un servicio ≈ un bounded context
 
 > Un microservicio **no debe ser más pequeño que un bounded context**; de partida, **un contexto ≈ un servicio**.
@@ -277,6 +307,42 @@ In a migration it helps: see which boundaries already exist de facto, decide whe
 are needed (the Anticorruption Layer relationship), and spot unhealthy relationships — the
 classic one: everyone "conformist" to the central DB model. We saw ACL in Session 2: here
 you see it's ONE of the possible relationships in Evans' catalog.
+-->
+
+---
+
+## Un context map de ejemplo
+
+Las mismas relaciones, dibujadas sobre los contextos de un e-commerce:
+
+```
+  ┌──────────┐  conformist     ┌──────────┐  Customer–Supplier  ┌──────────┐
+  │ Catálogo │◄────────────────│ Pedidos  │────────────────────►│  Pagos   │
+  └──────────┘  (acepta su     └────┬─────┘  (negocia contrato)  └────┬─────┘
+                 modelo)            │ evento                          │ ACL
+                                    ▼ PedidoCreado                    ▼
+                             ┌──────────┐               ┌──────────────────────┐
+                             │  Envíos  │               │ Pasarela pago (ext.) │
+                             └──────────┘               └──────────────────────┘
+```
+
+> Saber los contextos no basta: el mapa fija **quién depende de quién**, dónde pones un **ACL** y quién tiene **poder de negociación** sobre el contrato.
+
+<!--
+ES: Aterrizamos la tabla anterior en un dibujo. Lecturas clave: Pedidos es upstream de
+Pagos (customer-supplier: el contrato se negocia); Pedidos es conformista con Catálogo
+(acepta su modelo de producto sin discutir); Pagos se protege de la pasarela externa con
+un ACL; y Envíos no se llama directamente, reacciona a un evento. En una migración el
+primer mapa casi siempre revela la relación enferma: todo el mundo conformista con el
+modelo de la BD central. Dibujarlo es lo que convierte "tenemos contextos" en "sabemos
+qué romper primero".
+
+EN: We ground the previous table in a picture. Key readings: Orders is upstream of Payments
+(customer-supplier: the contract is negotiated); Orders is conformist to Catalog (accepts
+its product model without arguing); Payments shields itself from the external gateway with
+an ACL; and Shipping isn't called directly, it reacts to an event. In a migration the first
+map almost always reveals the sick relationship: everyone conformist to the central DB
+model. Drawing it is what turns "we have contexts" into "we know what to break first".
 -->
 
 ---
@@ -469,6 +535,45 @@ the session's last slide (queries via events, not a shared DB).
 
 ---
 
+## Partir una tabla en la práctica
+
+`pedidos` esconde **dos dueños**: datos de pedido (→ Pedidos) y de envío (→ Envíos).
+
+```
+ANTES — una tabla, dos dueños       DESPUÉS — dos servicios
+
+  pedidos                           pedidos-svc        envios-svc
+  ────────────────                  ───────────        ──────────────
+  id           (PK)                 id      (PK)       id          (PK)
+  cliente_id                        cliente_id         pedido_id   (ref→)
+  total                  ──►        total              direccion
+  direccion_envio                                      transportista
+  transportista                                        estado_envio
+  estado_envio
+```
+
+> `pedido_id` deja de ser una FK con integridad de BD y pasa a ser una **referencia entre servicios:** la valida la app, puede quedar "colgada" un instante, y se sincroniza por **eventos** (`PedidoCreado` → Envíos crea su fila).
+
+<!--
+ES: La concreción de "una tabla, dos dueños" de la slide anterior, que es el caso que más
+asusta. El reparto de columnas ya delataba dos conceptos mezclados; se parte por columnas y
+cada grupo se va con su servicio. Lo importante es el cambio de naturaleza de la clave:
+dentro del monolito pedido_id era una FK que la BD garantizaba; tras partir, es una simple
+referencia que la app valida y que puede estar momentáneamente incoherente (Envíos aún no
+ha creado su fila). La coherencia se restablece por el evento PedidoCreado, no por la BD.
+Esto responde a la pregunta clásica "¿y los joins y las claves?".
+
+EN: The concrete version of "one table, two owners" from the previous slide — the scariest
+case. The column split already revealed two mixed concepts; you split by columns and each
+group goes with its service. The key point is the change in the key's nature: inside the
+monolith pedido_id was an FK the DB guaranteed; after splitting it's just a reference the
+app validates and that can be momentarily inconsistent (Shipping hasn't created its row
+yet). Consistency is restored by the PedidoCreado event, not by the DB. This answers the
+classic "what about joins and keys?" question.
+-->
+
+---
+
 ## El coste de los datos distribuidos
 
 Sin anestesia: al partir los datos **se pierde** lo que la BD única regalaba.
@@ -528,6 +633,37 @@ business semantics (the restaurant confirms/rejects = a saga compensation). ~25 
 
 # 4. Consistencia sin
 # transacciones distribuidas
+
+---
+
+## Agregados: la unidad de consistencia
+
+El único trozo de DDD **táctico** que la migración necesita.
+
+Un **agregado** = grupo de objetos que cambian juntos bajo una **regla de negocio** (invariante) y se tratan como **una sola unidad**. Tiene una **raíz**; desde fuera solo se habla con la raíz.
+
+> Ej.: **Pedido + sus líneas** = un agregado. El invariante "el total no supera el límite de crédito" obliga a validarlas juntas → no se tocan las líneas por separado.
+
+**Regla de oro de consistencia:** un invariante que exige **ACID** debe caber dentro de un agregado → dentro de **un** servicio. Lo que cruza agregados/servicios va con consistencia **eventual** (sagas).
+
+<!--
+ES: Esta slide es la bisagra entre DDD y el bloque de consistencia, y por eso abre la
+sección. Es el único concepto táctico que necesitamos: el agregado es la frontera de
+consistencia transaccional. La regla operativa que lo conecta todo: si un invariante
+necesita ACID (el total y las líneas SIEMPRE cuadran), ese invariante define el tamaño
+mínimo de algo que NO se puede partir entre servicios. Por eso un buen corte mete cada
+invariante fuerte dentro de un servicio; lo que queda entre servicios, por definición,
+tolera consistencia eventual. Cierra el círculo con la slide del coste de los datos:
+buenos límites = pocos invariantes cruzando fronteras.
+
+EN: This slide is the hinge between DDD and the consistency block, which is why it opens the
+section. It's the only tactical concept we need: the aggregate is the transactional
+consistency boundary. The operating rule that ties it all together: if an invariant needs
+ACID (total and lines ALWAYS reconcile), that invariant sets the minimum size of something
+that CANNOT be split across services. So a good cut puts each strong invariant inside one
+service; whatever remains between services, by definition, tolerates eventual consistency.
+Closes the loop with the data-cost slide: good boundaries = few invariants crossing borders.
+-->
 
 ---
 
@@ -610,6 +746,41 @@ This links to Exercise 3.4 (design a saga) where step ORDER is a money decision.
 
 ---
 
+## Saga: camino feliz y compensación
+
+```
+CAMINO FELIZ                     FALLO EN EL COBRO (paso 3)
+
+1. Pedidos: crear pedido         1. Pedidos: crear pedido
+2. Stock:   reservar             2. Stock:   reservar
+3. Pagos:   cobrar               3. Pagos:   cobrar ──────► ✗ rechazado
+4. Pedidos: confirmar               ↺ Stock:   liberar reserva    (compensa 2)
+                                    ↺ Pedidos: marcar CANCELADO   (compensa 1)
+   = PEDIDO CONFIRMADO              = PEDIDO CANCELADO (no borrado)
+```
+
+> No hay rollback global: cada compensación es una **acción de negocio** ejecutada hacia atrás. Por eso el **orden** de los pasos es una decisión (Ejercicio 3.4): deja lo más caro de compensar para el final.
+
+<!--
+ES: El diagrama que faltaba a la slide anterior. A la izquierda la secuencia de
+transacciones locales; a la derecha, qué pasa cuando una falla. Insistir en tres cosas: (1)
+no hay un "deshacer" automático — las compensaciones las escribes tú; (2) van en orden
+inverso y son acciones de negocio con significado (CANCELADO no es borrar: queda rastro y
+motivo); (3) el orden de los pasos minimiza el coste esperado de compensar, que es justo lo
+que se trabaja en 3.4 (lo barato/reversible primero, lo caro como el cobro lo más tarde
+posible). Esto convierte la saga de "concepto" a "algo que veo ejecutarse".
+
+EN: The diagram the previous slide was missing. Left: the sequence of local transactions;
+right: what happens when one fails. Stress three things: (1) there's no automatic "undo" —
+you write the compensations; (2) they run in reverse order and are business actions with
+meaning (CANCELLED isn't delete: trace and reason remain); (3) step order minimizes the
+expected cost of compensating, which is exactly what 3.4 works on (cheap/reversible first,
+expensive like the charge as late as possible). This turns the saga from "concept" into
+"something I can see execute".
+-->
+
+---
+
 ## Orquestación vs. coreografía
 
 **Orquestación** — un coordinador central llama a cada paso y decide compensar.
@@ -652,6 +823,8 @@ Un servicio debe **guardar en su BD y publicar un evento**. No hay transacción 
 │                 └────────┘  (reintenta)    │
 └─────────────────────────────────────────────┘
 ```
+
+**El relay** publica leyendo la outbox: por *polling* periódico de la tabla, o por **CDC** (change data capture) sobre el log de transacciones de la BD — p. ej. **Debezium** — sin consultar la tabla.
 
 <!--
 ES: El outbox resuelve un problema sutil pero OMNIPRESENTE: "guardar y publicar" no es
@@ -723,6 +896,45 @@ everything?". The answer: don't go back to the shared DB — treat reporting as 
 consumer. For few entities, compose via API; for cross queries, a materialized view fed by
 events (system-level CQRS); for heavy analytics, a warehouse. The rule closes the session:
 the events you already publish for sagas also serve to build the read views.
+-->
+
+---
+
+## CQRS: vista de lectura por eventos
+
+"Los 10 clientes con más pedidos del mes" cruza dos servicios. En vez de un JOIN, un componente mantiene una tabla ya cruzada, **solo de lectura**:
+
+```
+ Pedidos ──PedidoCreado──┐
+                         ├──► proyector ──► BD de lectura ──► consulta
+ Clientes ─ClienteAlta───┘                 (cruzada,          (rápida,
+                                            desnormalizada)    sin JOINs)
+```
+
+- **Escritura** y **lectura** usan modelos distintos → eso es **CQRS**
+- Es **eventualmente consistente** (desfase de segundos; suele bastar para informes)
+- Si se corrompe, se **reconstruye** reproduciendo los eventos
+
+> Reusa los **mismos eventos** de las sagas: el reporting es otro consumidor de eventos, no una excusa para volver a la BD compartida.
+
+<!--
+ES: Desarrolla la opción 2 de la slide anterior, que es la respuesta seria a la objeción
+nº1 ("¿y mis informes que cruzan todo?"). CQRS = separar el modelo de escritura del de
+lectura; aquí, a nivel de sistema: un proyector escucha eventos y construye una vista ya
+cruzada y desnormalizada, optimizada para la consulta. Tres ideas que vender: es
+eventualmente consistente y normalmente no pasa nada (un informe con segundos de desfase
+sirve); es desechable y reconstruible desde los eventos; y NO añade un pipeline nuevo,
+reusa los eventos que ya emites para las sagas y el outbox. Es el cierre natural del bloque
+de datos: los eventos no son solo para coordinar, también para consultar.
+
+EN: Expands option 2 of the previous slide — the serious answer to objection #1 ("what
+about my reports that cross everything?"). CQRS = separate the write model from the read
+model; here, at system level: a projector listens to events and builds an already-crossed,
+denormalized view optimized for the query. Three selling points: it's eventually consistent
+and usually that's fine (a report seconds behind is fine); it's disposable and rebuildable
+from the events; and it adds NO new pipeline — it reuses the events you already emit for
+sagas and the outbox. The natural close of the data block: events aren't only for
+coordinating, also for querying.
 -->
 
 ---
