@@ -43,7 +43,7 @@ style: |
 <!-- _header: '' -->
 <!-- _footer: '' -->
 
-![w:360](logo.png)
+![w:700](logo.png)
 
 # Sesión 2
 ## Patrones de migración
