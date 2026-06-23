@@ -165,7 +165,7 @@ La alternativa clásica era una **rama de larga vida** en el control de versione
 
 ### 4.2 Los cinco pasos
 
-1. **Crear una abstracción** (interfaz) sobre la funcionalidad a reemplazar.
+1. **Crear una abstracción** (una interfaz u otra *costura*; ver 4.3) sobre la funcionalidad a reemplazar.
 2. **Migrar los clientes** internos para que usen la abstracción en lugar de la implementación directa. *(El sistema sigue funcionando igual; pasos 1–2 son pura refactorización.)*
 3. **Crear la implementación nueva** detrás de la misma abstracción — puede ser una llamada a un servicio externo nuevo. Se desarrolla con calma, desplegada pero inactiva.
 4. **Conmutar** la abstracción a la implementación nueva (idealmente con un *feature flag*, que permite conmutar por configuración y volver atrás al instante).
@@ -186,7 +186,18 @@ Paso 1-2:                       Paso 3-4:
                                         └─────────────────┘
 ```
 
-### 4.3 Ventajas y limitaciones
+### 4.3 La abstracción no es solo una interfaz
+
+En el paso 1 hablamos de "crear una interfaz", pero la abstracción de Branch by Abstraction es, en realidad, **cualquier costura** (*seam*): un punto de indirección donde puedas elegir entre dos implementaciones sin tocar a los llamantes. La interfaz es la forma más típica en código orientado a objetos, pero hay muchas, a distintos niveles:
+
+- **Lenguaje / código:** interfaz o clase abstracta; una **función de orden superior, *Strategy* o *delegate*** (pasar la implementación como un dato); polimorfismo por subclase.
+- **Módulo:** una **fachada** o **adaptador** con API estable sobre un subsistema; la **inyección de dependencias / factory**, donde conmutas en el punto de *wiring*; un **proxy** o **decorador** que delega a la implementación vieja o la nueva.
+- **Mensajería:** sustituir una llamada directa por **publicar un evento** — el contrato del evento es la abstracción, y la implementación vieja y la nueva son suscriptores.
+- **Datos / infraestructura:** un **repositorio** o una **vista de BD** como costura; un registro de **plugins / SPI**; o, a nivel de despliegue, una **ruta del gateway** o el descubrimiento de servicios.
+
+Regla práctica: **cuanto más esparcida** esté la funcionalidad por el código, más cuesta introducir una interfaz fina, y más conviene una costura "más alta" (un módulo-fachada, un evento, un proxy). Esto matiza la limitación de "encontrar una buena abstracción es difícil": a veces la costura correcta no es una interfaz, sino un nivel por encima.
+
+### 4.4 Ventajas y limitaciones
 
 **Ventajas:** todo ocurre en trunk con despliegues continuos; ambas implementaciones conviven y son conmutables al instante; cada paso es pequeño y seguro; combina perfectamente con Strangler (Strangler para los bordes, BbA para las entrañas).
 
@@ -348,7 +359,7 @@ Customer { id, type: PERSON|COMPANY, displayName, active: bool, creditHold: bool
 **Tareas:**
 1. Escribe (en pseudocódigo o prosa) las reglas de traducción de la ACL.
 2. ¿Dónde vive este código y quién lo mantiene?
-3. El equipo legacy ofrece "añadir los campos nuevos directamente a la vista para que no tengáis que traducir". ¿Aceptas?
+3. El equipo legacy se ofrece a **añadir a la vista columnas ya calculadas con el modelo nuevo** (`type`, `display_name`, `active`, `credit_hold`), hechas en el lado legacy, para que `customer-service` las lea directamente sin traducir los campos crudos (`KD_TYP`, `STATUS_KZ`, …). ¿Aceptas?
 
 <details>
 <summary>💡 Solución</summary>

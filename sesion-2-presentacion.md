@@ -479,24 +479,49 @@ recreates the coupling you wanted to remove. One ACL per boundary/service.
 
 ## Ejemplo: la aseguradora
 
-`policy-service` nuevo necesita pólizas que viven en un **mainframe**.
+`policy-service` lee pólizas de un **mainframe**. *Activa* = cobertura **en vigor** (concepto de negocio, no un código).
 
-> En el mainframe, una póliza "activa" es `ST=02`… salvo que `MIGR_FLAG='S'`, en cuyo caso hay que mirar otra tabla.
+**Lo que el dominio ve** (modelo nuevo): `Policy { id, status: ACTIVE | LAPSED | CANCELLED }`
 
-La ACL encapsula esa **lógica arqueológica** en `isActive(policyId)` y expone `Policy` con el modelo limpio.
+**El mapeo vive dentro de la ACL:**
 
-Cuando el mainframe se apague → se borra la ACL y `policy-service` ni se entera.
+```
+toPolicy(raw):                          # raw = registro del mainframe
+  if   raw.MIGR_FLAG == 'S': st = migrStatus(raw.id)   # ← 2ª tabla
+  elif raw.ST == '02':       st = ACTIVE
+  elif raw.ST == '07':       st = LAPSED
+  else:                      st = CANCELLED
+  return Policy(raw.id, st)
+```
+
+El dominio llama `policy.isActive()` (≡ `status == ACTIVE`); nunca ve `ST`, `MIGR_FLAG` ni la 2ª tabla. Apagar el mainframe → reescribir `toPolicy()`, borrar la ACL; el dominio no cambia.
 
 <!--
-ES: El ejemplo perfecto de por qué existe la ACL: la regla "ST=02 salvo MIGR_FLAG"
-es exactamente el tipo de conocimiento arqueológico que NO debe filtrarse al servicio
-nuevo. Queda encapsulado tras isActive(). El día que muera el mainframe, solo cambia
-la implementación del puerto; el dominio nuevo no nota nada. Esa es la meta.
+ES: Aquí se ve el mapeo concreto, que responde a las cuatro dudas habituales:
+(1) "Activa" es un concepto de NEGOCIO (cobertura en vigor), no el código ST=02; el
+mainframe lo CODIFICA como ST=02, la ACL lo recupera como concepto.
+(2) El Policy se expone como tipo limpio del servicio nuevo (id + status enum); el
+dominio solo conoce ese tipo.
+(3) El mapeo es UNA función (toPolicy) que vive en la ACL, no en el dominio — es el
+"traductor de modelo" de la slide de componentes.
+(4) La 2ª tabla (caso MIGR_FLAG='S', pólizas migradas de un sistema anterior) se
+resuelve con un lookup extra DENTRO de la ACL; el dominio nunca sabe que existió.
+En términos de puertos/adaptadores: isActive()/el repositorio es el PUERTO, toPolicy()
+es el ADAPTADOR legacy. Apagar el mainframe = reescribir el adaptador y borrar la ACL;
+el dominio no cambia. Esa es la meta.
 
-EN: The perfect example of why the ACL exists: the "ST=02 unless MIGR_FLAG" rule is
-exactly the kind of archaeological knowledge that must NOT leak into the new service.
-It stays encapsulated behind isActive(). The day the mainframe dies, only the port's
-implementation changes; the new domain notices nothing. That's the goal.
+EN: Here the concrete mapping answers the four usual doubts:
+(1) "Active" is a BUSINESS concept (coverage in force), not the code ST=02; the
+mainframe ENCODES it as ST=02, the ACL recovers it as a concept.
+(2) Policy is exposed as the new service's clean type (id + status enum); the domain
+only knows that type.
+(3) The mapping is ONE function (toPolicy) living in the ACL, not the domain — it's the
+"model translator" from the components slide.
+(4) The 2nd table (the MIGR_FLAG='S' case, policies migrated from an older system) is
+resolved with an extra lookup INSIDE the ACL; the domain never knows it existed.
+In ports/adapters terms: isActive()/the repository is the PORT, toPolicy() is the legacy
+ADAPTER. Decommissioning the mainframe = rewrite the adapter and delete the ACL; the
+domain doesn't change. That's the goal.
 -->
 
 ---
@@ -604,22 +629,37 @@ defensible case. We'll see it at the end.
 
 ## El problema que resuelve
 
-Strangler intercepta **desde fuera**. Pero ¿y si lo que quieres reemplazar está **enterrado dentro** del monolito, llamado desde decenas de sitios?
+Strangler intercepta **desde fuera**. ¿Y si lo que quieres reemplazar está **enterrado dentro**, llamado desde decenas de sitios? → no hay borde donde poner un proxy.
 
-→ No hay borde donde poner un proxy.
+**Enfoque ingenuo — *rama de larga vida*:** ramificar en git, arrancar lo viejo y construir lo nuevo aparte durante semanas.
+- el resto del equipo sigue en *trunk* (la línea principal, `main`) → la rama **diverge** → infierno de *merges*
+- lo que está a medias **no se puede desplegar** → cero valor hasta el final
 
-La alternativa clásica era una **rama de larga vida** ("la rama de la migración") y su infierno de merges. Branch by Abstraction logra lo mismo **en trunk**, desplegando continuamente.
+**Idea de BbA:** sustituir la rama de *git* por una **rama lógica en el código** — una abstracción con dos implementaciones. Ambas viven en `main`, compilan y se despliegan; **nada diverge**.
 
 <!--
-ES: Aquí se ve la complementariedad con el Strangler. Strangler = bordes externos.
-BbA = entrañas internas. La gran aportación de BbA: nada de ramas de larga vida.
-Todo ocurre en trunk, con la rama "lógica" creada por la abstracción, no por el
-control de versiones. De ahí el nombre.
+ES: El término "rama de larga vida" (long-lived branch) hay que explicarlo: es una rama
+de control de versiones que vive semanas o meses separada de la principal. Tiene dos
+males: (a) DIVERGE de main mientras los demás siguen commiteando → al final el merge es
+enorme y doloroso; (b) el código a medias NO es desplegable, así que no entregas nada
+hasta el final — un mini big-bang. "Trunk" = la línea principal (main/master);
+"trunk-based development" = todos integran cambios pequeños en main a menudo,
+manteniéndola siempre desplegable.
+El truco de BbA: la "rama" se hace en el CÓDIGO (la abstracción con dos implementaciones
+detrás), no en git. Las dos compilan y se despliegan en main; un flag elige cuál corre.
+Así obtienes el aislamiento de una rama SIN el coste de una rama. El CÓMO concreto son
+los cinco pasos de la siguiente slide. De ahí el nombre: "ramificar por abstracción".
 
-EN: Here you see the complementarity with the Strangler. Strangler = external edges.
-BbA = internal guts. BbA's big contribution: no long-lived branches. Everything
-happens in trunk, with the "branch" created logically by the abstraction, not by
-version control. Hence the name.
+EN: The term "long-lived branch" needs explaining: it's a version-control branch that
+lives for weeks or months apart from the main line. Two evils: (a) it DIVERGES from main
+while everyone else keeps committing → the eventual merge is huge and painful; (b) the
+half-done code is NOT deployable, so you ship nothing until the end — a mini big-bang.
+"Trunk" = the main line (main/master); "trunk-based development" = everyone integrates
+small changes into main often, keeping it always releasable.
+The BbA trick: the "branch" is made in the CODE (the abstraction with two implementations
+behind it), not in git. Both compile and deploy on main; a flag picks which one runs. You
+get a branch's isolation WITHOUT a branch's cost. The concrete HOW is the five steps on
+the next slide. Hence the name: "branch by abstraction".
 -->
 
 ---
@@ -673,6 +713,44 @@ estado de transición: es una red de seguridad (puedes hacer fallback a la vieja
 EN: The visual key: in step 3-4 both implementations exist at once behind the SAME
 interface, and the flag decides which runs. That coexistence isn't just a transitional
 state: it's a safety net (you can fall back to the old one).
+-->
+
+---
+
+## La abstracción no es solo una interfaz
+
+Es **cualquier costura** (*seam*) donde insertar el conmutador:
+
+- **Interfaz / clase abstracta** — lo típico en OO
+- **Función de orden superior / Strategy / delegate** — la implementación como dato
+- **Fachada, adaptador o inyección de dependencias** — costura a nivel de módulo / *wiring*
+- **Proxy / decorador** — un envoltorio que delega a la vieja o la nueva
+- **Publicar un evento** en vez de llamar directo — el contrato del evento es la abstracción
+- **Costura de datos/infra** — repositorio, vista de BD, SPI/plugin, ruta del gateway
+
+> Cuanto más **esparcida** esté la funcionalidad, más arriba conviene la costura (módulo/infra) que una interfaz fina.
+
+<!--
+ES: El objetivo de esta slide es romper la idea "abstracción = interfaz". La abstracción
+de BbA es cualquier PUNTO DE INDIRECCIÓN (costura/seam, término de Michael Feathers)
+donde puedas elegir entre dos implementaciones sin editar a los llamantes. Va por
+niveles: lenguaje (interfaz, función/Strategy, subclase), módulo (fachada, adaptador,
+inyección de dependencias, proxy/decorador), mensajería (evento en vez de llamada) e
+infra/datos (repositorio, vista de BD, SPI/plugin, ruta del gateway). Regla práctica: si
+la funcionalidad está muy esparcida, una interfaz fina cuesta mucho de introducir →
+elige una costura más alta (un módulo-fachada, un evento, un proxy). Esto matiza la
+limitación "encontrar una buena abstracción es difícil": a veces la costura correcta no
+es una interfaz.
+
+EN: The point of this slide is to break the "abstraction = interface" idea. BbA's
+abstraction is any POINT OF INDIRECTION (a seam, Michael Feathers' term) where you can
+choose between two implementations without editing the callers. It spans levels:
+language (interface, function/Strategy, subclass), module (facade, adapter, dependency
+injection, proxy/decorator), messaging (an event instead of a call) and infra/data
+(repository, DB view, SPI/plugin, gateway route). Rule of thumb: if the functionality is
+very scattered, a fine-grained interface is costly to introduce → pick a higher seam (a
+facade module, an event, a proxy). This nuances the "finding a good abstraction is hard"
+limitation: sometimes the right seam isn't an interface.
 -->
 
 ---
