@@ -1081,30 +1081,6 @@ synthesis of the whole session.
 
 ---
 
-## Resumen de la sesión
-
-- **Strangler Fig:** interceptar en el borde y redirigir gradualmente; reversible y visible, pero no resuelve los datos
-- **ACL:** traducción que impide que el legacy contamine lo nuevo; pertenece al lado nuevo; se borra con el legacy
-- **Big-Bang:** mala idea para sistemas grandes y vivos; justificable solo en piezas pequeñas, congeladas y especificadas
-- **Branch by Abstraction:** el "strangler de interior" — abstracción, dos implementaciones, flag, limpieza; en trunk
-- **Parallel Run:** ambos sistemas con tráfico real y comparación; la validación más fuerte para lo crítico y comparable
-- **Bubble Context:** un contexto limpio protegido por ACL para remodelar el dominio dentro del legacy
-- Los patrones **se combinan**; y siempre: ACL en toda frontera y **borrado** del legacy
-
-<!--
-ES: El destilado de la sesión. Si solo se llevan una idea: los patrones no compiten, se
-combinan, y cada uno responde a una pregunta distinta. La siguiente sesión ataca el
-problema que todos estos patrones dejan abierto: DÓNDE cortar (DDD) y cómo partir los
-DATOS, que es lo más difícil de todo.
-
-EN: The session's distillate. If they take away one idea: patterns don't compete, they
-combine, and each answers a different question. The next session tackles the problem all
-these patterns leave open: WHERE to cut (DDD) and how to split the DATA, which is the
-hardest part of all.
--->
-
----
-
 <!-- _class: lead -->
 
 # ¿Preguntas?
