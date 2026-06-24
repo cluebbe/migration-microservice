@@ -495,7 +495,14 @@ aligned to contexts, and subdivide only when the pain justifies it.
 
 ## El problema: la BD compartida
 
-Extrae todo el código que quieras: mientras **compartan base de datos, siguen acoplados**.
+Extrae todo el código que quieras: mientras **compartan base de datos, siguen acoplados**. Usaremos este esquema de ejemplo el resto de la sección:
+
+```
+┌──────────────── BD única del monolito (e-commerce) ─────────────────┐
+│  clientes · pedidos · pagos · envios · catalogo · paises · monedas  │
+└─────────────────────────────────────────────────────────────────────┘
+           todos los módulos leen y escriben cualquier tabla
+```
 
 - El **esquema es un contrato implícito**: nadie cambia una tabla sin romper a los demás → adiós despliegue independiente
 - La lógica acaba en el sitio equivocado (se reimplementa y diverge en cada consumidor)
@@ -609,23 +616,31 @@ events = EventStorming Policy / event-driven integration.
 
 ## Casos típicos difíciles
 
-- **Tabla de referencia compartida** (`paises`): duplicar en cada servicio (cambia poco) o un servicio de referencia
-- **Una tabla, dos dueños** (`pedidos` con columnas de pedido + de envío): **partirla**; la clave (`pedido_id`) pasa a ser referencia entre servicios
-- **Joins entre dominios** (informe clientes × pedidos): ya no hay JOIN entre BDs → composición en el llamante, o **vista materializada** por eventos (§4.5)
+Las tres opciones rompen un acceso *simple*. Sobre el esquema de antes, tres **formas de datos** piden un matiz extra:
+
+- **Datos de referencia que todos leen** (`paises`, monedas): API o eventos serían exagerados para algo casi inmutable → **duplica una copia** en cada servicio (o un mini-servicio de referencia si cambia)
+- **Una tabla que esconde dos dueños** (`pedidos` mezcla columnas de pedido y de envío): no es elegir entre las tres → **pártela por columnas**; la clave (`pedido_id`) queda como referencia entre Pedidos y Envíos
+- **Informes que cruzan dominios** (Clientes × Pedidos): ya no hay JOIN entre BDs → **composición en el llamante**, o **vista materializada por eventos** —la copia local del slide anterior aplicada a consultas (§4.5)
 
 <!--
-ES: Los tres casos que siempre aparecen. El de referencia (paises, monedas) casi siempre
-se resuelve duplicando — montar un servicio para algo que cambia una vez al año es
-sobreingeniería. "Una tabla, dos dueños" delata que el reparto de columnas escondía dos
-conceptos: se parte por columnas y la clave queda como referencia. Los joins entre dominios
-son el dolor recurrente y enlazan con la última slide de la sesión (consultas por eventos,
-no por BD compartida).
+ES: No son técnicas nuevas, son tres FORMAS de datos donde las tres opciones del slide
+anterior se aplican con un matiz — por eso esta slide se apoya en la anterior, no la repite.
+Referencia (paises, monedas): casi siempre duplicar; montar un servicio para algo que
+cambia una vez al año es sobreingeniería (ni hace falta eventos: es estático). "Una tabla,
+dos dueños" delata que el reparto de columnas escondía dos conceptos: se parte por columnas
+(es el "mover el dato" del slide anterior, pero a nivel de columna) y la clave queda como
+referencia. Los informes que cruzan dominios son el dolor recurrente: la vista materializada
+por eventos es la copia local de antes aplicada a consultas — enlaza con la última slide de
+la sesión (§4.5: consultas por eventos, no por BD compartida).
 
-EN: The three cases that always appear. Reference data (countries, currencies) is almost
-always solved by duplicating — building a service for something that changes once a year is
-over-engineering. "One table, two owners" reveals the column split hid two concepts: split
-by columns, key stays as a reference. Cross-domain joins are the recurring pain and link to
-the session's last slide (queries via events, not a shared DB).
+EN: Not new techniques — three SHAPES of data where the previous slide's three options apply
+with a twist; that's why this slide builds on it instead of repeating it. Reference data
+(countries, currencies): almost always duplicate; a service for something that changes once
+a year is over-engineering (not even events needed: it's static). "One table, two owners"
+reveals the column split hid two concepts: split by columns (it's the previous slide's "move
+the data" at column level), key stays as a reference. Cross-domain reports are the recurring
+pain: the event-fed materialized view is the earlier local copy applied to queries — links
+to the session's last slide (§4.5: queries via events, not a shared DB).
 -->
 
 ---
@@ -908,7 +923,10 @@ legitimate (orchestrate the core, choreograph the peripheral reactions).
 
 ## La idea del Outbox
 
-Un servicio debe **guardar en su BD y publicar un evento**. No hay transacción que cubra BD *y* broker: si guarda y se cae antes de publicar → saga colgada; si publica y falla el guardado → el mundo cree algo falso.
+Un servicio debe guardar el cambio en su BD **y** publicar un evento — pero son **dos sistemas, sin transacción común**, y cada mitad puede fallar sola:
+
+- **Guarda y no publica** (cae tras el commit) → **evento perdido**: pasó, pero nadie se entera
+- **Publica y no guarda** (rollback) → **evento fantasma**: otros reaccionan a algo que no pasó
 
 ```
 ┌───────────── Servicio Pedidos ─────────────┐
@@ -919,7 +937,7 @@ Un servicio debe **guardar en su BD y publicar un evento**. No hay transacción 
 └─────────────────────────────────────────────┘
 ```
 
-**El relay** publica leyendo la outbox: por *polling* periódico de la tabla, o por **CDC** (change data capture) sobre el log de transacciones de la BD — p. ej. **Debezium** — sin consultar la tabla.
+**El relay** publica leyendo la outbox: por *polling* de la tabla, o por **CDC** sobre el log de la BD (p. ej. **Debezium**).
 
 <!--
 ES: El outbox resuelve un problema sutil pero OMNIPRESENTE: "guardar y publicar" no es
@@ -973,7 +991,7 @@ covered more deeply in Session 4.
 Sin JOINs globales, ¿"los 10 clientes con más pedidos este mes"?
 
 1. **Composición de APIs:** el llamante consulta varios servicios y combina. Bien para pocas entidades; mal para agregaciones masivas
-2. **Vista materializada / CQRS:** un componente se **suscribe a los eventos** y mantiene una BD de lectura ya cruzada. Eventualmente consistente (suele bastar para informes)
+2. **Vista materializada / CQRS** *(Command Query Responsibility Segregation: separar el modelo de escritura del de lectura)*: un componente se **suscribe a los eventos** y mantiene una BD de lectura ya cruzada. Eventualmente consistente (suele bastar para informes)
 3. **Plataforma analítica:** informes pesados → data warehouse alimentado por eventos, no contra las BDs operacionales
 
 > Las consultas que cruzan dominios son **otro consumidor de eventos**, no una excusa para volver a la BD compartida.
@@ -1000,10 +1018,11 @@ the events you already publish for sagas also serve to build the read views.
 "Los 10 clientes con más pedidos del mes" cruza dos servicios. En vez de un JOIN, un componente mantiene una tabla ya cruzada, **solo de lectura**:
 
 ```
- Pedidos ──PedidoCreado──┐
-                         ├──► proyector ──► BD de lectura ──► consulta
- Clientes ─ClienteAlta───┘                 (cruzada,          (rápida,
-                                            desnormalizada)    sin JOINs)
+[ Pedidos  ] ─PedidoCreado─┐
+                           │   ┌──── Contexto Informes (lectura) ─────┐
+                           ├──►│ proyector → BD de lectura → consulta │
+[ Clientes ] ─ClienteAlta ─┘   │            (cruzada, desnormalizada) │
+                               └──────────────────────────────────────┘
 ```
 
 - **Escritura** y **lectura** usan modelos distintos → eso es **CQRS**

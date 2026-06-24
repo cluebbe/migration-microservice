@@ -1453,7 +1453,12 @@ section.lead h1 {
 ;" data-marpit-pagination-total="40">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 <h2 id="el-problema-la-bd-compartida">El problema: la BD compartida</h2>
-<p>Extrae todo el código que quieras: mientras <strong>compartan base de datos, siguen acoplados</strong>.</p>
+<p>Extrae todo el código que quieras: mientras <strong>compartan base de datos, siguen acoplados</strong>. Usaremos este esquema de ejemplo el resto de la sección:</p>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code>┌──────────────── BD única del monolito (e-commerce) ─────────────────┐
+│  clientes · pedidos · pagos · envios · catalogo · paises · monedas  │
+└─────────────────────────────────────────────────────────────────────┘
+           todos los módulos leen y escriben cualquier tabla
+</code></pre>
 <ul>
 <li>El <strong>esquema es un contrato implícito</strong>: nadie cambia una tabla sin romper a los demás → adiós despliegue independiente</li>
 <li>La lógica acaba en el sitio equivocado (se reimplementa y diverge en cada consumidor)</li>
@@ -1774,10 +1779,11 @@ section.lead h1 {
 ;" data-marpit-pagination-total="40">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 <h2 id="casos-t%C3%ADpicos-dif%C3%ADciles">Casos típicos difíciles</h2>
+<p>Las tres opciones rompen un acceso <em>simple</em>. Sobre el esquema de antes, tres <strong>formas de datos</strong> piden un matiz extra:</p>
 <ul>
-<li><strong>Tabla de referencia compartida</strong> (<code>paises</code>): duplicar en cada servicio (cambia poco) o un servicio de referencia</li>
-<li><strong>Una tabla, dos dueños</strong> (<code>pedidos</code> con columnas de pedido + de envío): <strong>partirla</strong>; la clave (<code>pedido_id</code>) pasa a ser referencia entre servicios</li>
-<li><strong>Joins entre dominios</strong> (informe clientes × pedidos): ya no hay JOIN entre BDs → composición en el llamante, o <strong>vista materializada</strong> por eventos (§4.5)</li>
+<li><strong>Datos de referencia que todos leen</strong> (<code>paises</code>, monedas): API o eventos serían exagerados para algo casi inmutable → <strong>duplica una copia</strong> en cada servicio (o un mini-servicio de referencia si cambia)</li>
+<li><strong>Una tabla que esconde dos dueños</strong> (<code>pedidos</code> mezcla columnas de pedido y de envío): no es elegir entre las tres → <strong>pártela por columnas</strong>; la clave (<code>pedido_id</code>) queda como referencia entre Pedidos y Envíos</li>
+<li><strong>Informes que cruzan dominios</strong> (Clientes × Pedidos): ya no hay JOIN entre BDs → <strong>composición en el llamante</strong>, o <strong>vista materializada por eventos</strong> —la copia local del slide anterior aplicada a consultas (§4.5)</li>
 </ul>
 <footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
 </section>
@@ -2611,7 +2617,11 @@ section.lead h1 {
 ;" data-marpit-pagination-total="40">
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 <h2 id="la-idea-del-outbox">La idea del Outbox</h2>
-<p>Un servicio debe <strong>guardar en su BD y publicar un evento</strong>. No hay transacción que cubra BD <em>y</em> broker: si guarda y se cae antes de publicar → saga colgada; si publica y falla el guardado → el mundo cree algo falso.</p>
+<p>Un servicio debe guardar el cambio en su BD <strong>y</strong> publicar un evento — pero son <strong>dos sistemas, sin transacción común</strong>, y cada mitad puede fallar sola:</p>
+<ul>
+<li><strong>Guarda y no publica</strong> (cae tras el commit) → <strong>evento perdido</strong>: pasó, pero nadie se entera</li>
+<li><strong>Publica y no guarda</strong> (rollback) → <strong>evento fantasma</strong>: otros reaccionan a algo que no pasó</li>
+</ul>
 <pre is="marp-pre" data-auto-scaling="downscale-only"><code>┌───────────── Servicio Pedidos ─────────────┐
 │  TX local: INSERT pedido + INSERT outbox   │ ← atómico <img class="emoji" draggable="false" alt="✔" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@17.0.2/assets/svg/2714.svg" data-marp-twemoji=""/>
 │                 ┌────────┐                 │
@@ -2619,7 +2629,7 @@ section.lead h1 {
 │                 └────────┘  (reintenta)    │
 └─────────────────────────────────────────────┘
 </code></pre>
-<p><strong>El relay</strong> publica leyendo la outbox: por <em>polling</em> periódico de la tabla, o por <strong>CDC</strong> (change data capture) sobre el log de transacciones de la BD — p. ej. <strong>Debezium</strong> — sin consultar la tabla.</p>
+<p><strong>El relay</strong> publica leyendo la outbox: por <em>polling</em> de la tabla, o por <strong>CDC</strong> sobre el log de la BD (p. ej. <strong>Debezium</strong>).</p>
 <footer>Sesión 3 — Domain-Driven Design y descomposición de datos</footer>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="35" data-paginate="true" data-header="![h:34px](nobleprog-logo.png) Tecnología de Punta Formación SL" data-footer="Sesión 3 — Domain-Driven Design y descomposición de datos" data-theme="default" data-style="section {
@@ -2766,7 +2776,7 @@ section.lead h1 {
 <p>Sin JOINs globales, ¿&quot;los 10 clientes con más pedidos este mes&quot;?</p>
 <ol>
 <li><strong>Composición de APIs:</strong> el llamante consulta varios servicios y combina. Bien para pocas entidades; mal para agregaciones masivas</li>
-<li><strong>Vista materializada / CQRS:</strong> un componente se <strong>suscribe a los eventos</strong> y mantiene una BD de lectura ya cruzada. Eventualmente consistente (suele bastar para informes)</li>
+<li><strong>Vista materializada / CQRS</strong> <em>(Command Query Responsibility Segregation: separar el modelo de escritura del de lectura)</em>: un componente se <strong>suscribe a los eventos</strong> y mantiene una BD de lectura ya cruzada. Eventualmente consistente (suele bastar para informes)</li>
 <li><strong>Plataforma analítica:</strong> informes pesados → data warehouse alimentado por eventos, no contra las BDs operacionales</li>
 </ol>
 <blockquote>
@@ -2840,10 +2850,11 @@ section.lead h1 {
 <header><img src="nobleprog-logo.png" alt="" style="height:34px;" /> Tecnología de Punta Formación SL</header>
 <h2 id="cqrs-vista-de-lectura-por-eventos">CQRS: vista de lectura por eventos</h2>
 <p>&quot;Los 10 clientes con más pedidos del mes&quot; cruza dos servicios. En vez de un JOIN, un componente mantiene una tabla ya cruzada, <strong>solo de lectura</strong>:</p>
-<pre is="marp-pre" data-auto-scaling="downscale-only"><code> Pedidos ──PedidoCreado──┐
-                         ├──► proyector ──► BD de lectura ──► consulta
- Clientes ─ClienteAlta───┘                 (cruzada,          (rápida,
-                                            desnormalizada)    sin JOINs)
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code>[ Pedidos  ] ─PedidoCreado─┐
+                           │   ┌──── Contexto Informes (lectura) ─────┐
+                           ├──►│ proyector → BD de lectura → consulta │
+[ Clientes ] ─ClienteAlta ─┘   │            (cruzada, desnormalizada) │
+                               └──────────────────────────────────────┘
 </code></pre>
 <ul>
 <li><strong>Escritura</strong> y <strong>lectura</strong> usan modelos distintos → eso es <strong>CQRS</strong></li>
@@ -3297,18 +3308,24 @@ but runtime coupling (owner down, you're down); events = local copy with lag but
 (you keep working if the owner is unavailable). In microservices the default preference is
 events, precisely because it breaks the runtime coupling, which is the whole point of
 splitting the DBs. Course links: API = Open Host / Customer-Supplier on the context map;
-events = EventStorming Policy / event-driven integration.</p></div><div class="bespoke-marp-note" data-index="22" tabindex="0"><p>ES: Los tres casos que siempre aparecen. El de referencia (paises, monedas) casi siempre
-se resuelve duplicando — montar un servicio para algo que cambia una vez al año es
-sobreingeniería. &quot;Una tabla, dos dueños&quot; delata que el reparto de columnas escondía dos
-conceptos: se parte por columnas y la clave queda como referencia. Los joins entre dominios
-son el dolor recurrente y enlazan con la última slide de la sesión (consultas por eventos,
-no por BD compartida).
+events = EventStorming Policy / event-driven integration.</p></div><div class="bespoke-marp-note" data-index="22" tabindex="0"><p>ES: No son técnicas nuevas, son tres FORMAS de datos donde las tres opciones del slide
+anterior se aplican con un matiz — por eso esta slide se apoya en la anterior, no la repite.
+Referencia (paises, monedas): casi siempre duplicar; montar un servicio para algo que
+cambia una vez al año es sobreingeniería (ni hace falta eventos: es estático). &quot;Una tabla,
+dos dueños&quot; delata que el reparto de columnas escondía dos conceptos: se parte por columnas
+(es el &quot;mover el dato&quot; del slide anterior, pero a nivel de columna) y la clave queda como
+referencia. Los informes que cruzan dominios son el dolor recurrente: la vista materializada
+por eventos es la copia local de antes aplicada a consultas — enlaza con la última slide de
+la sesión (§4.5: consultas por eventos, no por BD compartida).
 
-EN: The three cases that always appear. Reference data (countries, currencies) is almost
-always solved by duplicating — building a service for something that changes once a year is
-over-engineering. &quot;One table, two owners&quot; reveals the column split hid two concepts: split
-by columns, key stays as a reference. Cross-domain joins are the recurring pain and link to
-the session's last slide (queries via events, not a shared DB).</p></div><div class="bespoke-marp-note" data-index="23" tabindex="0"><p>ES: La concreción de &quot;una tabla, dos dueños&quot; de la slide anterior, que es el caso que más
+EN: Not new techniques — three SHAPES of data where the previous slide's three options apply
+with a twist; that's why this slide builds on it instead of repeating it. Reference data
+(countries, currencies): almost always duplicate; a service for something that changes once
+a year is over-engineering (not even events needed: it's static). &quot;One table, two owners&quot;
+reveals the column split hid two concepts: split by columns (it's the previous slide's &quot;move
+the data&quot; at column level), key stays as a reference. Cross-domain reports are the recurring
+pain: the event-fed materialized view is the earlier local copy applied to queries — links
+to the session's last slide (§4.5: queries via events, not a shared DB).</p></div><div class="bespoke-marp-note" data-index="23" tabindex="0"><p>ES: La concreción de &quot;una tabla, dos dueños&quot; de la slide anterior, que es el caso que más
 asusta. El reparto de columnas ya delataba dos conceptos mezclados; se parte por columnas y
 cada grupo se va con su servicio. Lo importante es el cambio de naturaleza de la clave:
 dentro del monolito pedido_id era una FK que la BD garantizaba; tras partir, es una simple
