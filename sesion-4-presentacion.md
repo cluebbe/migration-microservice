@@ -434,33 +434,6 @@ most profitable application.
 
 ---
 
-## Idempotencia (transversal)
-
-Aparece en **todas partes** porque es lo que hace **seguros** los mecanismos anteriores: reintentos, entrega al-menos-una-vez, compensaciones de saga repetidas, relays de outbox.
-
-Técnicas:
-- **Claves de idempotencia:** el cliente genera un ID, el servidor **deduplica**
-- **Restricciones únicas** por clave de negocio
-- **Operaciones naturalmente idempotentes:** *asignar* en vez de *incrementar*
-
-> **Regla de diseño:** toda operación expuesta entre servicios debería ser **idempotente** o **declarar explícitamente que no lo es**.
-
-<!--
-ES: Recapitulación transversal: la idempotencia es el pegamento de la fiabilidad. Sin ella,
-nada de lo anterior es seguro: reintentos duplican, brokers entregan dos veces, sagas
-compensan dos veces. La regla del blockquote es la que deben llevarse: diseñar operaciones
-"repetibles sin daño" por defecto. Truco mental: prefiere fijar estado absoluto (set
-estado=PAGADO) a deltas (suma 10€), que se rompen al repetirse.
-
-EN: Cross-cutting recap: idempotency is the glue of reliability. Without it, nothing above
-is safe: retries duplicate, brokers deliver twice, sagas compensate twice. The blockquote
-rule is the take-away: design operations "repeatable without harm" by default. Mental
-trick: prefer setting absolute state (set status=PAID) over deltas (add 10€), which break
-when repeated.
--->
-
----
-
 <!-- _class: lead -->
 
 # Ejercicio 4.2
@@ -674,7 +647,7 @@ No es metáfora, es una **fuerza física** de la ingeniería:
 ```
  3 equipos:   Frontend │ Backend │ DBA
                      ▼ (Conway empuja)
- sale esto:   web-api │ lógica  │ datos     (capas, NO dominios)
+ sale esto:    UI/web  │ web-api │ datos     (capas, NO dominios)
 ```
 
 - Migrar la arquitectura **sin tocar la organización** → monolito distribuido
