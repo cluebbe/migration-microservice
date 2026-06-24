@@ -201,14 +201,14 @@ the most-used collaborative workshop for this — mention it as a technique, don
 
 ## EventStorming: encontrar fronteras con el negocio
 
-Taller donde negocio y desarrollo mapean el dominio en una pared, en orden temporal, con post-its de colores:
+**Enfoque bottom-up** — las fronteras *emergen* del comportamiento real. Taller donde negocio y desarrollo mapean el dominio en una pared, en orden temporal, con post-its de colores:
 
 - **Evento de dominio** *(naranja)* — algo relevante que pasó ("Pedido confirmado")
 - **Comando** *(azul)* — lo que lo provoca ("Confirmar pedido")
 - **Agregado** *(amarillo)* — sobre qué recae el comando
 - **Política / proceso** *(lila)* — "cuando pasa X, automáticamente Y"
 
-> Los **racimos** de eventos que van juntos y los **cambios de vocabulario** a lo largo de la pared dibujan los bounded contexts. Es la vía más rápida de encontrar fronteras *con* el negocio en la sala, no en una reunión técnica aparte.
+> Es la vía más rápida de encontrar fronteras *con* el negocio en la sala. **Cómo emergen exactamente** —racimos, vocabulario, agregados y políticas— en las dos slides siguientes.
 
 <!--
 ES: Desarrollamos la última viñeta de la slide anterior. EventStorming es el taller
@@ -225,6 +225,104 @@ matters is WHY it works for a migration: you get business and dev to tell the sy
 story as events, and boundaries emerge on their own where vocabulary shifts and events
 cluster. Cheap (sticky notes and a wall) and produces the first draft of bounded contexts
 in a morning. No need to master the colors; just know it exists and what it's for.
+-->
+
+---
+
+## De los racimos a las fronteras: cómo emergen
+
+Colocados **en orden temporal**, los eventos se apelotonan solos. Donde el racimo se corta (`‖`) hay una frontera:
+
+```
+  Carrito creado         ‖ Pago autorizado        ‖ Envío despachado
+  Pedido confirmado      ‖ Factura emitida        ‖ Entrega confirmada
+  ────────────────────── ‖ ────────────────────── ‖ ──────────────────────
+  objetivo: VENDER       ‖ objetivo: COBRAR       ‖ objetivo: ENTREGAR
+  vocab: carrito·pedido  ‖ vocab: pago·factura    ‖ vocab: envío·paquete
+  = Contexto Ventas      ‖ = Contexto Pagos       ‖ = Contexto Logística
+```
+
+**Por qué ahí corta una frontera:** en la `‖` saltan a la vez el **objetivo** del negocio, el **vocabulario** (mismo dato, otro nombre y campos) y el **responsable** (Ventas → Finanzas → Logística).
+
+<!--
+ES: Esta slide hace explícito el "cómo" que la anterior solo enuncia. Idea clave: NO
+defines las fases y luego agrupas; es al revés — pones los eventos en orden temporal y los
+racimos (y sus fronteras) emergen solos donde saltan objetivo + vocabulario + responsable.
+Las tres señales saltan JUNTAS en el mismo punto: por eso es una frontera fiable y no un
+corte arbitrario. Cierre: el agregado mira hacia dentro (cohesión, lo que cambia junto);
+la política mira hacia fuera (el evento que dispara trabajo en otro racimo = el contrato/
+evento async entre los dos servicios). Ese es exactamente el material de una migración:
+el negocio te dibuja las costuras sin reunión técnica aparte.
+
+EN: This slide makes explicit the "how" the previous one only states. Key idea: you do NOT
+define the phases first and then group; it's the reverse — you place events in temporal
+order and the clusters (and their boundaries) emerge where objective + vocabulary +
+owner shift. The three signals shift TOGETHER at the same spot: that's why it's a reliable
+boundary and not an arbitrary cut. Close: the aggregate looks inward (cohesion, what
+changes together); the policy looks outward (the event that triggers work in another
+cluster = the contract/async event between the two services).
+-->
+
+---
+
+## Enriquecer la pared: los demás post-its
+
+Los **eventos encuentran** las fronteras; los demás post-its, añadidos por capas, las **validan y tipifican**:
+
+| Post-it | Pregunta que responde | Efecto en la frontera |
+|---|---|---|
+| **Comando** + actor *(azul)* | ¿quién lo dispara y cómo lo llama? | **confirma** la línea (vocabulario, rol) |
+| **Agregado** *(amarillo)* | ¿qué cambia junto? | **cohesión *dentro*** — mismo nombre como 2 agregados = parte el racimo |
+| **Política** *(lila)* | ¿quién reacciona a quién? | **contrato *entre*** contextos (evento async) |
+
+> Terminas no solo con los contextos, sino con los **contratos entre ellos** (las políticas) — justo lo que necesitas para planificar la migración.
+
+<!--
+ES: Cierra la secuencia de EventStorming. Mensaje: los post-its no se ponen todos a la vez;
+se añaden por capas sobre los eventos ya ordenados, y cada capa responde una pregunta y
+afina la frontera. Clave de examen: agregado = cohesión hacia DENTRO (test de "esta línea
+está bien puesta"; un agregado nunca cruza un contexto); política = acoplamiento hacia
+FUERA (las flechas que cruzan racimos se vuelven los eventos async/contratos entre
+servicios). El regalo de la técnica: sales con los contratos de integración ya dibujados,
+que es el insumo directo del plan de migración.
+
+EN: Closes the EventStorming sequence. Message: you don't place all post-its at once; you
+add them in layers over the already-ordered events, and each layer answers a question and
+sharpens the boundary. Exam key: aggregate = cohesion INWARD (the "is this line right?"
+test; an aggregate never crosses a context); policy = coupling OUTWARD (arrows crossing
+clusters become the async events/contracts between services). The gift of the technique:
+you leave with the integration contracts already drawn — the direct input to the migration
+plan.
+-->
+
+---
+
+## Capacidad de negocio vs. subdominio
+
+Dos heurísticas **top-down** para proponer contextos —se *deducen* del propósito y la estructura, y complementan el EventStorming **bottom-up**:
+
+- **Por capacidad de negocio:** ¿qué *hace* la empresa? (gestionar pedidos, facturar). Estable, de fuera adentro. Riesgo: copiar el organigrama actual.
+- **Por subdominio:** ¿de qué *se compone* el dominio?
+  - **Core** — lo que te diferencia. Mejor equipo, mejor diseño.
+  - **Supporting** — necesario, no diferencial; a medida porque no hay alternativa.
+  - **Generic** — lo resuelve una solución comprada (contabilidad, login, email).
+
+> **core / supporting / generic** = cómo **repartir el esfuerzo**: modelado fino al core; lo genérico a menudo **ni se migra — se reemplaza** por SaaS.
+
+<!--
+ES: Las dos heurísticas son complementarias: una mira lo que la empresa hace, la otra de
+qué se compone el problema. La clasificación core/supporting/generic es la herramienta de
+priorización más útil de la sesión: evita gastar el mismo esfuerzo de diseño (y de
+migración) en todo por igual. Lo genérico (email, contabilidad) no se reescribe como
+microservicio propio: se compra y se borra el módulo legacy — la forma más barata de
+adelgazar el monolito. Es la base del Ejercicio 3.2.
+
+EN: The two heuristics are complementary: one looks at what the company does, the other at
+what the problem is made of. The core/supporting/generic classification is the most useful
+prioritization tool of the session: it avoids spending the same design (and migration)
+effort on everything equally. Generic stuff (email, accounting) isn't rewritten as your
+own microservice: you buy it and delete the legacy module — the cheapest way to slim the
+monolith. It's the basis of Exercise 3.2.
 -->
 
 ---
@@ -255,23 +353,35 @@ to start: few services, one per context; subdivide later.
 
 <!-- _class: lead -->
 
-# Ejercicio 3.1
-## Detectar bounded contexts por el lenguaje
+# Ejercicios 3.1 y 3.2
+
+**3.1 · Detectar bounded contexts por el lenguaje**
+
+**3.2 · Core, supporting o generic**
 
 *(ver cuaderno de ejercicios)*
 
 <!--
-ES: Pausa para ejercicio. 3.1: VuelaYa (aerolínea) — la palabra "vuelo" significa cosas
-distintas en Operaciones, Ventas, Fidelidad y Mantenimiento. Tareas: desambiguar los
-significados, proponer los bounded contexts, y razonar qué pasaría con una entidad Vuelo
-única (la entidad-dios → tabla compartida que bloquea la migración). El doble "pasajero"
-(comprador vs. embarcado) refuerza la frontera. ~15-20 min con puesta en común.
+ES: Dos ejercicios juntos antes de la Sección 2.
+3.1: VuelaYa (aerolínea) — "vuelo" significa cosas distintas en Operaciones, Ventas,
+Fidelidad y Mantenimiento. Desambiguar los significados, proponer los bounded contexts y
+razonar qué pasaría con una entidad Vuelo única (entidad-dios → tabla compartida que
+bloquea la migración). El doble "pasajero" (comprador vs. embarcado) refuerza la frontera.
+3.2: clasificar subdominios de VuelaYa (precios dinámicos, tripulaciones, emails,
+contabilidad, fidelidad) en core/supporting/generic y extraer consecuencias para la
+migración. Precios = core (máxima inversión, bubble context); emails y contabilidad =
+generic (no se migran, se reemplazan por SaaS/ERP + ACL). El razonamiento ("¿esto nos
+diferencia?") importa más que la etiqueta. ~30-35 min los dos con puesta en común.
 
-EN: Exercise break. 3.1: VuelaYa (airline) — the word "flight" means different things in
-Operations, Sales, Loyalty and Maintenance. Tasks: disambiguate the meanings, propose the
-bounded contexts, and reason what a single Flight entity would cause (the god-entity →
-shared table that blocks the migration). The double "passenger" (buyer vs. boarded)
-reinforces the boundary. ~15-20 min with group discussion.
+EN: Two exercises together before Section 2.
+3.1: VuelaYa (airline) — "flight" means different things in Operations, Sales, Loyalty and
+Maintenance. Disambiguate the meanings, propose the bounded contexts, and reason what a
+single Flight entity would cause (god-entity → shared table that blocks the migration). The
+double "passenger" (buyer vs. boarded) reinforces the boundary.
+3.2: classify VuelaYa subdomains (dynamic pricing, crew, emails, accounting, loyalty) into
+core/supporting/generic and draw migration consequences. Pricing = core (max investment);
+emails and accounting = generic (not migrated, replaced by SaaS/ERP + ACL). Reasoning
+matters more than the label. ~30-35 min for both with group discussion.
 -->
 
 ---
@@ -293,6 +403,7 @@ El **plano de los contextos y sus relaciones**. Saber cuáles son no basta: hay 
 | **Anticorruption Layer** | El consumidor se protege traduciendo (Sesión 2) |
 | **Shared Kernel** | Comparten parte del modelo (acoplamiento fuerte — con moderación) |
 | **Open Host / Published Language** | API/formato estable y documentado para muchos |
+| **Integración por eventos** *(pub/sub)* | El consumidor reacciona a eventos publicados, sin llamada directa (la *Política* de EventStorming) |
 | **Separate Ways** | No se integran: duplicar es más barato que coordinar |
 
 <!--
@@ -347,36 +458,6 @@ model. Drawing it is what turns "we have contexts" into "we know what to break f
 
 ---
 
-## Capacidad de negocio vs. subdominio
-
-Dos heurísticas para proponer contextos:
-
-- **Por capacidad de negocio:** ¿qué *hace* la empresa? (gestionar pedidos, facturar). Estable, de fuera adentro. Riesgo: copiar el organigrama actual.
-- **Por subdominio:** ¿de qué *se compone* el dominio?
-  - **Core** — lo que te diferencia. Mejor equipo, mejor diseño.
-  - **Supporting** — necesario, no diferencial; a medida porque no hay alternativa.
-  - **Generic** — lo resuelve una solución comprada (contabilidad, login, email).
-
-> **core / supporting / generic** = cómo **repartir el esfuerzo**: modelado fino al core; lo genérico a menudo **ni se migra — se reemplaza** por SaaS.
-
-<!--
-ES: Las dos heurísticas son complementarias: una mira lo que la empresa hace, la otra de
-qué se compone el problema. La clasificación core/supporting/generic es la herramienta de
-priorización más útil de la sesión: evita gastar el mismo esfuerzo de diseño (y de
-migración) en todo por igual. Lo genérico (email, contabilidad) no se reescribe como
-microservicio propio: se compra y se borra el módulo legacy — la forma más barata de
-adelgazar el monolito. Es la base del Ejercicio 3.2.
-
-EN: The two heuristics are complementary: one looks at what the company does, the other at
-what the problem is made of. The core/supporting/generic classification is the most useful
-prioritization tool of the session: it avoids spending the same design (and migration)
-effort on everything equally. Generic stuff (email, accounting) isn't rewritten as your
-own microservice: you buy it and delete the legacy module — the cheapest way to slim the
-monolith. It's the basis of Exercise 3.2.
--->
-
----
-
 ## Granularidad: ¿demasiado pequeño?
 
 Señales de haber cortado **demasiado fino**:
@@ -402,29 +483,6 @@ are distributed-monolith symptoms applied to "you cut too fine". Subdividing a s
 turned out big is a local refactor; merging two that turned out small forces undoing
 published contracts, joining data and joining models — far costlier. Message: few services
 aligned to contexts, and subdivide only when the pain justifies it.
--->
-
----
-
-<!-- _class: lead -->
-
-# Ejercicio 3.2
-## Core, supporting o generic
-
-*(ver cuaderno de ejercicios)*
-
-<!--
-ES: Pausa para ejercicio. 3.2: clasificar subdominios de VuelaYa (precios dinámicos,
-tripulaciones, emails, contabilidad, fidelidad) en core/supporting/generic y extraer
-consecuencias para la migración. Clave: precios = core (máxima inversión, bubble context);
-emails y contabilidad = generic (no se migran, se reemplazan por SaaS/ERP + ACL). El
-razonamiento ("¿esto nos diferencia?") importa más que la etiqueta. ~15 min.
-
-EN: Exercise break. 3.2: classify VuelaYa subdomains (dynamic pricing, crew, emails,
-accounting, loyalty) into core/supporting/generic and draw migration consequences. Key:
-pricing = core (max investment, bubble context); emails and accounting = generic (not
-migrated, replaced by SaaS/ERP + ACL). The reasoning ("does this differentiate us?")
-matters more than the label. ~15 min.
 -->
 
 ---
