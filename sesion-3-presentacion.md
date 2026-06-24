@@ -570,6 +570,43 @@ reassign owner if the initial split was wrong.
 
 ---
 
+## Romper un acceso cruzado: tres opciones
+
+Cuando un contexto **lee/escribe una tabla de otro**, cortas ese hilo con una de tres:
+
+| Opción | Cuándo usarla | Efecto |
+|---|---|---|
+| **1. API del dueño** *(síncrono)* | necesitas el dato **fresco** al momento (p.ej. stock antes de vender) | dato exacto, pero **acopla en runtime**: latencia y dependes de que el dueño esté vivo |
+| **2. Copia local por eventos** *(asíncrono)* | toleras **desfase** (consistencia eventual; p.ej. nombre del cliente en Envíos) | **desacopla en runtime** (sigues vivo si el dueño cae); duplicas el dato |
+| **3. Mover el dato de dueño** | el dato **pertenece** a otro contexto (el reparto del paso 1 estaba mal) | **elimina** la relación en vez de gestionarla — la más limpia cuando aplica |
+
+> ¿El dato es de otro contexto? → **muévelo**. Si no: ¿lo necesitas fresco? → **API**; ¿toleras desfase? → **eventos** *(la opción por defecto: es la única que rompe el acoplamiento en tiempo de ejecución)*.
+
+<!--
+ES: Desarrollamos el paso 3 de la slide anterior. Las tres no compiten: cada una es para un
+caso. Mover el dato (3) es de hecho lo primero que hay que preguntarse — si el dato está en
+el sitio equivocado, no construyes ningún puente, lo reasignas y el cruce desaparece.
+Si de verdad hay dos dueños, eliges entre API y eventos según la frescura que necesites:
+API = dato exacto pero acoplas en runtime (si el dueño cae, tú caes); eventos = copia local
+con desfase pero desacoplada (sigues funcionando aunque el dueño no responda). En
+microservicios la preferencia por defecto es eventos, justo porque rompe el acoplamiento en
+tiempo de ejecución, que es el objetivo de separar las BD. Enlace con la sesión: API = Open
+Host / Customer-Supplier del context map; eventos = Política de EventStorming / integración
+por eventos.
+
+EN: We expand step 3 of the previous slide. The three don't compete: each fits a case.
+Moving the data (3) is actually the first question — if the data sits in the wrong place
+you don't build a bridge, you reassign it and the cross access vanishes. If there genuinely
+are two owners, choose between API and events by the freshness you need: API = exact data
+but runtime coupling (owner down, you're down); events = local copy with lag but decoupled
+(you keep working if the owner is unavailable). In microservices the default preference is
+events, precisely because it breaks the runtime coupling, which is the whole point of
+splitting the DBs. Course links: API = Open Host / Customer-Supplier on the context map;
+events = EventStorming Policy / event-driven integration.
+-->
+
+---
+
 ## Casos típicos difíciles
 
 - **Tabla de referencia compartida** (`paises`): duplicar en cada servicio (cambia poco) o un servicio de referencia
