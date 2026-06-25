@@ -30,6 +30,16 @@ style: |
   table {
     font-size: 0.8em;
   }
+  section.compact {
+    font-size: 22px;
+  }
+  section.compact pre {
+    font-size: 0.62em;
+    line-height: 1.15;
+  }
+  section.compact blockquote {
+    font-size: 0.9em;
+  }
   section.lead {
     text-align: center;
   }
@@ -97,14 +107,16 @@ The technical part (1–4) and the human one (5) are the same project.
 
 ## Síncrono vs. asíncrono
 
-La decisión clave no es REST vs. gRPC, sino **síncrono vs. asíncrono**:
+La decisión clave no es REST vs. RPC (como gRPC), sino **síncrono vs. asíncrono**:
 
 - **Síncrono** (petición/respuesta): el llamante **espera** la respuesta (HTTP, gRPC)
   - ✅ simple, resultado inmediato, fácil de depurar
   - ⚠️ **acopla disponibilidad y tiempo**: si el llamado está lento, tú también; las cadenas multiplican latencia y riesgo
+  - 👉 **cuándo:** necesitas la respuesta para continuar (validar, precio, login)
 - **Asíncrono**: el llamante envía y **sigue con su vida** (broker, cola)
   - ✅ **desacopla en el tiempo**: absorbe picos, el receptor puede estar caído ahora
   - ⚠️ más difícil de razonar, consistencia eventual, necesita broker
+  - 👉 **cuándo:** notificar hechos o trabajo diferido (email, PDF, propagar a otros)
 
 > La disponibilidad de una cadena síncrona es el **producto** de las disponibilidades: 5 saltos al 99,9 % ≈ 99,5 %.
 
@@ -178,6 +190,102 @@ broker (transport) from saga coordinator (logic), as in Session 3.
 
 ---
 
+<!-- _class: compact -->
+
+## Mensajería en la práctica — el productor (pedidos)
+
+El servicio **pedidos** anuncia el hecho `PedidoCreado` en el exchange `pedidos`; **no sabe quién escucha**:
+
+```java
+// El productor declara el exchange y publica un HECHO (no conoce a sus consumidores):
+channel.exchangeDeclare("pedidos", BuiltinExchangeType.FANOUT, true); // durable
+
+var props = new AMQP.BasicProperties.Builder()
+        .messageId(pedidoId)             // clave de idempotencia (dedupe aguas abajo)
+        .deliveryMode(2)                 // persistente: sobrevive al reinicio del broker
+        .contentType("application/json")
+        .build();
+
+channel.basicPublish("pedidos", "", props, toJson(evento)); // routing key "" → fanout
+```
+
+> `messageId` viaja con el evento (lo usa el dedupe del consumidor) · `deliveryMode(2)` = el broker lo persiste · *fanout* = cada suscriptor recibe **su copia**.
+
+<!--
+ES: La otra mitad de la historia: el lado productor. Tres ideas: (1) el productor declara
+un exchange FANOUT y publica un HECHO (PedidoCreado) sin saber quién lo consume — esa es la
+inversión de dependencia que vimos en "Mensajes y eventos"; (2) messageId es la clave de
+idempotencia que el consumidor usará para deduplicar (la misma de la slide siguiente);
+(3) deliveryMode(2) marca el mensaje como persistente: sobrevive a un reinicio del broker.
+La routing key vacía es típica de fanout (va a TODAS las colas enlazadas). Con un exchange
+topic en su lugar, la routing key sería "pedido.creado" y cada consumidor filtraría por
+patrón. Punto clave: añadir un nuevo suscriptor (p. ej. analítica) NO toca este código.
+
+EN: The other half of the story: the producer side. Three ideas: (1) the producer declares
+a FANOUT exchange and publishes a FACT (PedidoCreado) without knowing who consumes it —
+that's the dependency inversion from "Messages and events"; (2) messageId is the idempotency
+key the consumer will use to dedupe (same one as the next slide); (3) deliveryMode(2) marks
+the message persistent: it survives a broker restart. The empty routing key is typical of
+fanout (goes to ALL bound queues). With a topic exchange instead, the routing key would be
+"order.created" and each consumer would filter by pattern. Key point: adding a new
+subscriber (e.g. analytics) does NOT touch this code.
+-->
+
+---
+
+<!-- _class: compact -->
+
+## Mensajería en la práctica — el consumidor (fidelidad)
+
+`PedidoCreado` → exchange `pedidos`; el servicio **fidelidad** (consumidor) consume de su propia cola:
+
+```java
+// The queue routes rejected messages to the DLQ (x-dead-letter-exchange):
+var args = Map.of("x-dead-letter-exchange", "pedidos.dlx");
+channel.queueDeclare("fidelidad", true, false, false, args);
+
+DeliverCallback onMsg = (consumerTag, msg) -> {
+    String id = msg.getProperties().getMessageId();
+    long t = msg.getEnvelope().getDeliveryTag();
+    if (seen(id)) { channel.basicAck(t, false); return; }  // dedupe
+    try {
+        addPoints(parse(msg.getBody()));     // business effect
+        markSeen(id);                        // store the id in a persistent set of seen ids
+        channel.basicAck(t, false);          // ack → the broker deletes it
+    } catch (Exception e) {
+        channel.basicNack(t, false, false);  // requeue=false → DLQ
+    }
+};
+channel.basicConsume("fidelidad", false, onMsg, ct -> {}); // autoAck=false
+```
+
+> `basicAck` = entrega fiable · `messageId` + `seen` = no duplicar puntos · `requeue=false` = mensaje veneno a la **DLQ**.
+
+<!--
+ES: Mismo caso TiendaTotal, ahora como código RabbitMQ en Java (cliente oficial
+amqp-client). Las tres garantías de la slide anterior, hechas línea de código: (1) ack
+MANUAL — basicConsume con autoAck=false; si no llamas a basicAck, el broker asume que
+fallaste y reentrega (entrega fiable); (2) messageId + seen — como la entrega es
+al-menos-una-vez, el mismo evento puede llegar dos veces y sin dedupe sumarías puntos dos
+veces (la idempotencia de la Sesión 3, aquí concreta); (3) basicNack(t, false, false) — el
+tercer parámetro es requeue: en false, un mensaje que falla repetidamente no se reencola en
+bucle, se manda a la DLQ (la cola se declaró con x-dead-letter-exchange apuntando a ella).
+Punto clave: el efecto de negocio debe quedar protegido por el dedupe, porque el ack mismo
+puede perderse.
+
+EN: Same TiendaTotal case, now as RabbitMQ code in Java (official amqp-client). The three
+guarantees from the previous slide, turned into lines of code: (1) MANUAL ack —
+basicConsume with autoAck=false; if you don't call basicAck, the broker assumes failure and
+redelivers (reliable delivery); (2) messageId + seen-check — since delivery is
+at-least-once, the same event can arrive twice and without dedupe you'd add points twice
+(Session 3's idempotency, made concrete); (3) basicNack(t, false, false) — the third arg is
+requeue: when false, a message that keeps failing isn't requeued in a loop, it's sent to the
+DLQ (the queue was declared with x-dead-letter-exchange pointing to it). Key point: the
+business effect must be guarded by the dedupe, because the ack itself can be lost.
+-->
+
+---
+
 ## Heurística de elección
 
 | Situación | Estilo natural |
@@ -218,7 +326,7 @@ La **fachada única** por la que entran los clientes externos (web, móvil, terc
 
 - **Enrutado** al servicio interno (pieza natural del **Strangler Fig**, Sesión 2)
 - **Transversales en un punto:** autenticación, rate limiting, TLS, CORS, caché
-- **Adaptación al cliente:** agregar llamadas, traducir; *Backend for Frontend* (BFF) = un gateway por tipo de cliente
+- **Adaptación al cliente:** agregar llamadas de varios servicios en una sola respuesta, traducir formatos
 
 > El gateway **adapta y protege; no decide negocio.** Riesgos: cuello de botella, "monolito de enrutado", punto único de fallo → redundante.
 
@@ -226,14 +334,12 @@ La **fachada única** por la que entran los clientes externos (web, móvil, terc
 ES: El gateway resuelve los transversales en un solo sitio y es el aliado natural del
 Strangler (es la fachada que va redirigiendo del monolito a los servicios nuevos). El
 peligro es que se llene de lógica de negocio y se convierta en un nuevo monolito, o que
-sea un SPOF: protégelo (redundancia) y manténlo tonto. BFF es la variante cuando móvil y
-web necesitan agregaciones distintas.
+sea un SPOF: protégelo (redundancia) y manténlo tonto.
 
 EN: The gateway solves cross-cutting concerns in one place and is the Strangler's natural
 ally (it's the façade that gradually redirects from monolith to new services). The danger
 is it fills with business logic and becomes a new monolith, or it's a SPOF: protect it
-(redundancy) and keep it dumb. BFF is the variant when mobile and web need different
-aggregations.
+(redundancy) and keep it dumb.
 -->
 
 ---
@@ -356,7 +462,12 @@ pattern that follows exists to cut that cascade.
 - **Reintentos:** curan fallos transitorios, pero son peligrosos:
   - Solo lo **idempotente** (¿y si el cobro sí se ejecutó y se perdió la respuesta?)
   - Solo errores **transitorios** (un 503 sí; un 400 nunca será válido)
-  - **Presupuesto limitado** (2–3) y cuidado con la **amplificación**: 3× en A × 3× en B → C recibe 9×
+  - **Presupuesto limitado** (2–3) y cuidado con la **amplificación en cadena**:
+    ```
+    cliente → A (reintenta 3×) → B (reintenta 3×) → C
+                                                      ↑ recibe 3×3 = 9 peticiones
+    ```
+    C ya está fallando — recibir 9× más carga lo hunde del todo
 - **Backoff exponencial + jitter:** esperar cada vez más (1 s, 2 s, 4 s…) y con aleatoriedad — sin jitter, todos reintentan a la vez (*retry storm*)
 
 <!--
@@ -387,8 +498,9 @@ CLOSED ───────────────► OPEN ──────�
                                   └── prueba falla ──► OPEN
 ```
 
-- **Open:** las llamadas **fallan al instante** sin tocar la red → el llamante no malgasta recursos (corta la cascada) y el servicio enfermo respira
-- Obliga a la pregunta sana: **¿qué hago cuando está abierto?** (el *fallback*): valor por defecto, dato cacheado, función degradada, mensaje honesto
+- **Closed:** tráfico normal; cuenta fallos en silencio. Si superan el umbral → **Open**
+- **Open:** falla **al instante** sin llamar a la red → el llamante no espera, el servicio enfermo respira. Tras un tiempo de espera → **Half-open**
+- **Half-open:** deja pasar unas pocas llamadas de prueba. Si van bien → **Closed**; si fallan → vuelve a **Open**
 
 <!--
 ES: El patrón estrella contra la cascada. La idea: si algo falla repetidamente, deja de
@@ -412,7 +524,7 @@ question.
 
 Como los **compartimentos estancos de un barco**: particionar recursos para que el agotamiento de uno no hunda el resto.
 
-- **Pools separados por dependencia:** si recomendaciones se vuelve lento, agota *su* pool — las llamadas a pagos siguen teniendo el suyo
+- **Pools de hilos separados por dependencia:** si recomendaciones se vuelve lento, agota *su* pool — las llamadas a pagos siguen teniendo el suyo
 - **Instancias/colas separadas** por tipo de carga: el *batch* no roba capacidad al tráfico interactivo
 - **Límites de concurrencia por cliente**
 
@@ -502,10 +614,10 @@ slide) is to build them DURING the migration.
 - **Trazado distribuido:** un **trace ID** se **propaga** en cada llamada; cada servicio registra sus *spans*:
 
 ```
-trace=abc  ├─────────── checkout 420ms ───────────┤
- gateway     ├ 12ms ┤
- pedidos          ├────── 380ms ──────┤
- pagos              ├─ 310ms ─┤  ← aquí se fue el tiempo
+trace=abc  ├──────────────── checkout 420ms ──────────────────┤
+ gateway   ├ 12ms ┤
+ pedidos    ├──────────────── 380ms ───────────────┤
+ pagos      ├─────────────── 310ms ──────────────┤  ← aquí se fue el tiempo
 ```
 
 > Propaga el contexto **también por colas y eventos**, o la traza se corta donde empieza lo difícil.
@@ -524,6 +636,36 @@ user suffers), not causes (noise that burns out on-call). Tracing: it's the Gant
 request — it tells you in which service time went without guessing. Classic mistake: not
 propagating context across events/queues, so the trace dies right at the async part, which
 is the hard one. OpenTelemetry as the example standard.
+-->
+
+---
+
+## Herramientas estándar de observabilidad
+
+| Pilar | Recoger (servicio) | Almacenar | Visualizar |
+|---|---|---|---|
+| **Logs** | OpenTelemetry | Loki, ELK, CloudWatch | Grafana |
+| **Métricas** | OpenTelemetry | Prometheus, CloudWatch | Grafana |
+| **Trazas** | OpenTelemetry | Jaeger, Tempo, X-Ray | Grafana |
+
+> OTel desacopla **cómo mides** de **dónde lo guardas**: cambias de Jaeger a Datadog sin tocar el código del servicio.
+
+<!--
+ES: La tabla da nombres concretos para que los asistentes salgan con algo accionable. El
+punto clave es OpenTelemetry: antes cada herramienta tenía su propio SDK (Zipkin, Jaeger,
+Prometheus exporters separados) y cambiar de backend era reescribir la instrumentación.
+OTel unifica los tres pilares bajo un SDK estándar — instrumentas una vez y el Collector
+envía a donde quieras. En la práctica: OTel auto-instrumenta Spring Boot / Express / etc.
+sin tocar código de negocio; solo hace falta añadir la dependencia y configurar el endpoint
+del Collector. La propagación por colas (RabbitMQ headers) sí requiere unas líneas manuales.
+
+EN: The table gives concrete names so attendees leave with something actionable. The key
+point is OpenTelemetry: before, each tool had its own SDK (Zipkin, Jaeger, separate
+Prometheus exporters) and switching backends meant rewriting instrumentation. OTel unifies
+the three pillars under one standard SDK — instrument once, the Collector sends anywhere.
+In practice: OTel auto-instruments Spring Boot / Express / etc. without touching business
+code; just add the dependency and configure the Collector endpoint. Queue propagation
+(RabbitMQ headers) does require a few manual lines.
 -->
 
 ---
