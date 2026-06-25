@@ -83,9 +83,8 @@ Que el sistema resultante sea **robusto de operar** y esté **alineado con los e
 1. **Comunicación:** síncrono vs. asíncrono, eventos, gateway, contratos
 2. **Resiliencia:** que el fallo parcial **no se propague**
 3. **Observabilidad:** ¿dónde se rompió entre 6 servicios?
-4. **Pruebas y entrega** durante la migración
-5. **Organización:** la ley de Conway y Team Topologies
-6. **Síntesis:** la hoja de ruta y los errores frecuentes
+4. **Organización:** la ley de Conway y Team Topologies
+5. **Síntesis:** la hoja de ruta y los errores frecuentes
 
 <!--
 ES: Recorrido de la sesión, con ejercicios tras cada bloque. Idea transversal: en un
@@ -648,8 +647,6 @@ is the hard one. OpenTelemetry as the example standard.
 | **Métricas** | OpenTelemetry | Prometheus, CloudWatch | Grafana |
 | **Trazas** | OpenTelemetry | Jaeger, Tempo, X-Ray | Grafana |
 
-> OTel desacopla **cómo mides** de **dónde lo guardas**: cambias de Jaeger a Datadog sin tocar el código del servicio.
-
 <!--
 ES: La tabla da nombres concretos para que los asistentes salgan con algo accionable. El
 punto clave es OpenTelemetry: antes cada herramienta tenía su propio SDK (Zipkin, Jaeger,
@@ -666,110 +663,6 @@ the three pillars under one standard SDK — instrument once, the Collector send
 In practice: OTel auto-instruments Spring Boot / Express / etc. without touching business
 code; just add the dependency and configure the Collector endpoint. Queue propagation
 (RabbitMQ headers) does require a few manual lines.
--->
-
----
-
-<!-- _class: lead -->
-
-# 4. Pruebas y entrega
-
----
-
-## Estrategia de pruebas en transición
-
-La pirámide clásica sigue valiendo (muchas unitarias, menos integración, **poquísimas E2E**), con dos matices:
-
-- Las **E2E que cruzan muchos servicios** son carísimas y frágiles → redúcelas a *smoke tests* de los flujos de oro. Su papel lo asumen **pruebas de contrato + observabilidad** en producción
-- **Tests de caracterización** sobre el monolito: capturan el comportamiento **actual** (correcto o no) de la pieza a extraer, escritos **antes** de extraer
-
-> Son la **red de seguridad** de la extracción y la base contra la que validar el servicio nuevo (el pariente barato del *Parallel Run*).
-
-<!--
-ES: La pirámide no cambia, su interpretación sí. Las E2E completas en microservicios son un
-pozo de fragilidad: poquísimas, solo los flujos de oro. El arma específica de la migración
-son los tests de caracterización: NO comprueban que el código esté bien, comprueban que el
-servicio nuevo se comporta IGUAL que el viejo (incluidas sus rarezas) — exactamente lo que
-necesitas para extraer sin cambiar comportamiento. Es el Parallel Run de los pobres.
-
-EN: The pyramid doesn't change, its interpretation does. Full E2E in microservices is a
-fragility pit: very few, golden flows only. The migration-specific weapon is
-characterization tests: they DON'T check the code is correct, they check the new service
-behaves the SAME as the old one (quirks included) — exactly what you need to extract without
-changing behavior. It's the poor man's Parallel Run.
--->
-
----
-
-## Pruebas de contrato
-
-Verifican que proveedor y consumidor están de acuerdo **sin levantar los dos sistemas juntos**:
-
-- El **consumidor** declara qué usa (*"llamo a `GET /clientes/{id}` y uso `nombre` y `email`"*)
-- Esa expectativa se verifica **contra el proveedor en su CI** (*consumer-driven contracts*; Pact, como ejemplo)
-- Si el proveedor intenta quitar `email`, **su build falla antes de desplegar**, señalando qué consumidor se rompería
-
-> Es la **malla de seguridad que sustituye al compilador** del monolito — la que permite desplegar de forma independiente con confianza.
-
-<!--
-ES: La respuesta automatizada a "¿romperé a alguien?" del bloque 1. La magia: no necesitas
-un entorno con los dos servicios; el consumidor publica sus expectativas y el CI del
-proveedor las verifica. Así recuperas, en distribuido, lo que el compilador te daba gratis
-en el monolito: te avisa antes de desplegar y te dice a quién romperías. Sin esto, la
-independencia de despliegue es una apuesta a ciegas.
-
-EN: The automated answer to "will I break someone?" from block 1. The magic: you don't need
-an environment with both services; the consumer publishes its expectations and the
-provider's CI verifies them. So you recover, in distributed systems, what the compiler gave
-you for free in the monolith: it warns before deploy and tells you whom you'd break.
-Without this, deployment independence is a blind bet.
--->
-
----
-
-## CI/CD e independencia de despliegue
-
-- **Un pipeline por servicio:** cada uno se construye, prueba y despliega **solo**. Si liberar exige "el pipeline de la release" global → no hay independencia (*release train* = síntoma del monolito distribuido, Sesión 1)
-- **Separar despliegue de liberación:** desplegar código inactivo y activarlo por **configuración** (*feature flags*, canary) — ya visto en *Branch by Abstraction*
-- Durante la migración, **el monolito también** necesita buen pipeline (se redesplegará sin parar al quitarle piezas) — invertir en su CI/CD es el **andamiaje de la obra**
-
-<!--
-ES: La independencia de despliegue es el objetivo de toda la migración, y aquí se hace
-operativa. Un pipeline por servicio o no hay autonomía. Separar deploy de release (feature
-flags) desacopla "poner código en producción" de "activar la función" — clave para
-desplegar sin miedo. Y el recordatorio práctico: no descuides el pipeline del monolito; va
-a ser la pieza que más se toca durante años, invertir ahí no es trabajo perdido.
-
-EN: Deployment independence is the goal of the whole migration, and here it becomes
-operational. One pipeline per service or there's no autonomy. Separating deploy from release
-(feature flags) decouples "ship code" from "enable the feature" — key to deploy without
-fear. And the practical reminder: don't neglect the monolith's pipeline; it'll be the most-
-touched piece for years, investing there isn't wasted work.
--->
-
----
-
-<!-- _class: lead -->
-
-# Ejercicio 4.3
-## ¿Romperá a los consumidores?
-
-*(ver cuaderno de ejercicios)*
-
-<!--
-ES: Pausa para ejercicio. 4.3: el equipo de clientes propone 4 cambios en GET /clientes/
-{id}; clasificar compatible/rompedor y hacerlo seguro. A (añadir campo) = compatible; B
-(renombrar email) = rompedor → expand–contract; C (telefono nunca-nulo pasa a nullable) =
-rompedor TRAICIONERO (cambio de semántica que ningún validador pilla); D (cambiar el
-esquema del evento) = rompedor (el evento es contrato igual que la API). Extra: pruebas de
-contrato dirigidas por el consumidor cazan B y D antes de desplegar. ~15-20 min.
-
-EN: Exercise break. 4.3: the customers team proposes 4 changes to GET /clientes/{id};
-classify compatible/breaking and make it safe. A (add field) = compatible; B (rename email)
-= breaking → expand–contract; C (never-null phone becomes nullable) = TREACHEROUS breaking
-(semantic change no validator catches); D (change event schema) = breaking (the event is a
-contract like the API). Extra: consumer-driven contract tests catch B and D before deploy.
-~15-20 min.
 -->
 
 ---
